@@ -18,8 +18,16 @@ offer.configure(
     image: "http://merchant.com/assets/fb_image.jpg"
   },
   twitter: {
-    message: 'Click {{ 'twitter' | claim_url }} and get {{friend_incentive.description}} off on the merchant.com'
+    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
   },
+)
+
+
+offer.configure(
+  twitter: {
+    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
+  },
+
 )
 ```
 
@@ -41,14 +49,28 @@ offer.bindClickLink($('.js-plain-offer-link'))
 
 
 ``` haml
-%h1= offer.ab_test("Share with friends", "Get yourself a discount #{campaign.advocate_incentive.description}")
+%h1= offer.localize('offer_title')
+%h1= offer.ab_test("Share with friends", "Get yourself a discount %{advocate_amount}", advocate_amount: campaign.advocate_incentive.description)
 %p
   Share this offer with friends and get <%= campaign.advocate_incentive.description %>
-
 
 
 %a.js-share-via-facebook Facebook
 %a.js-share-via-twitter Twitter
 %a.js-share-via-sms Twitter
 ```
+
+``` sh
+rails g talkable
+
+app/views/talkable/share.html.erb
+app/assets/javascripts/talkable.js
+app/assets/stylesheets/talkable.css
+
+# config/routes.rb
+
+mount Talkable::Rack => 'talkable'
+```
+
+
 
