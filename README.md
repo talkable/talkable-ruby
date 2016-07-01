@@ -4,13 +4,70 @@ Talkable Ruby Gem to make your own referral program
 
 ## Use Cases
 
+### Configuration
 
 ``` ruby
-Talkable::API.register_purchase()
-offer = Talkable::API.register_origin()
-campaign = offer.campaign
+Talkable.configure do |c|
+  c.site_slug = 'hello'
+  c.api_token = '188773'
+  c.integration_library = 'http://d2jj/integration/hello.js'  # default
+  c.server = 'http://invite.site.com' # fetched from site settings automatically by default
+end
+```
+
+``` ruby
+class ApplicationController < ActionController::Base
+
+  initialize_talkable_api
 
 
+  def self.initialize_talkable_api
+    before_action :talkable_before_request
+  end
+
+  def talkable_before_request
+    cookies[:talkable_visitor_uuid] = params[:talkable_visitor_uuid] || talkable_visitor_uuid
+    Talkable.with_uuid(talkable_visitor_uuid) do
+      yield
+    end
+  end
+
+  def talkable_visitor_uuid
+    cookies[:talkable_visitor_uuid] ||= Talkable::API.create_visitor.uuid 
+  end
+end
+```
+
+
+
+
+mount Talkable::Rack => 'talkable'
+
+
+
+``` ruby
+offer = Talkable::API.register_purchase()
+offer = Talkable::API.register_event()
+offer = Talkable::API.register_affiliate_member(
+    {
+      email: '...'
+      sharing_channels: ['facebook', 'embedded_email', 'sms', 'other']
+    }
+    )
+# {
+#   twitter: "http://invite.site.com/x/12356"
+#   facebook: "http://invite.site.com/x/12356"
+#   embedded_email: "http://invite.site.com/x/12356"
+#   twitter: "http://invite.site.com/x/12356"
+# }
+```
+
+``` erb
+<%= offer.share_frame %>
+```
+
+
+``` ruby
 offer.configure(
   facebook: {
     title: ['An offer for all my friends', 'Claim your reward'], # AB test
@@ -30,6 +87,8 @@ offer.configure(
 
 )
 ```
+
+
 
 
 ``` js
@@ -60,6 +119,8 @@ offer.bindClickLink($('.js-plain-offer-link'))
 %a.js-share-via-sms Twitter
 ```
 
+
+
 ``` sh
 rails g talkable
 
@@ -68,9 +129,4 @@ app/assets/javascripts/talkable.js
 app/assets/stylesheets/talkable.css
 
 # config/routes.rb
-
-mount Talkable::Rack => 'talkable'
 ```
-
-
-
