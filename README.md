@@ -1,6 +1,6 @@
-# talkable-ruby
-Talkable Ruby Gem to make your own referral program
+# Talkable Referral Programe API Gem
 
+Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
 
 ## Use Cases
 
@@ -8,9 +8,11 @@ Talkable Ruby Gem to make your own referral program
 
 ``` ruby
 Talkable.configure do |c|
+  # required
   c.site_slug = 'hello'
   c.api_token = '188773'
-  c.integration_library = 'http://d2jj/integration/hello.js'  # default
+  # optional
+  c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
   c.server = 'http://invite.site.com' # fetched from site settings automatically by default
 end
 ```
@@ -20,33 +22,42 @@ class ApplicationController < ActionController::Base
 
   initialize_talkable_api
 
+end
 
-  def self.initialize_talkable_api
-    before_action :talkable_before_request
-  end
-
-  def talkable_before_request
-    cookies[:talkable_visitor_uuid] = params[:talkable_visitor_uuid] || talkable_visitor_uuid
-    Talkable.with_uuid(talkable_visitor_uuid) do
-      yield
+# GEM internals
+class Talkable
+  module ActionControllerExtension
+    def self.initialize_talkable_api
+      before_action :talkable_before_request
     end
-  end
 
-  def talkable_visitor_uuid
-    cookies[:talkable_visitor_uuid] ||= Talkable::API.create_visitor.uuid 
+    def talkable_before_request
+      cookies[:talkable_visitor_uuid] = params[:talkable_visitor_uuid] || talkable_visitor_uuid
+      Talkable.with_uuid(talkable_visitor_uuid) do
+        yield
+      end
+    end
+
+    def talkable_visitor_uuid
+      cookies[:talkable_visitor_uuid] ||= Talkable.find_or_generate_uuid
+    end
   end
 end
 ```
 
 
-
-
-mount Talkable::Rack => 'talkable'
-
+### Basics
 
 
 ``` ruby
-offer = Talkable::API.register_purchase()
+offer = Talkable::API.register_purchase(
+    {
+      email: 'a@b.com',
+      subtotal: 100.53,
+      coupon_codes: [],
+      traffic_source: 'zz'
+    },
+    )
 offer = Talkable::API.register_event()
 offer = Talkable::API.register_affiliate_member(
     {
@@ -63,8 +74,11 @@ offer = Talkable::API.register_affiliate_member(
 ```
 
 ``` erb
-<%= offer.share_frame %>
+<%= offer.advocate_share_iframe %>
 ```
+
+
+### Self-Serve UI
 
 
 ``` ruby
@@ -130,3 +144,10 @@ app/assets/stylesheets/talkable.css
 
 # config/routes.rb
 ```
+
+``` ruby
+# routes.rb
+mount Talkable::Rack => 'talkable'
+```
+
+
