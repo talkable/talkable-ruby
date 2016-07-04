@@ -46,7 +46,11 @@ end
 ```
 
 
-### Basics
+### API
+
+Full API support according to DOC
+
+
 
 
 ``` ruby
@@ -73,6 +77,15 @@ offer = Talkable::API.register_affiliate_member(
 # }
 ```
 
+### AD Offer Share page
+
+
+
+```  js
+_talkableq.push(['show_offer'], offer)
+talkable.showOffer(offer.id)
+
+```
 ``` erb
 <%= offer.advocate_share_iframe %>
 ```
