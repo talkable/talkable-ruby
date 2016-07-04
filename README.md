@@ -69,12 +69,14 @@ offer = Talkable::API.register_affiliate_member(
       sharing_channels: ['facebook', 'embedded_email', 'sms', 'other']
     }
     )
-# {
-#   twitter: "http://invite.site.com/x/12356"
-#   facebook: "http://invite.site.com/x/12356"
-#   embedded_email: "http://invite.site.com/x/12356"
-#   twitter: "http://invite.site.com/x/12356"
-# }
+
+offer.claim_links # =>
+                  # {
+                  #   twitter: "http://invite.site.com/x/12356"
+                  #   facebook: "http://invite.site.com/x/12356"
+                  #   embedded_email: "http://invite.site.com/x/12356"
+                  #   twitter: "http://invite.site.com/x/12356"
+                  # }
 ```
 
 ### AD Offer Share page
@@ -82,10 +84,12 @@ offer = Talkable::API.register_affiliate_member(
 
 
 ```  js
-_talkableq.push(['show_offer'], offer)
-talkable.showOffer(offer.id)
+_talkableq.push(['show_offer'], "https://zz.com/x/38828")
+talkable.showOffer(offer.show_url)
 
 ```
+
+
 ``` erb
 <%= offer.advocate_share_iframe %>
 ```
