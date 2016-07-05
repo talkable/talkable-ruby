@@ -2,9 +2,8 @@
 
 Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
 
-## Use Cases
 
-### Configuration
+## Configuration
 
 ``` ruby
 Talkable.configure do |c|
@@ -46,7 +45,7 @@ end
 ```
 
 
-### API
+## API
 
 Full API support according to DOC
 
@@ -79,9 +78,10 @@ offer.claim_links # =>
                   # }
 ```
 
-### AD Offer Share page
+## AD Offer Share page
 
 
+`integration.js` additions. Suppose to be never used directly if using talkable gem
 
 ```  js
 _talkableq.push(['show_offer'], "https://zz.com/x/38828")
@@ -89,13 +89,14 @@ talkable.showOffer(offer.show_url)
 
 ```
 
+User facing GEM API
 
 ``` erb
 <%= offer.advocate_share_iframe %>
 ```
 
 
-### Self-Serve UI
+## Self-Serve UI
 
 
 ``` ruby
@@ -168,3 +169,6 @@ mount Talkable::Rack => 'talkable'
 ```
 
 
+## TODO
+
+[  ] Prevent API request to create visitor until user interacts with RAF
