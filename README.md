@@ -80,15 +80,15 @@ end
 ```
 
 
+
+
 ## API
 
 Full API support according to DOC
 
 
-
-
 ``` ruby
-offer = Talkable::API.register_purchase(
+origin = Talkable::API.register_purchase(
     {
       email: 'a@b.com',
       subtotal: 100.53,
@@ -96,8 +96,9 @@ offer = Talkable::API.register_purchase(
       traffic_source: 'zz'
     },
     )
-offer = Talkable::API.register_event()
-offer = Talkable::API.register_affiliate_member(
+origin = Talkable::API.register_event()
+origin = Talkable::API.register_affiliate_member(
+offer = origin.offer
     {
       email: '...'
       sharing_channels: ['facebook', 'embedded_email', 'sms', 'other']
@@ -210,4 +211,10 @@ mount Talkable::Rack => 'talkable'
 
 ## TODO
 
-[  ] Prevent API request to create visitor until user interacts with RAF
+* [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
+* [ ] Gem infrustructure
+* [ ] Configuration
+* [ ] API
+* [ ] Offer Share Iframe
+* [ ] Generator
+
