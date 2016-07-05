@@ -29,6 +29,7 @@ create config/initializers/talkable.rb
 update app/controllers/application_controller.rb
 
 create app/controllers/talkable_invite.rb
+create app/views/talkable_invite/show.html.erb
 update config/routes.rb
 ```
 
@@ -191,17 +192,6 @@ offer.bindClickLink($('.js-plain-offer-link'))
 %a.js-share-via-sms Twitter
 ```
 
-
-
-``` sh
-rails g talkable
-
-app/views/talkable/share.html.erb
-app/assets/javascripts/talkable.js
-app/assets/stylesheets/talkable.css
-
-# config/routes.rb
-```
 
 ``` ruby
 # routes.rb
