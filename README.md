@@ -3,23 +3,16 @@
 Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
 
 
-## Configuration
+
+## Demo
+
+Take a spree demo app and intall Talkable
+
+## Intallation
 
 ``` ruby
-Talkable.configure do |c|
-  # required
-  c.site_slug = 'hello'
-  # or
-  c.site_slug = Rails.env.production? ? "hello" : "hello-staging"
-  # required
-  c.api_token = '188773'
-  # optional
-  c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
-  # required
-  c.server = 'http://invite.site.com' # fetched from site settings automatically by default
-end
+gem "talkable"
 ```
-
 
 ## Using Generator
 
@@ -38,6 +31,25 @@ update app/controllers/application_controller.rb
 create app/controllers/talkable_invite.rb
 update config/routes.rb
 ```
+
+## Configuration
+
+``` ruby
+Talkable.configure do |c|
+  # required
+  c.site_slug = 'hello'
+  # or
+  c.site_slug = Rails.env.production? ? "hello" : "hello-staging"
+  # required
+  c.api_token = Rails.env.production? ? "1235" : "6789" 
+  # required
+  c.server = 'http://invite.site.com' # fetched from site settings automatically using generator
+  # optional
+  c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
+end
+```
+
+
 
 ``` ruby
 class ApplicationController < ActionController::Base
@@ -104,18 +116,22 @@ offer.claim_links # =>
 ## AD Offer Share page
 
 
-`integration.js` additions. Suppose to be never used directly if using talkable gem
-
-```  js
-_talkableq.push(['show_offer'], "https://zz.com/x/38828")
-talkable.showOffer(offer.show_url)
-
-```
 
 User facing GEM API
 
 ``` erb
 <%= offer.advocate_share_iframe %>
+
+```
+
+`integration.js` additions. Suppose to be never used directly if using talkable gem
+
+```  html
+<div class='talkable-offer-xxx'></div>
+<script>
+_talkableq.push(['show_offer'], "https://invite.site.com/x/38828?current_visitor_uuid=<uuid>", {container: 'talkable-offer-xxx'})
+talkable.showOffer(offer.show_url)
+</script>
 ```
 
 
