@@ -9,11 +9,34 @@ Talkable Ruby Gem to make your own referral program in Sinatra or Rails applicat
 Talkable.configure do |c|
   # required
   c.site_slug = 'hello'
+  # or
+  c.site_slug = Rails.env.production? ? "hello" : "hello-staging"
+  # required
   c.api_token = '188773'
   # optional
   c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
+  # required
   c.server = 'http://invite.site.com' # fetched from site settings automatically by default
 end
+```
+
+
+## Using Generator
+
+``` sh
+rails generate talkable:install
+Your talkable site slug (http://talkable.com): 
+You API token (http://talkable.com/sites/zz/edit):
+Do you want a different site to be used for non-production env? (y/n)
+Your staging site slug:
+Your staging site API token:
+
+
+create config/initializers/talkable.rb
+update app/controllers/application_controller.rb
+
+create app/controllers/talkable_invite.rb
+update config/routes.rb
 ```
 
 ``` ruby
