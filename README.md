@@ -201,10 +201,13 @@ mount Talkable::Rack => 'talkable'
 
 ## TODO
 
-* [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
+Functionality:
+
 * [ ] Gem infrustructure
 * [ ] Configuration
 * [ ] API
 * [ ] Offer Share Iframe
 * [ ] Generator
 
+Caveats:
+* [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
