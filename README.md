@@ -126,14 +126,31 @@ User facing GEM API
 
 ```
 
-`integration.js` additions. Suppose to be never used directly if using talkable gem
+Generated code:
+
 
 ```  html
-<div class='talkable-offer-xxx'></div>
+<div class='talkable-offer-xxx'>
+  <!-- result of the JS evaluation - not ruby evaluation -->
+  <iframe src="https://invite.site.com/x/38828?current_visitor_uuid=<uuid>"></iframe>
+</div>
+
 <script>
-_talkableq.push(['show_offer'], "https://invite.site.com/x/38828?current_visitor_uuid=<uuid>", {container: 'talkable-offer-xxx'})
-talkable.showOffer(offer.show_url)
+_talkableq.push(['init', {
+  server: '...',
+  site_id: '...',
+  visitor_uuid: '...'
+}])
+_talkableq.push(['show_offer'], "https://invite.site.com/x/38828", {container: 'talkable-offer-xxx'})
 </script>
+```
+
+## integration.js extension
+
+`integration.js` additions. Suppose to be never used directly if using talkable gem
+
+``` js
+talkable.showOffer(offer.show_url)
 ```
 
 
@@ -206,7 +223,14 @@ Functionality:
 * [ ] Gem infrustructure
 * [ ] Configuration
 * [ ] API
+  * Visitors
+  * Origins
+  * Shares
+  * Rewards
+* [ ] Controller hook
 * [ ] Offer Share Iframe
+  * [ ] Integration JS additions
+  * [ ] Ruby iframe generation method
 * [ ] Generator
 
 Caveats:
