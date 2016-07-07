@@ -223,11 +223,13 @@ Functionality:
 * [ ] Gem infrustructure
 * [ ] Configuration
 * [ ] API
+  * Custom Traffic Source
+  * Custom User Agent
   * Visitors
   * Origins
   * Shares
   * Rewards
-* [ ] Controller hook
+* [ ] Controller uuid hook
 * [ ] Offer Share Iframe
   * [ ] Integration JS additions
   * [ ] Ruby iframe generation method
