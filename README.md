@@ -30,6 +30,8 @@ update app/controllers/application_controller.rb
 
 create app/controllers/talkable_invite.rb
 create app/views/talkable_invite/show.html.erb
+update app/layouts/application.html.erb # floating widget install
+update app/layouts/_talkable_floating_widget.html.erb
 update config/routes.rb
 ```
 
