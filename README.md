@@ -236,6 +236,7 @@ Functionality:
   * [ ] Integration JS additions
   * [ ] Ruby iframe generation method
 * [ ] Generator
+* [ ] Setup demo with the most popular ruby shopping cart gem
 
 Caveats:
 * [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
