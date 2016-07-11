@@ -236,6 +236,9 @@ Functionality:
   * [ ] Integration JS additions
   * [ ] Ruby iframe generation method
 * [ ] Generator
+* [ ] Documentation
+  * Post-Checkout integration instructions
+  * Events integration instructions
 * [ ] Setup demo with the most popular ruby shopping cart gem
 
 Caveats:
