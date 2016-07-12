@@ -1,0 +1,3 @@
+module Talkable
+
+end
