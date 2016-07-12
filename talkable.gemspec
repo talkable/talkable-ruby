@@ -12,5 +12,10 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/talkable/talkable-ruby"
   s.license     = 'MIT'
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  s.require_paths = ["lib"]
+
+  s.add_development_dependency "bundler", "~> 1.9"
+  s.add_development_dependency "rake", "~> 10.0"
+  s.add_development_dependency "rspec", "~> 3.4"
 end
