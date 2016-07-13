@@ -5,6 +5,9 @@ module Talkable
     attr_accessor :server
     attr_accessor :js_integration_library
 
+    class UnknownOptionError < StandardError
+    end
+
     def initialize
       self.site_slug  = ENV["TALKABLE_SITE_SLUG"]
       self.api_key    = ENV["TALKABLE_API_KEY"]
@@ -13,7 +16,11 @@ module Talkable
 
     def apply(config)
       config.each do |key, value|
-        send("#{key}=", value) if respond_to?("#{key}=")
+        if respond_to?("#{key}=")
+          public_send("#{key}=", value)
+        else
+          raise UnknownOptionError.new("There is no `#{key}` option")
+        end
       end
     end
 

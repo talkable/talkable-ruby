@@ -26,5 +26,11 @@ describe Talkable::Configuration do
     it 'changes configuration' do
       expect(subject.server).to eq('http://some-server.com')
     end
+
+    it 'raises for unknown options' do
+      expect {
+        subject.apply(not_existing_option: 'value')
+      }.to raise_error(Talkable::Configuration::UnknownOptionError)
+    end
   end
 end
