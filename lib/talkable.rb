@@ -1,5 +1,6 @@
 require 'talkable/version'
 require 'talkable/configuration'
+require 'talkable/api'
 
 module Talkable
 
