@@ -4,7 +4,7 @@ describe Talkable::Configuration do
   subject { Talkable::Configuration.new }
 
   it 'has defaults' do
-    expect(subject.server).to eq("https://talkable.com")
+    expect(subject.server).to eq("https://www.talkable.com")
     expect(subject.api_key).to be_nil
     expect(subject.site_slug).to be_nil
   end

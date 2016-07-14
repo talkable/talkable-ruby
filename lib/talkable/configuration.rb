@@ -11,7 +11,7 @@ module Talkable
     def initialize
       self.site_slug  = ENV["TALKABLE_SITE_SLUG"]
       self.api_key    = ENV["TALKABLE_API_KEY"]
-      self.server     = "https://talkable.com"
+      self.server     = "https://www.talkable.com"
     end
 
     def apply(config)
