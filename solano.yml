@@ -12,3 +12,6 @@ test_pattern:
   - spec/**_spec.rb
 cache:
   nocache: true
+coverage:
+  version: 2
+  enabled: true
