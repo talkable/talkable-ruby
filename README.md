@@ -1,8 +1,7 @@
 # Talkable Referral Programe API Gem
+[![](https://ci.solanolabs.com:443/Talkable/talkable-ruby/badges/branches/master?badge_token=c2445aee31992aafe3d8fda62fcde2708f6254f6)](https://ci.solanolabs.com:443/Talkable/talkable-ruby/suites/484176)
 
 Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
-
-
 
 ## Demo
 
