@@ -10,3 +10,5 @@ ruby_version:
     - "2.3.0"
 test_pattern:
   - spec/**_spec.rb
+cache:
+  nocache: true
