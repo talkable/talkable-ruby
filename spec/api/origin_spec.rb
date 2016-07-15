@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Talkable::API::Origins do
+describe Talkable::API::Origin do
   before do
     Talkable.configure do |config|
       config.server     = 'http://example.com'
@@ -10,7 +10,7 @@ describe Talkable::API::Origins do
   end
 
   describe ".create" do
-    let(:type) { Talkable::API::Origins::PURCHASE }
+    let(:type) { Talkable::API::Origin::PURCHASE }
     let(:params) {{
       email: 'customer@domain.com',
       order_number: '123',
@@ -29,7 +29,7 @@ describe Talkable::API::Origins do
     end
 
     it "success" do
-      expect(Talkable::API::Origins.create(type, params)).to eq({'origin' => {'id' => 1024}})
+      expect(Talkable::API::Origin.create(type, params)).to eq({'origin' => {'id' => 1024}})
     end
   end
 end

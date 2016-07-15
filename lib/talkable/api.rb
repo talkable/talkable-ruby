@@ -1,5 +1,5 @@
 require 'talkable/api/base'
-require 'talkable/api/origins'
+require 'talkable/api/origin'
 
 module Talkable
   module API

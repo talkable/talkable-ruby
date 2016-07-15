@@ -1,6 +1,6 @@
 module Talkable
   module API
-    class Origins < Base
+    class Origin < Base
       AFFILIATE_MEMBER  = "AffiliateMember".freeze
       PURCHASE          = "Purchase".freeze
       EVENT             = "Event".freeze
