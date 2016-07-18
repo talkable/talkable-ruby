@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|spec|features)/}) }
   s.require_paths = ["lib"]
 
+  s.add_dependency "furi", "~> 0.2"
+
   s.add_development_dependency "bundler", "~> 1.12"
   s.add_development_dependency "rake", "~> 11.2"
   s.add_development_dependency "rspec", "~> 3.4"

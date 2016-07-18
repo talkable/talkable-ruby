@@ -1,17 +1,18 @@
 require 'net/https'
 require 'json'
+require 'furi'
 
 module Talkable
   module API
     class Base
       class << self
-        def get(path, params = nil)
+        def get(path, params = {})
           uri = request_uri(path, request_params(params))
           request = Net::HTTP::Get.new(uri.request_uri)
           perform_request(uri, request)
         end
 
-        def post(path, params = nil)
+        def post(path, params = {})
           uri = request_uri(path)
           request = Net::HTTP::Post.new(uri.request_uri)
           request.body = request_params(params).to_json
@@ -20,17 +21,19 @@ module Talkable
 
         protected
 
-        def request_params(params = nil)
-          (params || {}).merge({
+        def request_params(params = {})
+          params.merge({
             api_key:   Talkable.configuration.api_key,
             site_slug: Talkable.configuration.site_slug,
           })
         end
 
-        def request_uri(path, params = nil)
-          uri = URI("#{Talkable.configuration.server}/api/#{Talkable::API::VERSION}#{path}")
-          uri.query = URI.encode_www_form(params) if params
-          uri
+        def request_uri(path, params = {})
+          URI(
+            Furi.update("#{Talkable.configuration.server}/api/#{Talkable::API::VERSION}#{path}",
+              query: params
+            )
+          )
         end
 
         def request_headers
