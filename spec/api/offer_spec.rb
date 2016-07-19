@@ -13,7 +13,7 @@ describe Talkable::API::Offer do
     end
 
     it "success" do
-      expect(Talkable::API::Offer.find(id, params)).to eq({'offer' => {'id' => id}})
+      expect(Talkable::API::Offer.find(id, params)).to eq({offer: {id: id}})
     end
   end
 end

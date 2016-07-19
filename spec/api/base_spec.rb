@@ -71,7 +71,7 @@ describe Talkable::API::Base do
         body: '{"ok": true, "result":{"key": "value"}}'
       )
       expect {
-        expect(request).to eq({'key' => 'value'})
+        expect(request).to eq({key: 'value'})
       }.not_to raise_error
     end
   end

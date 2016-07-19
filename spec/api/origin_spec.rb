@@ -16,7 +16,7 @@ describe Talkable::API::Origin do
     end
 
     it "success" do
-      expect(Talkable::API::Origin.create(type, params)).to eq({'origin' => {'id' => 1024}})
+      expect(Talkable::API::Origin.create(type, params)).to eq({origin: {id: 1024}})
     end
   end
 end

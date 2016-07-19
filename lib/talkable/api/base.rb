@@ -67,13 +67,13 @@ module Talkable
 
         def parse_response(body)
           raise_invalid_response if body.nil?
-          result = JSON.parse(body)
+          result = JSON.parse(body, symbolize_names: true)
           raise_invalid_response unless result.is_a?(Hash)
 
-          if result['ok']
-            result['result']
+          if result[:ok]
+            result[:result]
           else
-            raise BadRequest.new(result['error_message'])
+            raise BadRequest.new(result[:error_message])
           end
 
         rescue JSON::ParserError
