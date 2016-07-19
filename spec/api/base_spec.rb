@@ -9,11 +9,10 @@ describe Talkable::API::Base do
     let(:http_method) { http_method }
     let(:path)        { '/path' }
     let(:params)      { {key1: :value1, key2: :value2} }
+    let(:api_params)  { params.merge(api_key: api_key, site_slug: site_slug) }
 
     def stub_api_request
-      api_params = params.merge({api_key: api_key, site_slug: site_slug})
-      stub_request(http_method, "#{server}/api/#{version}/path").
-        with(http_method == :get ? {query: api_params} : {body: api_params.to_json})
+      stub_request(http_method, "#{server}/api/#{version}/path").with(params_stub)
     end
 
     before do
@@ -78,11 +77,14 @@ describe Talkable::API::Base do
 
   describe '.get' do
     let(:request) { Talkable::API::Base.get(path, params) }
+    let(:params_stub) { {query: api_params} }
     it_behaves_like 'api request', :get
   end
 
   describe '.post' do
     let(:request) { Talkable::API::Base.post(path, params) }
+    let(:params_stub) { {body: api_params.to_json} }
+
     it_behaves_like 'api request', :post
   end
 end
