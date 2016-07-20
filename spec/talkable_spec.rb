@@ -43,6 +43,14 @@ describe Talkable do
       end
       expect(Talkable.visitor_uuid).to be_nil
     end
+
+    it 'returns result of given block' do
+      expect(
+        Talkable.with_uuid('40a852bf-8887-4ce7-b3f4-e08ff327d74f') do
+          "result"
+        end
+      ).to eq("result")
+    end
   end
 
   describe '#find_or_generate_uuid' do

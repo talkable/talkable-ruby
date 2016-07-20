@@ -18,8 +18,9 @@ module Talkable
 
     def with_uuid(uuid)
       old_uuid, @visitor_uuid = @visitor_uuid, uuid
-      yield if block_given?
+      result = yield if block_given?
       @visitor_uuid = old_uuid
+      result
     end
 
     def find_or_generate_uuid
