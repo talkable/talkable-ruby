@@ -16,6 +16,5 @@ end
 
 def stub_uuid_request(uuid)
   stub_request(:post, /.*api\/v2\/visitors.*/).
-    with(body: /.*\"data\":{}.*/).
     to_return(body: %Q{{"ok": true, "result": {"uuid":"#{uuid}"}}})
 end
