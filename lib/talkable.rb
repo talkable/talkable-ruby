@@ -1,8 +1,10 @@
 require 'talkable/version'
 require 'talkable/configuration'
 require 'talkable/api'
+require 'talkable/middleware'
 
 module Talkable
+  UUID = 'talkable_visitor_uuid'.freeze
 
   class << self
     attr_reader :visitor_uuid

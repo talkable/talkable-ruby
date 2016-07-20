@@ -57,10 +57,7 @@ describe Talkable do
     let(:uuid) { 'fe09af8c-1801-4fa3-998b-ddcbe0e052e5' }
 
     it 'makes API call' do
-      stub_request(:post, /.*api\/v2\/visitors.*/).
-        with(body: /.*\"data\":{}.*/).
-        to_return(body: '{"ok": true, "result": {"uuid":"fe09af8c-1801-4fa3-998b-ddcbe0e052e5"}}')
-
+      stub_uuid_request(uuid)
       expect(Talkable.find_or_generate_uuid).to eq(uuid)
     end
 

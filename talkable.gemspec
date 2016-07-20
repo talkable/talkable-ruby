@@ -17,6 +17,12 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 1.9.3"
 
+  if RUBY_VERSION < '2.2.2'
+    s.add_dependency "rack", ">= 1.5.2", "< 2"
+  else
+    s.add_dependency "rack", ">= 2.0"
+  end
+
   s.add_dependency "furi", "~> 0.2"
 
   s.add_development_dependency "bundler", "~> 1.12"
