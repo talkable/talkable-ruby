@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.2.2')
     s.add_dependency "rack", ">= 1.5.2", "< 2"
   else
-    s.add_dependency "rack", ">= 2.0"
+    s.add_dependency "rack", ">= 1.5.2"
   end
 
   s.add_dependency "furi", "~> 0.2"
