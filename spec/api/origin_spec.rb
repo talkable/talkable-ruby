@@ -11,7 +11,7 @@ describe Talkable::API::Origin do
 
     before do
       stub_request(:post, /.*api\/v2\/origins.*/).
-        with(body: /.*\"type\":\"Purchase\".*\"email\":\"customer@domain.com\",\"order_number\":\"123\",\"subtotal\":34.56.*/).
+        with(body: /.*\"type\":\"Purchase\".*\"traffic_source\":\"talkable-gem\",\"email\":\"customer@domain.com\",\"order_number\":\"123\",\"subtotal\":34.56.*/).
         to_return(body: '{"ok": true, "result": {"origin":{"id":1024}}}')
     end
 
