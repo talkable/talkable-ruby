@@ -9,7 +9,9 @@ module Talkable
         def create(origin_type, params)
           post '/origins', {
             type: origin_type,
-            data: params,
+            data: {
+              uuid: Talkable.visitor_uuid
+            }.merge(params)
           }
         end
       end
