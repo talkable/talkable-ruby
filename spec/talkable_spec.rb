@@ -33,6 +33,20 @@ describe Talkable do
     end
   end
 
+  describe '#visitor_uuid' do
+    it 'uses threads' do
+      allow(Thread.current).to receive(:[]).with(Talkable::UUID).and_return("some-uuid")
+      expect(Talkable.visitor_uuid).to eq('some-uuid')
+    end
+  end
+
+  describe '#visitor_uuid=' do
+    it 'uses threads' do
+      allow(Thread.current).to receive(:[]=).with(Talkable::UUID, 'some-uuid')
+      Talkable.visitor_uuid = 'some-uuid'
+    end
+  end
+
   describe '#with_uuid' do
     it 'retains and releases uuid' do
       Talkable.with_uuid('fe09af8c-1801-4fa3-998b-ddcbe0e052e5') do
