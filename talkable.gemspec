@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 1.9.3"
 
-  if RUBY_VERSION < '2.2.2'
+  if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.2.2')
     s.add_dependency "rack", ">= 1.5.2", "< 2"
   else
     s.add_dependency "rack", ">= 2.0"
