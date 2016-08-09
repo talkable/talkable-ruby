@@ -1,3 +1,4 @@
+require 'cgi'
 require 'rack/request'
 
 module Talkable
@@ -55,11 +56,14 @@ module Talkable
     end
 
     def sync_uuid_url(uuid)
-      "https://www.talkable.com/public/1x1.gif?current_visitor_uuid=#{URI.escape(uuid)}"
+      Furi.update("https://www.talkable.com/public/1x1.gif", query: {current_visitor_uuid: uuid})
     end
 
     def sync_uuid_content(uuid)
-      "\n<img src=\"#{sync_uuid_url(uuid)}\" style=\"position:absolute; left:-9999px;\" alt=\"\" />"
+      src = CGI::escapeHTML(sync_uuid_url(uuid))
+      %Q{
+<img src="#{src}" style="position:absolute; left:-9999px;" alt="" />
+      }
     end
 
     def inject_body?(result)
