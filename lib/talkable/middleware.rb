@@ -16,7 +16,8 @@ module Talkable
 
       inject_uuid_in_cookie(uuid, result)
       modify_response_content(result) do |content|
-        inject_uuid_in_body(uuid, content)
+        content = inject_uuid_in_body(uuid, content)
+        inject_integration_js_in_head(content)
       end
 
     end
@@ -51,13 +52,20 @@ module Talkable
 
     def inject_uuid_in_body(uuid, content)
       if injection_index = body_injection_position(content)
-        content = \
-          content[0...injection_index] \
-          << sync_uuid_content(uuid) \
-          << content[injection_index..-1]
+        content = inject_in_content(content, sync_uuid_content(uuid), injection_index)
       end
-
       content
+    end
+
+    def inject_integration_js_in_head(content)
+      if injection_index = head_injection_position(content)
+        content = inject_in_content(content, integration_content, injection_index)
+      end
+      content
+    end
+
+    def inject_in_content(content, injection, position)
+      content[0...position] << injection << content[position..-1]
     end
 
     def cookies_expiration
@@ -72,6 +80,28 @@ module Talkable
       src = CGI::escapeHTML(sync_uuid_url(uuid))
       %Q{
 <img src="#{src}" style="position:absolute; left:-9999px;" alt="" />
+      }
+    end
+
+    def integration_content
+      integration_script_content + integration_init_content
+    end
+
+    def integration_script_content
+      %Q{
+<script>
+  window._talkableq = window._talkableq || [];
+  _talkableq.push(['init', {
+    site_id: '#{CGI::escape(Talkable.configuration.site_slug)}'
+  }]);
+</script>
+      }
+    end
+
+    def integration_init_content
+      src = CGI::escapeHTML(Talkable.configuration.js_integration_library)
+      %Q{
+<script src="#{src}" type="text/javascript"></script>
       }
     end
 
@@ -96,6 +126,12 @@ module Talkable
       pattern = /<\s*body[^>]*>/im
       match = pattern.match(content)
       match.end(0) if match
+    end
+
+    def head_injection_position(content)
+      pattern = /<\s*\/\s*head[^>]*>/im
+      match = pattern.match(content)
+      match.begin(0) if match
     end
 
     def html?(headers)
