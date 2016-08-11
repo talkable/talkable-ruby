@@ -15,7 +15,10 @@ module Talkable
       end
 
       inject_uuid_in_cookie(uuid, result)
-      inject_uuid_in_body(uuid, result)
+      modify_response_content(result) do |content|
+        inject_uuid_in_body(uuid, content)
+      end
+
     end
 
     protected
@@ -29,26 +32,32 @@ module Talkable
       Rack::Utils.set_cookie_header!(result[1], UUID, {value: uuid, path: '/', expires: cookies_expiration})
     end
 
-    def inject_uuid_in_body(uuid, result)
-      return result unless inject_body?(result)
+    def modify_response_content(result)
+      return result unless modifiable?(result)
 
-      body = result[2]
-      body_content = collect_response(body)
-      body.close if body.respond_to?(:close)
+      chunks = result[2]
+      response_content = collect_content(chunks)
+      chunks.close if chunks.respond_to?(:close)
 
-      if injection_index = body_injection_position(body_content)
-        body_content = \
-          body_content[0...injection_index] \
-          << sync_uuid_content(uuid) \
-          << body_content[injection_index..-1]
-      end
+      response_content = yield(response_content) if block_given?
 
-      if body_content
-        response = Rack::Response.new(body_content, result[0], result[1])
+      if response_content
+        response = Rack::Response.new(response_content, result[0], result[1])
         response.finish
       else
         result
       end
+    end
+
+    def inject_uuid_in_body(uuid, content)
+      if injection_index = body_injection_position(content)
+        content = \
+          content[0...injection_index] \
+          << sync_uuid_content(uuid) \
+          << content[injection_index..-1]
+      end
+
+      content
     end
 
     def cookies_expiration
@@ -66,19 +75,19 @@ module Talkable
       }
     end
 
-    def inject_body?(result)
+    def modifiable?(result)
       status, headers = result
       status == 200 && html?(headers) && !attachment?(headers)
     end
 
-    def collect_response(body)
+    def collect_content(chunks)
       content = nil
-      if body.respond_to?(:each)
-        body.each do |chunk|
+      if chunks.respond_to?(:each)
+        chunks.each do |chunk|
           content ? (content << chunk.to_s) : (content = chunk.to_s)
         end
       else
-        content = body
+        content = chunks
       end
       content
     end
