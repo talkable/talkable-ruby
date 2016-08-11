@@ -3,6 +3,7 @@ PATH
   specs:
     talkable (0.0.0)
       furi (~> 0.2)
+      hashie (~> 3.4)
       rack (>= 1.5.2, < 2)
 
 GEM
@@ -15,6 +16,7 @@ GEM
     docile (1.1.5)
     furi (0.2.0)
     hashdiff (0.3.0)
+    hashie (3.4.4)
     json (1.8.3)
     rack (1.6.4)
     rake (11.2.2)

@@ -1,7 +1,7 @@
 require 'time'
 
 module Talkable
-  class Origin < JSONStruct
+  class Origin < Hashie::Mash
     def self.parse(result_hash)
       origin_hash = result_hash[:origin]
       order_date = (origin_hash ? origin_hash[:order_date] : nil)

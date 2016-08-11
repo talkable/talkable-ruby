@@ -1,3 +1,3 @@
-require 'talkable/resources/json_struct'
+require 'hashie'
 require 'talkable/resources/origin'
 require 'talkable/resources/offer'

@@ -21,10 +21,10 @@ describe Talkable::Offer do
 
     it 'has claim_links data' do
       offer = Talkable::Offer.parse(offer: offer_hash)
-      expect(offer.claim_links).to be_kind_of(Talkable::JSONStruct)
+      expect(offer.claim_links).to be_kind_of(Hashie::Mash)
 
       offer = Talkable::Offer.parse(claim_links: claim_links_hash)
-      expect(offer.claim_links.to_h).to eq(claim_links_hash)
+      expect(offer.claim_links.to_hash).to eq(Hashie.stringify_keys claim_links_hash)
     end
   end
 end

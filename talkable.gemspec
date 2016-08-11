@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   end
 
   s.add_dependency "furi", "~> 0.2"
+  s.add_dependency "hashie", "~> 3.4"
 
   s.add_development_dependency "bundler", "~> 1.12"
   s.add_development_dependency "rake", "~> 11.2"
