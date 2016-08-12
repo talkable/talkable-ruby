@@ -62,10 +62,7 @@ describe Talkable::Middleware do
       expect(response.body.first).to include(%Q{
 <script>
   window._talkableq = window._talkableq || [];
-  _talkableq.push(['init', {
-    site_id: 'test-middleware',
-    server: 'http://example.com'
-  }]);
+  _talkableq.push(['init', {"site_id":"test-middleware","server":"http://example.com"}]);
 </script>
       })
     end

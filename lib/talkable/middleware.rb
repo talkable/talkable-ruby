@@ -36,14 +36,14 @@ module Talkable
     def modify_response_content(result)
       return result unless modifiable?(result)
 
-      chunks = result[2]
-      response_content = collect_content(chunks)
-      chunks.close if chunks.respond_to?(:close)
+      status, header, body = result
+      response_content = collect_content(body)
+      body.close if body.respond_to?(:close)
 
       response_content = yield(response_content) if block_given?
 
       if response_content
-        response = Rack::Response.new(response_content, result[0], result[1])
+        response = Rack::Response.new(response_content, status, header)
         response.finish
       else
         result
@@ -77,30 +77,34 @@ module Talkable
     end
 
     def sync_uuid_content(uuid)
-      src = CGI::escapeHTML(sync_uuid_url(uuid))
+      src = CGI.escape_html(sync_uuid_url(uuid))
       %Q{
 <img src="#{src}" style="position:absolute; left:-9999px;" alt="" />
       }
     end
 
     def integration_content
-      integration_script_content + integration_init_content
+      integration_init_content + integration_script_content
     end
 
-    def integration_script_content
+    def integration_init_content
       %Q{
 <script>
   window._talkableq = window._talkableq || [];
-  _talkableq.push(['init', {
-    site_id: '#{CGI::escape(Talkable.configuration.site_slug)}',
-    server: '#{CGI::escapeHTML(Talkable.configuration.server)}'
-  }]);
+  _talkableq.push(['init', #{init_parameters.to_json}]);
 </script>
       }
     end
 
-    def integration_init_content
-      src = CGI::escapeHTML(Talkable.configuration.js_integration_library)
+    def init_parameters
+      {
+        site_id: Talkable.configuration.site_slug,
+        server: Talkable.configuration.server,
+      }
+    end
+
+    def integration_script_content
+      src = CGI.escape_html(Talkable.configuration.js_integration_library)
       %Q{
 <script src="#{src}" type="text/javascript"></script>
       }
@@ -112,15 +116,9 @@ module Talkable
     end
 
     def collect_content(chunks)
-      content = nil
-      if chunks.respond_to?(:each)
-        chunks.each do |chunk|
-          content ? (content << chunk.to_s) : (content = chunk.to_s)
-        end
-      else
-        content = chunks
+      ''.tap do |content|
+        chunks.each { |chunk| content << chunk.to_s }
       end
-      content
     end
 
     def body_injection_position(content)
