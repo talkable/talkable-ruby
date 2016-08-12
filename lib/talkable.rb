@@ -1,6 +1,7 @@
 require 'talkable/version'
 require 'talkable/configuration'
 require 'talkable/api'
+require 'talkable/resources'
 require 'talkable/middleware'
 
 module Talkable
