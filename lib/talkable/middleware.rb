@@ -92,7 +92,8 @@ module Talkable
 <script>
   window._talkableq = window._talkableq || [];
   _talkableq.push(['init', {
-    site_id: '#{CGI::escape(Talkable.configuration.site_slug)}'
+    site_id: '#{CGI::escape(Talkable.configuration.site_slug)}',
+    server: '#{CGI::escapeHTML(Talkable.configuration.server)}'
   }]);
 </script>
       }

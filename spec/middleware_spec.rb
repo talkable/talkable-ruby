@@ -48,7 +48,7 @@ describe Talkable::Middleware do
 
     before {
       stub_uuid_request(uuid)
-      Talkable.configure(site_slug: 'test-middleware')
+      Talkable.configure(site_slug: 'test-middleware', server: 'http://example.com')
     }
 
     it 'injects sync url in body' do
@@ -63,7 +63,8 @@ describe Talkable::Middleware do
 <script>
   window._talkableq = window._talkableq || [];
   _talkableq.push(['init', {
-    site_id: 'test-middleware'
+    site_id: 'test-middleware',
+    server: 'http://example.com'
   }]);
 </script>
       })
