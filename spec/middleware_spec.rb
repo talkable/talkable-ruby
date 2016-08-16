@@ -44,13 +44,27 @@ describe Talkable::Middleware do
       env['Content-Type'] = 'text/html; charset=utf-8'
       env
     end
-    let(:app) { ->(env) { [200, env, ['<body></body>']] } }
+    let(:app) { ->(env) { [200, env, ['<head><title>title</title></head><body><h1>title</h1></body>']] } }
 
-    before { stub_uuid_request(uuid) }
+    before {
+      stub_uuid_request(uuid)
+      Talkable.configure(site_slug: 'test-middleware', server: 'http://example.com')
+    }
 
     it 'injects sync url in body' do
       _, _, response = subject.call(env)
       expect(response.body.first).to include("https://www.talkable.com/public/1x1.gif?current_visitor_uuid=#{uuid}")
+    end
+
+    it 'injects integration js library' do
+      _, _, response = subject.call(env)
+      expect(response.body.first).to include('<script src="//d2jjzw81hqbuqv.cloudfront.net/integration/clients/test-middleware.min.js" type="text/javascript"></script>')
+      expect(response.body.first).to include(%Q{
+<script>
+  window._talkableq = window._talkableq || [];
+  _talkableq.push(['init', {"site_id":"test-middleware","server":"http://example.com"}]);
+</script>
+      })
     end
   end
 

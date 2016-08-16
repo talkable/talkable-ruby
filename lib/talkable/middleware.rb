@@ -15,7 +15,11 @@ module Talkable
       end
 
       inject_uuid_in_cookie(uuid, result)
-      inject_uuid_in_body(uuid, result)
+      modify_response_content(result) do |content|
+        content = inject_uuid_in_body(uuid, content)
+        inject_integration_js_in_head(content)
+      end
+
     end
 
     protected
@@ -29,26 +33,39 @@ module Talkable
       Rack::Utils.set_cookie_header!(result[1], UUID, {value: uuid, path: '/', expires: cookies_expiration})
     end
 
-    def inject_uuid_in_body(uuid, result)
-      return result unless inject_body?(result)
+    def modify_response_content(result)
+      return result unless modifiable?(result)
 
-      body = result[2]
-      body_content = collect_response(body)
+      status, header, body = result
+      response_content = collect_content(body)
       body.close if body.respond_to?(:close)
 
-      if injection_index = body_injection_position(body_content)
-        body_content = \
-          body_content[0...injection_index] \
-          << sync_uuid_content(uuid) \
-          << body_content[injection_index..-1]
-      end
+      response_content = yield(response_content) if block_given?
 
-      if body_content
-        response = Rack::Response.new(body_content, result[0], result[1])
+      if response_content
+        response = Rack::Response.new(response_content, status, header)
         response.finish
       else
         result
       end
+    end
+
+    def inject_uuid_in_body(uuid, content)
+      if injection_index = body_injection_position(content)
+        content = inject_in_content(content, sync_uuid_content(uuid), injection_index)
+      end
+      content
+    end
+
+    def inject_integration_js_in_head(content)
+      if injection_index = head_injection_position(content)
+        content = inject_in_content(content, integration_content, injection_index)
+      end
+      content
+    end
+
+    def inject_in_content(content, injection, position)
+      content[0...position] << injection << content[position..-1]
     end
 
     def cookies_expiration
@@ -60,33 +77,60 @@ module Talkable
     end
 
     def sync_uuid_content(uuid)
-      src = CGI::escapeHTML(sync_uuid_url(uuid))
+      src = CGI.escape_html(sync_uuid_url(uuid))
       %Q{
 <img src="#{src}" style="position:absolute; left:-9999px;" alt="" />
       }
     end
 
-    def inject_body?(result)
+    def integration_content
+      integration_init_content + integration_script_content
+    end
+
+    def integration_init_content
+      %Q{
+<script>
+  window._talkableq = window._talkableq || [];
+  _talkableq.push(['init', #{init_parameters.to_json}]);
+</script>
+      }
+    end
+
+    def init_parameters
+      {
+        site_id: Talkable.configuration.site_slug,
+        server: Talkable.configuration.server,
+      }
+    end
+
+    def integration_script_content
+      src = CGI.escape_html(Talkable.configuration.js_integration_library)
+      %Q{
+<script src="#{src}" type="text/javascript"></script>
+      }
+    end
+
+    def modifiable?(result)
       status, headers = result
       status == 200 && html?(headers) && !attachment?(headers)
     end
 
-    def collect_response(body)
-      content = nil
-      if body.respond_to?(:each)
-        body.each do |chunk|
-          content ? (content << chunk.to_s) : (content = chunk.to_s)
-        end
-      else
-        content = body
+    def collect_content(chunks)
+      ''.tap do |content|
+        chunks.each { |chunk| content << chunk.to_s }
       end
-      content
     end
 
     def body_injection_position(content)
       pattern = /<\s*body[^>]*>/im
       match = pattern.match(content)
       match.end(0) if match
+    end
+
+    def head_injection_position(content)
+      pattern = /<\s*\/\s*head[^>]*>/im
+      match = pattern.match(content)
+      match.begin(0) if match
     end
 
     def html?(headers)
