@@ -7,41 +7,39 @@ module Talkable
     end
 
     def advocate_share_iframe(options = {})
-      show_trigger = trigger_widget? && !options[:ignore_trigger]
+      show_trigger = !options[:ignore_trigger]
+      tag = campaign_tags.first
+      iframe_options = default_iframe_options(tag).merge(options[:iframe] || {})
+      url = show_trigger ? Furi.update(show_url, query: {trigger_enabled: 1}) : show_url
 
-      iframe_container = generate_container_id
-      trigger_container = generate_container_id
-
-      show_options = {
-        url: show_url,
-        iframe: default_iframe_options.merge(container: iframe_container),
-        trigger_widget: {},
-      }
-
-      if show_trigger
-        show_options.merge!({
-          url: Furi.update(show_url, query: {only_trigger: 1}),
-          trigger_widget: default_iframe_options.merge(container: trigger_container),
-        })
+      snippets = []
+      if !options[:iframe] || !options[:iframe][:container]
+        snippets << render_container_snipet(iframe_options[:container])
       end
+      snippets << render_share_snipet({
+        url: url,
+        iframe: iframe_options,
+      })
 
-      render_share_snipet(show_options, iframe_container, trigger_container)
+      snippets.join("\n")
     end
 
     protected
 
-    def generate_container_id
-      "talkable-offer-#{SecureRandom.hex(3)}"
+    def default_iframe_options(tag = nil)
+      tag ||= SecureRandom.hex(3)
+      {
+        container: "talkable-offer-#{tag}",
+        width: '100%',
+      }
     end
 
-    def default_iframe_options
-      {width: '100%'}
+    def render_container_snipet(name)
+      "<div id='#{name}'></div>"
     end
 
-    def render_share_snipet(show_options, iframe_container, trigger_container)
+    def render_share_snipet(show_options)
       %Q{
-<div id='#{iframe_container}'></div>
-<div id='#{trigger_container}'></div>
 <script>
 _talkableq.push(['show_offer', #{show_options.to_json}])
 </script>
