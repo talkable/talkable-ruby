@@ -21,8 +21,15 @@ module Talkable
     private
 
     def register_origin(origin_type, params)
-      result = Talkable::API::Origin.create(origin_type, default_params(origin_type).merge(params))
-      Talkable::Origin.parse(result)
+      origin_params = default_params(origin_type).merge(params)
+      result = Talkable::API::Origin.create(origin_type, origin_params)
+      origin = Talkable::Origin.parse(result)
+      if offer = origin.offer
+        # make sure that explicitly specified tags will be listed first
+        tags = Array(origin_params[:campaign_tags]) | Array(offer.campaign_tags)
+        offer.campaign_tags = tags.map(&:to_s).uniq
+      end
+      origin
     end
 
     def default_params(origin_type)
