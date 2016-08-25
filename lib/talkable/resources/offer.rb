@@ -10,7 +10,7 @@ module Talkable
       show_trigger = !options[:ignore_trigger]
       tag = campaign_tags.first
       iframe_options = default_iframe_options(tag).merge(options[:iframe] || {})
-      url = show_trigger ? Furi.update(show_url, query: {trigger_enabled: 1}) : show_url
+      url = show_trigger ? Furi.merge(show_url, query: {trigger_enabled: 1}) : show_url
 
       snippets = []
       if !options[:iframe] || !options[:iframe][:container]
@@ -30,12 +30,11 @@ module Talkable
       tag ||= SecureRandom.hex(3)
       {
         container: "talkable-offer-#{tag}",
-        width: '100%',
       }
     end
 
     def render_container_snipet(name)
-      "<div id='#{name}'></div>"
+      "<div id='#{CGI.escape(name)}'></div>"
     end
 
     def render_share_snipet(show_options)

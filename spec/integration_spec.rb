@@ -26,7 +26,7 @@ describe Talkable do
   end
 
   describe '#register_event' do
-    let(:register_params) { {event_category: 'some-event'} }
+    let(:register_params) { {event_category: 'some_event'} }
     it_behaves_like 'integration method', :register_event
   end
 end

@@ -1,9 +1,9 @@
 module Talkable
   DEFAULT_CAMPAIGN_TAGS = {
-    Talkable::API::Origin::AFFILIATE_MEMBER => 'invite',
-    Talkable::API::Origin::PURCHASE         => 'post-purchase',
+    Talkable::API::Origin::AFFILIATE_MEMBER => 'invite'.freeze,
+    Talkable::API::Origin::PURCHASE         => 'post-purchase'.freeze,
     Talkable::API::Origin::EVENT            => nil,
-  }
+  }.freeze
 
   class << self
     def register_affiliate_member(params)
