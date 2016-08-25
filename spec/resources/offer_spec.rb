@@ -27,4 +27,32 @@ describe Talkable::Offer do
       expect(offer.claim_links.to_hash).to eq(Hashie.stringify_keys claim_links_hash)
     end
   end
+
+  describe ".advocate_share_iframe" do
+    let(:offer) { Talkable::Offer.new(
+      show_url: 'https://www.talkable.com/x/5BN5h7',
+      campaign_tags: ['invite'],
+    )}
+    let(:options) { {} }
+    let(:snippet) { offer.advocate_share_iframe(options) }
+
+    it 'renders container' do
+      expect(snippet).to include("<div id='talkable-offer-invite'></div>")
+    end
+
+    it 'renders javascript' do
+      expect(snippet).to include("_talkableq.push(['show_offer', {\"url\":\"https://www.talkable.com/x/5BN5h7?trigger_enabled=1")
+    end
+
+    context "with iframe oprions" do
+      let(:options) { {
+        iframe: {container: 'custom-container'}
+      }}
+
+      it "doesn't render container" do
+        expect(snippet).not_to include("div")
+        expect(snippet).to include('"iframe":{"container":"custom-container"')
+      end
+    end
+  end
 end

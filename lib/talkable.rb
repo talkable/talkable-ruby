@@ -3,6 +3,7 @@ require 'talkable/configuration'
 require 'talkable/api'
 require 'talkable/resources'
 require 'talkable/middleware'
+require 'talkable/integration'
 
 module Talkable
   UUID = 'talkable_visitor_uuid'.freeze
