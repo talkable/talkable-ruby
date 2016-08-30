@@ -4,6 +4,7 @@ require 'talkable/api'
 require 'talkable/resources'
 require 'talkable/middleware'
 require 'talkable/integration'
+require 'talkable/railtie' if defined? ::Rails::Railtie
 
 module Talkable
   UUID = 'talkable_visitor_uuid'.freeze

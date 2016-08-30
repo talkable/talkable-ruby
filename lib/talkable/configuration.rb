@@ -1,5 +1,7 @@
 module Talkable
   class Configuration
+    DEFAULT_SERVER = "https://www.talkable.com".freeze
+
     attr_accessor :site_slug
     attr_accessor :api_key
     attr_accessor :server
