@@ -32,4 +32,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.12"
   s.add_development_dependency "json", "~> 1.8.3" if RUBY_VERSION < '2.0'
   s.add_development_dependency "webmock", "~> 2.1"
+  s.add_development_dependency "ammeter" # specs for generators
+  s.add_development_dependency "haml" # check haml syntex in generators
 end
