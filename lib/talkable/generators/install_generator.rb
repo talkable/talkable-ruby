@@ -2,6 +2,7 @@ module Talkable
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path("../templates", __FILE__)
     class_option :haml, type: :boolean, default: false
+    class_option :slim, type: :boolean, default: false
 
     def ask_config_values
       @site_slug  = ask("Your Talkable site slug:")
@@ -36,9 +37,11 @@ RUBY
 
       empty_directory "app/views/shared/"
 
-      if options[:haml]
-        copy_file "app/views/shared/_talkable_offer.html.haml", "app/views/shared/_talkable_offer.html.haml"
-        gsub_file "app/views/layouts/application.html.haml", /^(\s*)\=\s*yield\s*$/ do |line|
+      if options[:haml] || options[:slim]
+        ext = options[:haml] ? 'haml' : 'slim'
+
+        copy_file "app/views/shared/_talkable_offer.html.#{ext}", "app/views/shared/_talkable_offer.html.#{ext}"
+        gsub_file "app/views/layouts/application.html.#{ext}", /^(\s*)\=\s*yield\s*$/ do |line|
           paddings = line.match(/(\s*)\=/)[1]
           "#{line}#{paddings}= render 'shared/talkable_offer'\n"
         end
