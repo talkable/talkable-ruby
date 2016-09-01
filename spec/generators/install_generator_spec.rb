@@ -16,6 +16,7 @@ describe Talkable::InstallGenerator, type: :generator do
   let(:extension) { 'erb' }
   let(:layout) { file("app/views/layouts/application.html.#{extension}") }
   let(:partial) { file("app/views/shared/_talkable_offer.html.#{extension}") }
+  let(:routes) { file("config/routes.rb") }
 
   let(:default_arguments) { [] }
 
@@ -31,23 +32,20 @@ describe Talkable::InstallGenerator, type: :generator do
 
     prepare_destination
 
-    FileUtils.mkpath File.dirname(application_controller)
-    FileUtils.mkpath File.dirname(layout)
+    [application_controller, layout, routes].each do |rails_file|
+      FileUtils.mkpath File.dirname(rails_file)
 
-    File.open(application_controller, "w") do |f|
-      fixture = File.read(File.dirname(__FILE__) + '/../fixtures/files/application_controller.rb')
-      f.write fixture
+      File.open(rails_file, "w") do |f|
+        fixture = File.read(File.dirname(__FILE__) + "/../fixtures/files/#{File.basename(rails_file)}")
+        f.write fixture
+      end
     end
 
-    File.open(layout, "w") do |f|
-      fixture = File.read(File.dirname(__FILE__) + "/../fixtures/files/#{File.basename(layout)}")
-      f.write fixture
-    end
+    run_generator
   end
 
   describe '.add_initializer' do
     subject { file('config/initializers/talkable.rb') }
-    before { run_generator }
 
     it do
       is_expected.to exist
@@ -58,34 +56,61 @@ describe Talkable::InstallGenerator, type: :generator do
   end
 
   describe '.inject_talkable_offer' do
-    before { run_generator }
-
     it 'modifies application controller' do
       expect(application_controller).to have_correct_syntax
       expect(application_controller).to contain('before_action :load_talkable_offer')
       expect(application_controller).to have_method('load_talkable_offer')
     end
+  end
+
+  describe '.add_invite_controller' do
+    let(:invite_controller) { file("app/controllers/invite_controller.rb") }
+    it 'creates invite controller' do
+      expect(invite_controller).to have_correct_syntax
+      expect(invite_controller).to have_method('show_offer')
+      expect(invite_controller).to contain("skip_before_action :load_talkable_offer")
+    end
+  end
+
+
+  context 'when template language' do
 
     shared_examples 'templatable' do
-      it 'creates partial' do
-        expect(partial).to exist
-        expect(partial).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
-        expect(partial).to contain("= @offer.advocate_share_iframe")
+      describe '.inject_talkable_offer' do
+        it 'creates partial' do
+          expect(partial).to exist
+          expect(partial).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
+          expect(partial).to contain("= offer.advocate_share_iframe(defined?(options) ? options : {})")
+        end
+
+        it 'modifies application layout' do
+          expect(layout).to have_correct_syntax unless generator.options[:slim] # slim isn't supported yet
+          expect(layout).to contain("render 'shared/talkable_offer'")
+        end
       end
 
-      it 'modifies application layout' do
-        expect(layout).to have_correct_syntax unless generator.options[:slim] # slim isn't supported yet
-        expect(layout).to contain("render 'shared/talkable_offer'")
+      describe '.add_invite_controller' do
+        let(:view) { file("app/views/invite/show_offer.html.#{extension}") }
+
+        it 'creates offer view' do
+          expect(view).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
+          expect(view).to contain("render 'shared/talkable_offer'")
+        end
+
+        it 'adds route' do
+          expect(routes).to have_correct_syntax
+          expect(routes).to contain("get '/invite' => 'invite#show_offer'")
+        end
       end
     end
 
-    it_behaves_like 'templatable'
+    context 'erb' do
+      it_behaves_like 'templatable'
+    end
 
     context 'haml' do
       let(:default_arguments) { ['', '--haml'] }
       let(:extension) { 'haml' }
-
-      before { run_generator }
 
       it_behaves_like 'templatable'
     end
@@ -93,8 +118,6 @@ describe Talkable::InstallGenerator, type: :generator do
     context 'slim' do
       let(:default_arguments) { ['', '--slim'] }
       let(:extension) { 'slim' }
-
-      before { run_generator }
 
       it_behaves_like 'templatable'
     end
