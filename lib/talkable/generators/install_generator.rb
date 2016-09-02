@@ -57,8 +57,8 @@ RUBY
       ext = template_lang
 
       copy_file "app/controllers/invite_controller.rb", "app/controllers/invite_controller.rb"
-      copy_file "app/views/invite/show_offer.html.#{ext}", "app/views/invite/show_offer.html.#{ext}"
-      route "get '/invite' => 'invite#show_offer'"
+      copy_file "app/views/invite/show.html.#{ext}", "app/views/invite/show.html.#{ext}"
+      route "get '/invite' => 'invite#show'"
     end
 
     protected

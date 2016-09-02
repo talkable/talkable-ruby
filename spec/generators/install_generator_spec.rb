@@ -67,7 +67,7 @@ describe Talkable::InstallGenerator, type: :generator do
     let(:invite_controller) { file("app/controllers/invite_controller.rb") }
     it 'creates invite controller' do
       expect(invite_controller).to have_correct_syntax
-      expect(invite_controller).to have_method('show_offer')
+      expect(invite_controller).to have_method('show')
       expect(invite_controller).to contain("skip_before_action :load_talkable_offer")
     end
   end
@@ -80,7 +80,7 @@ describe Talkable::InstallGenerator, type: :generator do
         it 'creates partial' do
           expect(partial).to exist
           expect(partial).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
-          expect(partial).to contain("= offer.advocate_share_iframe(defined?(options) ? options : {})")
+          expect(partial).to contain("= offer.advocate_share_iframe(options)")
         end
 
         it 'modifies application layout' do
@@ -90,7 +90,7 @@ describe Talkable::InstallGenerator, type: :generator do
       end
 
       describe '.add_invite_controller' do
-        let(:view) { file("app/views/invite/show_offer.html.#{extension}") }
+        let(:view) { file("app/views/invite/show.html.#{extension}") }
 
         it 'creates offer view' do
           expect(view).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
@@ -99,7 +99,7 @@ describe Talkable::InstallGenerator, type: :generator do
 
         it 'adds route' do
           expect(routes).to have_correct_syntax
-          expect(routes).to contain("get '/invite' => 'invite#show_offer'")
+          expect(routes).to contain("get '/invite' => 'invite#show'")
         end
       end
     end
