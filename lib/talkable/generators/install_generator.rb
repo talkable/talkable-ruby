@@ -7,7 +7,7 @@ module Talkable
     def ask_config_values
       @site_slug  = ask("Your Talkable site slug:")
       @api_key    = ask("Your Talkable API Key:")
-      if ['', 'y', 'Y'].include?(ask 'Do you have a custom domain? [Y/n]')
+      if yes?('Do you have a custom domain? [Y/n]')
         @server   = ask("Your custom domain [#{Talkable::Configuration::DEFAULT_SERVER}]:")
       end
     end
@@ -37,20 +37,45 @@ RUBY
 
       empty_directory "app/views/shared/"
 
-      if options[:haml] || options[:slim]
-        ext = options[:haml] ? 'haml' : 'slim'
+      if erb?
+        copy_file "app/views/shared/_talkable_offer.html.erb", "app/views/shared/_talkable_offer.html.erb"
+        inject_into_file "app/views/layouts/application.html.erb", before: "</body>" do
+          "<%= render 'shared/talkable_offer', offer: @offer %>\n"
+        end
+      else
+        ext = template_lang
 
         copy_file "app/views/shared/_talkable_offer.html.#{ext}", "app/views/shared/_talkable_offer.html.#{ext}"
         gsub_file "app/views/layouts/application.html.#{ext}", /^(\s*)\=\s*yield\s*$/ do |line|
           paddings = line.match(/(\s*)\=/)[1]
-          "#{line}#{paddings}= render 'shared/talkable_offer'\n"
-        end
-      else
-        copy_file "app/views/shared/_talkable_offer.html.erb", "app/views/shared/_talkable_offer.html.erb"
-        inject_into_file "app/views/layouts/application.html.erb", before: "</body>" do
-          "<%= render 'shared/talkable_offer' %>\n"
+          "#{line}#{paddings}= render 'shared/talkable_offer', offer: @offer\n"
         end
       end
     end
+
+    def add_invite_controller
+      ext = template_lang
+
+      copy_file "app/controllers/invite_controller.rb", "app/controllers/invite_controller.rb"
+      copy_file "app/views/invite/show.html.#{ext}", "app/views/invite/show.html.#{ext}"
+      route "get '/invite' => 'invite#show'"
+    end
+
+    protected
+
+    def template_lang
+      @template_lang ||= if options[:haml]
+        'haml'
+      elsif options[:slim]
+        'slim'
+      else
+        Rails::Generators.options[:rails][:template_engine].to_s.downcase
+      end
+    end
+
+    def erb?
+      template_lang == 'erb'
+    end
+
   end
 end
