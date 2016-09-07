@@ -13,13 +13,22 @@ module Talkable
         end
 
         def post(path, params = {})
-          uri = request_uri(path)
-          request = Net::HTTP::Post.new(uri.request_uri)
-          request.body = request_params(params).to_json
-          perform_request(uri, request)
+          data_request(:post, path, params)
+        end
+
+        def put(path, params = {})
+          data_request(:put, path, params)
         end
 
         protected
+
+        def data_request(method, path, params)
+          http_class = {post: Net::HTTP::Post, put: Net::HTTP::Put}[method.to_sym]
+          uri = request_uri(path)
+          request = http_class.new(uri.request_uri)
+          request.body = request_params(params).to_json
+          perform_request(uri, request)
+        end
 
         def request_params(params = {})
           params.merge({

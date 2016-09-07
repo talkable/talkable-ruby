@@ -15,6 +15,6 @@ RSpec.configure do |config|
 end
 
 def stub_uuid_request(uuid)
-  stub_request(:post, /.*api\/v2\/visitors.*/).
+  stub_request(:post, %r{.*api/v2/visitors.*}).
     to_return(body: %Q{{"ok": true, "result": {"uuid":"#{uuid}"}}})
 end

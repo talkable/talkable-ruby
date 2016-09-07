@@ -8,7 +8,7 @@ describe Talkable::API::Offer do
     }}
 
     before do
-      stub_request(:get, /.*api\/v2\/offers\/123.*/).
+      stub_request(:get, %r{.*api/v2/offers/123.*}).
         to_return(body: '{"ok": true, "result": {"offer":{"id":123}}}')
     end
 

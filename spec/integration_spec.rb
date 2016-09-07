@@ -5,7 +5,7 @@ describe Talkable do
     let(:origin) { described_class.send(method_name, register_params) }
 
     before do
-      stub_request(:post, /.*api\/v2\/origins.*/).
+      stub_request(:post, %r{.*api/v2/origins.*}).
         to_return(body: '{"ok": true, "result": {"origin":{"id":1024}}}')
     end
 
