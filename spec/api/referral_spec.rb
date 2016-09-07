@@ -6,8 +6,8 @@ describe Talkable::API::Referral do
 
   describe '.update' do
     before do
-      stub_request(:put, /.*api\/v2\/origins\/order_number\/referral/).
-        with(body: /.*{\"data\":{\"status\":\"approved\"}.*/).
+      stub_request(:put, %r{.*api/v2/origins/order_number/referral}).
+        with(body: /.*{"data":{"status":"approved"}.*/).
         to_return(body: '{"ok": true}')
     end
 

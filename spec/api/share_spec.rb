@@ -6,8 +6,8 @@ describe Talkable::API::Share do
     let(:channel) { Talkable::API::Share::CHANNEL_SMS }
 
     before do
-      stub_request(:post, /.*api\/v2\/offers\/SAMPLE\/shares.*/).
-        with(body: /.*\"channel\":\"sms\".*/).
+      stub_request(:post, %r{.*api/v2/offers/SAMPLE/shares.*}).
+        with(body: /.*"channel":"sms".*/).
         to_return(body: '{"ok": true, "result": {"share":{"id":2096}}}')
     end
 

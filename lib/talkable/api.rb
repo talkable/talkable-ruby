@@ -1,11 +1,4 @@
-require 'talkable/api/base'
-require 'talkable/api/person'
-require 'talkable/api/origin'
-require 'talkable/api/offer'
-require 'talkable/api/share'
-require 'talkable/api/reward'
-require 'talkable/api/visitor'
-require 'talkable/api/referral'
+Dir[File.dirname(__FILE__) + '/api/*.rb'].each { |file| require file }
 
 module Talkable
   module API

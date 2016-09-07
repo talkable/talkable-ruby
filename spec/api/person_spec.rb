@@ -4,7 +4,7 @@ describe Talkable::API::Person do
   let(:email) { 'customer@email.com' }
   describe ".find" do
     before do
-      stub_request(:get, /.*api\/v2\/people\/customer@email.com/).
+      stub_request(:get, %r{.*api/v2/people/customer@email.com}).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman"}}}')
     end
 
@@ -15,8 +15,8 @@ describe Talkable::API::Person do
 
   describe '.update' do
     before do
-      stub_request(:put, /.*api\/v2\/people\/customer@email.com/).
-        with(body: /.*{\"data\":{\"unsubscribed\":true}.*/).
+      stub_request(:put, %r{.*api/v2/people/customer@email.com}).
+        with(body: /.*{"data":{"unsubscribed":true}.*/).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman", "unsubscribed_at":"2016-09-06T16:14:25.000Z"}}}')
     end
 

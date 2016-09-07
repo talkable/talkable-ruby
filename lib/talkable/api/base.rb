@@ -23,12 +23,7 @@ module Talkable
         protected
 
         def data_request(method, path, params)
-          http_class = if :post == method.to_sym
-            Net::HTTP::Post
-          elsif :put == method.to_sym
-            Net::HTTP::Put
-          end
-
+          http_class = {post: Net::HTTP::Post, put: Net::HTTP::Put}[method.to_sym]
           uri = request_uri(path)
           request = http_class.new(uri.request_uri)
           request.body = request_params(params).to_json
