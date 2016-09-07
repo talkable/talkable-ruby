@@ -151,107 +151,28 @@ Displaying a share page
 
 ```
 
-Generated code:
-
-```html
-<div id="talkable-offer-invite">
-  <iframe src="https://www.talkable.com/x/ThbpKo?trigger_enabled=1"></iframe>
-</div>
-
-<script>
-  _talkableq.push(['show_offer', {
-    "url": "https://www.talkable.com/x/ThbpKo?trigger_enabled=1",
-    "iframe": {
-      "container":"talkable-offer-invite"
-    }
-  }]);
-</script>
-```
-
-## Self-Serve UI
-
-
-``` ruby
-offer.configure(
-  facebook: {
-    title: ['An offer for all my friends', 'Claim your reward'], # AB test
-    description: 'Click this link and get #{campaign.friend_incentive.description} off on the merchant.com'
-    image: "http://merchant.com/assets/fb_image.jpg"
-  },
-  twitter: {
-    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
-  },
-)
-
-
-offer.configure(
-  twitter: {
-    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
-  },
-
-)
-```
-
-
-
-
-``` js
-
-offer = Talkable.offer(<%= offer.to_json %>)
-$('.js-share-via-facebook').click(
-    offer.shareViaFacebook()
-)
-$('.js-share-via-twitter').click(
-    offer.shareViaTwitter()
-)
-$('.js-share-via-sms').click(
-    offer.shareViaSms()
-)
-offer.bindClickLink($('.js-plain-offer-link'))
-```
-
-
-``` haml
-%h1= offer.localize('offer_title')
-%h1= offer.ab_test("Share with friends", "Get yourself a discount %{advocate_amount}", advocate_amount: campaign.advocate_incentive.description)
-%p
-  Share this offer with friends and get <%= campaign.advocate_incentive.description %>
-
-
-%a.js-share-via-facebook Facebook
-%a.js-share-via-twitter Twitter
-%a.js-share-via-sms Twitter
-```
-
-
-``` ruby
-# routes.rb
-mount Talkable::Rack => 'talkable'
-```
-
-
 ## TODO
 
 Functionality:
 
-* [ ] Gem infrustructure
-* [ ] Configuration
-* [ ] API
+* [x] Gem infrustructure
+* [x] Configuration
+* [x] API
   * Custom Traffic Source
   * Custom User Agent
   * Visitors
   * Origins
   * Shares
   * Rewards
-* [ ] Controller uuid hook
-* [ ] Offer Share Iframe
-  * [ ] Integration JS additions
-  * [ ] Ruby iframe generation method
-* [ ] Generator
+* [x] Middleware
+* [x] Offer Share Iframe
+  * [x] Integration JS additions
+  * [x] Ruby iframe generation method
+* [x] Generator
 * [ ] Documentation
   * Post-Checkout integration instructions
   * Events integration instructions
-* [ ] Setup demo with the most popular ruby shopping cart gem
+* [x] Setup demo with the most popular ruby shopping cart gem
 
 Caveats:
 * [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
