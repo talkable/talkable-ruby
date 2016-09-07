@@ -19,10 +19,13 @@ gem "talkable"
 
 ``` sh
 rails generate talkable:install
+```
+``` sh
 Your Talkable site slug: spree-example
 Your Talkable API Key: SOME-API-KEY
 Do you have a custom domain? [Y/n] n
-
+```
+``` sh
       create  config/initializers/talkable.rb
       insert  app/controllers/application_controller.rb
       insert  app/controllers/application_controller.rb
