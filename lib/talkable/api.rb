@@ -5,6 +5,7 @@ require 'talkable/api/offer'
 require 'talkable/api/share'
 require 'talkable/api/reward'
 require 'talkable/api/visitor'
+require 'talkable/api/referral'
 
 module Talkable
   module API
