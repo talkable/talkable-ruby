@@ -5,7 +5,9 @@ Talkable Ruby Gem to make your own referral program in Sinatra or Rails applicat
 
 ## Demo
 
-Take a spree demo app and intall Talkable
+Example of usage at http://github.com/talkable/talkable-spree-example
+
+Live demo available at http://spree-example.talkable.com
 
 ## Intallation
 
@@ -17,110 +19,132 @@ gem "talkable"
 
 ``` sh
 rails generate talkable:install
-Your talkable site slug (http://talkable.com): 
-You API token (http://talkable.com/sites/zz/edit):
-Do you want a different site to be used for non-production env? (y/n)
-Your staging site slug:
-Your staging site API token:
+Your Talkable site slug: spree-example
+Your Talkable API Key: SOME-API-KEY
+Do you have a custom domain? [Y/n] n
 
-
-create config/initializers/talkable.rb
-update app/controllers/application_controller.rb
-
-create app/controllers/talkable_invite.rb
-create app/views/talkable_invite/show.html.erb
-update app/layouts/application.html.erb # floating widget install
-update app/layouts/_talkable_floating_widget.html.erb
-update config/routes.rb
+      create  config/initializers/talkable.rb
+      insert  app/controllers/application_controller.rb
+      insert  app/controllers/application_controller.rb
+      create  app/views/shared
+      create  app/views/shared/_talkable_offer.html.erb
+      insert  app/views/layouts/application.html.erb
+      create  app/controllers/invite_controller.rb
+      create  app/views/invite/show.html.erb
+       route  get '/invite' => 'invite#show'
 ```
 
 ## Configuration
 
 ``` ruby
-Talkable.configure do |c|
-  # required
-  c.site_slug = 'hello'
-  # or
-  c.site_slug = Rails.env.production? ? "hello" : "hello-staging"
-  # required
-  c.api_token = Rails.env.production? ? "1235" : "6789" 
-  # required
-  c.server = 'http://invite.site.com' # fetched from site settings automatically using generator
-  # optional
-  c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
+Talkable.configure do |config|
+  # site slug takes form ENV["TALKABLE_SITE_SLUG"]
+  config.site_slug  = "spree-example"
+
+  # api key takes from ENV["TALKABLE_API_KEY"]
+  # config.api_key  =
+
+  # custom server address - by default https://www.talkable.com
+  # config.server   =
+
+  # manually specified per-client integration library
+  # config.js_integration_library =
+end
+
+```
+
+## Manual Integration
+
+- Add Talkable Middleware
+
+``` ruby
+  class Application < Rails::Application
+    config.middleware.use Talkable::Middleware
+  end
+```
+
+- Load an offer on every page
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :load_talkable_offer
+
+  protected
+
+  def load_talkable_offer
+    origin = Talkable.register_affiliate_member(campaign_tags: 'popup')
+    @offer ||= origin.offer if origin
+  end
+
 end
 ```
 
+or for a specific action
 
-
-``` ruby
-class ApplicationController < ActionController::Base
-
-  initialize_talkable_api
-
-end
-
-# GEM internals
-class Talkable
-  module ActionControllerExtension
-    def self.initialize_talkable_api
-      before_action :talkable_before_request
-    end
-
-    def talkable_before_request
-      cookies[:talkable_visitor_uuid] = params[:talkable_visitor_uuid] || talkable_visitor_uuid
-      Talkable.with_uuid(talkable_visitor_uuid) do
-        yield
-      end
-    end
-
-    def talkable_visitor_uuid
-      cookies[:talkable_visitor_uuid] ||= Talkable.find_or_generate_uuid
-    end
+```ruby
+class InviteController < ApplicationController
+  def show
+    origin = Talkable.register_affiliate_member(campaign_tags: 'invite')
+    @offer = origin.offer if origin
   end
 end
 ```
 
+- Display offer inside view
 
-
+```erb
+<div id="talkable-inline-offer-container"></div>
+<%= render 'shared/talkable_offer', offer: @offer, options: {iframe: {container: 'talkable-inline-offer-container'}} %>
+```
 
 ## API
 
-Full API support according to DOC
+Full API support according to [DOC](http://docs.talkable.com/api_v2.html)
 
-
-``` ruby
-origin = Talkable::API.register_purchase(
-    {
-      email: 'a@b.com',
-      subtotal: 100.53,
-      coupon_codes: [],
-      traffic_source: 'zz'
-    },
-    )
-origin = Talkable::API.register_event()
-origin = Talkable::API.register_affiliate_member(
-offer = origin.offer
-    {
-      email: '...'
-      sharing_channels: ['facebook', 'embedded_email', 'sms', 'other']
-    }
-    )
-
-offer.claim_links # =>
-                  # {
-                  #   twitter: "http://invite.site.com/x/12356"
-                  #   facebook: "http://invite.site.com/x/12356"
-                  #   embedded_email: "http://invite.site.com/x/12356"
-                  #   twitter: "http://invite.site.com/x/12356"
-                  # }
+```ruby
+Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
+  email: 'customer@domain.com',
+  order_number: '123',
+  subtotal: 34.56,
+})
+Talkable::API::Offer.find(short_url_code)
+Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
+Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
+Talkable::API::Person.find(email)
+Talkable::API::Person.update(email, unsubscribed: true)
+Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
 
-## AD Offer Share page
+## Referral Campaign
 
+Registering an origins
 
+```ruby
+origin = Talkable.register_affiliate_member(
+  email: 'user@example.com',
+  traffic_source: 'page_header',
+  campaign_tags: 'invite',
+)
 
-User facing GEM API
+origin = Talkable.register_purchase(
+  email: 'customer@example.com',
+  order_number: 'N1234567',
+  subtotal: 123.45,
+  coupon_code: 'SALE10',
+  traffic_source: 'checkout',
+  campaign_tags: 'post-purchase',
+  sharing_channels: ['facebook', 'sms'],
+)
+```
+Getting information about an offer
+
+```ruby
+offer = origin.offer
+offer.claim_links # => { facebook: "https://www.talkable.com/x/kqiYhR", sms: "https://www.talkable.com/x/PFxhNB" }
+
+```
+
+Displaying a share page
 
 ``` erb
 <%= offer.advocate_share_iframe %>
@@ -129,31 +153,20 @@ User facing GEM API
 
 Generated code:
 
-
-```  html
-<div class='talkable-offer-xxx'>
-  <!-- result of the JS evaluation - not ruby evaluation -->
-  <iframe src="https://invite.site.com/x/38828?current_visitor_uuid=<uuid>"></iframe>
+```html
+<div id="talkable-offer-invite">
+  <iframe src="https://www.talkable.com/x/ThbpKo?trigger_enabled=1"></iframe>
 </div>
 
 <script>
-_talkableq.push(['init', {
-  server: '...',
-  site_id: '...',
-  visitor_uuid: '...'
-}])
-_talkableq.push(['show_offer'], "https://invite.site.com/x/38828", {container: 'talkable-offer-xxx'})
+  _talkableq.push(['show_offer', {
+    "url": "https://www.talkable.com/x/ThbpKo?trigger_enabled=1",
+    "iframe": {
+      "container":"talkable-offer-invite"
+    }
+  }]);
 </script>
 ```
-
-## integration.js extension
-
-`integration.js` additions. Suppose to be never used directly if using talkable gem
-
-``` js
-talkable.showOffer(offer.show_url)
-```
-
 
 ## Self-Serve UI
 
