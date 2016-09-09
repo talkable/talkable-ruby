@@ -1,8 +1,8 @@
 Talkable.configure do |config|
-  # site slug takes form ENV["TALKABLE_SITE_SLUG"]
+  # site slug is taken takes form ENV["TALKABLE_SITE_SLUG"]
   config.site_slug  = <%= @site_slug.inspect %>
 
-  # api key takes from ENV["TALKABLE_API_KEY"]
+  # api key is taken from ENV["TALKABLE_API_KEY"]
   config.api_key    = <%= @api_key.inspect %>
   <%- if defined?(@server) && @server.present? %>
   config.server     = <%= @server.inspect %>

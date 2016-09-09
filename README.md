@@ -41,10 +41,10 @@ Do you have a custom domain? [Y/n] n
 
 ``` ruby
 Talkable.configure do |config|
-  # site slug takes form ENV["TALKABLE_SITE_SLUG"]
+  # site slug is taken form ENV["TALKABLE_SITE_SLUG"]
   config.site_slug  = "spree-example"
 
-  # api key takes from ENV["TALKABLE_API_KEY"]
+  # api key is taken from ENV["TALKABLE_API_KEY"]
   # config.api_key  =
 
   # custom server address - by default https://www.talkable.com
@@ -118,9 +118,9 @@ Talkable::API::Person.update(email, unsubscribed: true)
 Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
 
-## Referral Campaign
+## Integrate Conversion Points
 
-Registering an origins
+Registering an affiliate origin
 
 ```ruby
 origin = Talkable.register_affiliate_member(
@@ -128,7 +128,12 @@ origin = Talkable.register_affiliate_member(
   traffic_source: 'page_header',
   campaign_tags: 'invite',
 )
+```
 
+Registering a purchase has to be implemented manually based on your platform.
+> It's highly important to have Post-purchase integration for closing a referral loop.
+
+```ruby
 origin = Talkable.register_purchase(
   email: 'customer@example.com',
   order_number: 'N1234567',
@@ -139,6 +144,7 @@ origin = Talkable.register_purchase(
   sharing_channels: ['facebook', 'sms'],
 )
 ```
+
 Getting information about an offer
 
 ```ruby
