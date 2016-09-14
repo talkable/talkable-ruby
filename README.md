@@ -100,22 +100,28 @@ end
 <%= render 'shared/talkable_offer', offer: @offer, options: {iframe: {container: 'talkable-inline-offer-container'}} %>
 ```
 
-## API
+## Registering a purchase
 
-Full API support according to [DOC](http://docs.talkable.com/api_v2.html)
+Registering a purchase has to be implemented manually based on your platform.
+> It's highly recommended to have submitted purchases for closing a referral loop.
 
 ```ruby
 Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
-  email: 'customer@domain.com',
-  order_number: '123',
-  subtotal: 34.56,
+  email: 'customer@email.com',
+  order_number: 'ORDER-12345',
+  subtotal: 123.45,
+  coupon_code: 'SALE10',
+  ip_address: request.remote_ip,
+  shipping_zip: '94103',
+  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States',
+  items: order_items.map do |item|
+    {
+      price: item.price,
+      quantity: item.quantity,
+      product_id: item.product_id,
+    }
+  end
 })
-Talkable::API::Offer.find(short_url_code)
-Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
-Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
-Talkable::API::Person.find(email)
-Talkable::API::Person.update(email, unsubscribed: true)
-Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
 
 ## Integrate Conversion Points
@@ -127,21 +133,6 @@ origin = Talkable.register_affiliate_member(
   email: 'user@example.com',
   traffic_source: 'page_header',
   campaign_tags: 'invite',
-)
-```
-
-Registering a purchase has to be implemented manually based on your platform.
-> It's highly important to have Post-purchase integration for closing a referral loop.
-
-```ruby
-origin = Talkable.register_purchase(
-  email: 'customer@example.com',
-  order_number: 'N1234567',
-  subtotal: 123.45,
-  coupon_code: 'SALE10',
-  traffic_source: 'checkout',
-  campaign_tags: 'post-purchase',
-  sharing_channels: ['facebook', 'sms'],
 )
 ```
 
@@ -158,6 +149,24 @@ Displaying a share page
 ``` erb
 <%= offer.advocate_share_iframe %>
 
+```
+
+## API
+
+Full API support according to [DOC](http://docs.talkable.com/api_v2.html)
+
+```ruby
+Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
+  email: 'customer@domain.com',
+  order_number: '123',
+  subtotal: 34.56,
+})
+Talkable::API::Offer.find(short_url_code)
+Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
+Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
+Talkable::API::Person.find(email)
+Talkable::API::Person.update(email, unsubscribed: true)
+Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
 
 ## TODO
