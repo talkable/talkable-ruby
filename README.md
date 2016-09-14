@@ -9,6 +9,16 @@ Example of usage at http://github.com/talkable/talkable-spree-example
 
 Live demo available at http://spree-example.talkable.com
 
+## Requirements
+
+Gem requires:
+ - `Ruby` version since `1.9.3`
+ - `Rack` version since `1.5.2`
+
+Gem supports:
+ - `Ruby on Rails` since `4.0.0`
+ - `Sinatra` since `1.4.0`
+
 ## Intallation
 
 ``` ruby
