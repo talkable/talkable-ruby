@@ -25,7 +25,21 @@ Gem supports:
 gem "talkable"
 ```
 
-## Using Generator
+### Step by step instruction
+
+- [Setup configuration file __*__](#configuration)
+- [Add Middleware __*__](#add-talkable-middleware)
+- [Load an offer __*__](#load-an-offer)
+- [Display a share page __*__](#display-an-offer-inside-view)
+- [Integrate Conversion Points](#integrate-conversion-points)
+ - [Registering a purchase](#registering-a-purchase)
+ - [Registering other events](#registering-other-events)
+
+__*__ - Automated in Ruby On Rails by using the generator
+
+## Using the Ruby On Rails Generator
+
+Talkable gem provides Ruby On Rails generator to automate an integration process.
 
 ``` sh
 rails generate talkable:install
@@ -68,7 +82,7 @@ end
 
 ## Manual Integration
 
-- Add Talkable Middleware
+### Add Talkable Middleware
 
 ``` ruby
   class Application < Rails::Application
@@ -76,7 +90,9 @@ end
   end
 ```
 
-- Load an offer on every page
+### Load an offer
+
+Floating widget at every page
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -92,7 +108,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-or for a specific action
+or invite page at specific path
 
 ```ruby
 class InviteController < ApplicationController
@@ -103,62 +119,68 @@ class InviteController < ApplicationController
 end
 ```
 
-- Display offer inside view
+### Getting information about an offer
+
+```ruby
+offer = origin.offer
+offer.claim_links # => { facebook: "https://www.talkable.com/x/kqiYhR", sms: "https://www.talkable.com/x/PFxhNB" }
+```
+
+### Display an offer inside view
+
+Provide iframe options to show a share page in specific place
 
 ```erb
 <div id="talkable-inline-offer-container"></div>
-<%= render 'shared/talkable_offer', offer: @offer, options: {iframe: {container: 'talkable-inline-offer-container'}} %>
+<%== offer.advocate_share_iframe(iframe: {container: 'talkable-inline-offer-container'}) %>
 ```
 
-## Registering a purchase
+## Integrate Conversion Points
+
+### Registering a purchase
 
 Registering a purchase has to be implemented manually based on your platform.
-> It's highly recommended to have submitted purchases for closing a referral loop.
+> It's highly required to have submitted purchases for closing a referral loop.
 
 ```ruby
 Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
   email: 'customer@email.com',
   order_number: 'ORDER-12345',
   subtotal: 123.45,
-  coupon_code: 'SALE10',
-  ip_address: request.remote_ip,
-  shipping_zip: '94103',
-  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States',
+  coupon_code: 'SALE10', # optional
+  ip_address: request.remote_ip, # optional
+  shipping_zip: '94103', # optional
+  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States', # optional
   items: order_items.map do |item|
     {
       price: item.price,
       quantity: item.quantity,
       product_id: item.product_id,
     }
-  end
+  end # optional
 })
 ```
 
-## Integrate Conversion Points
-
-Registering an affiliate origin
+### Registering other events
 
 ```ruby
-origin = Talkable.register_affiliate_member(
-  email: 'user@example.com',
-  traffic_source: 'page_header',
-  campaign_tags: 'invite',
-)
-```
-
-Getting information about an offer
-
-```ruby
-offer = origin.offer
-offer.claim_links # => { facebook: "https://www.talkable.com/x/kqiYhR", sms: "https://www.talkable.com/x/PFxhNB" }
-
-```
-
-Displaying a share page
-
-``` erb
-<%= offer.advocate_share_iframe %>
-
+Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
+  email: 'customer@email.com',
+  event_number: 'N12345',
+  event_category: 'user_signuped',
+  subtotal: 123.45, # optional
+  coupon_code: 'SALE10', # optional
+  ip_address: request.remote_ip, # optional
+  shipping_zip: '94103', # optional
+  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States', # optional
+  items: order_items.map do |item|
+    {
+      price: item.price,
+      quantity: item.quantity,
+      product_id: item.product_id,
+    }
+  end # optional
+})
 ```
 
 ## API
@@ -178,29 +200,3 @@ Talkable::API::Person.find(email)
 Talkable::API::Person.update(email, unsubscribed: true)
 Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
-
-## TODO
-
-Functionality:
-
-* [x] Gem infrustructure
-* [x] Configuration
-* [x] API
-  * Custom Traffic Source
-  * Custom User Agent
-  * Visitors
-  * Origins
-  * Shares
-  * Rewards
-* [x] Middleware
-* [x] Offer Share Iframe
-  * [x] Integration JS additions
-  * [x] Ruby iframe generation method
-* [x] Generator
-* [ ] Documentation
-  * Post-Checkout integration instructions
-  * Events integration instructions
-* [x] Setup demo with the most popular ruby shopping cart gem
-
-Caveats:
-* [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
