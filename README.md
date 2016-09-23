@@ -1,4 +1,4 @@
-# Talkable Referral Programe API Gem
+# Talkable Referral Program API Gem
 [![](https://ci.solanolabs.com:443/Talkable/talkable-ruby/badges/branches/master?badge_token=c2445aee31992aafe3d8fda62fcde2708f6254f6)](https://ci.solanolabs.com:443/Talkable/talkable-ruby/suites/484176)
 
 Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
@@ -156,6 +156,7 @@ Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
       price: item.price,
       quantity: item.quantity,
       product_id: item.product_id,
+      title: item.title,
     }
   end # optional
 })
@@ -178,6 +179,7 @@ Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
       price: item.price,
       quantity: item.quantity,
       product_id: item.product_id,
+      title: item.title,
     }
   end # optional
 })
