@@ -8,8 +8,7 @@ module Talkable
 
     def advocate_share_iframe(options = {})
       show_trigger = !options[:ignore_trigger]
-      tag = campaign_tags.first
-      iframe_options = default_iframe_options(tag).merge(options[:iframe] || {})
+      iframe_options = default_iframe_options.merge(options[:iframe] || {})
       url = show_trigger ? Furi.merge(show_url, query: {trigger_enabled: 1}) : show_url
 
       snippets = []
@@ -26,10 +25,9 @@ module Talkable
 
     protected
 
-    def default_iframe_options(tag = nil)
-      tag ||= SecureRandom.hex(3)
+    def default_iframe_options
       {
-        container: "talkable-offer-#{tag}",
+        container: "talkable-offer",
       }
     end
 

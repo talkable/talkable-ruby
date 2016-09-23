@@ -29,7 +29,7 @@ RUBY
   protected
 
   def load_talkable_offer
-    origin = Talkable.register_affiliate_member(campaign_tags: 'popup')
+    origin = Talkable.register_affiliate_member
     @offer ||= origin.offer if origin
   end
 RUBY

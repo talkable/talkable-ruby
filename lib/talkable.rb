@@ -8,6 +8,7 @@ require 'talkable/railtie' if defined? ::Rails::Railtie
 
 module Talkable
   UUID = 'talkable_visitor_uuid'.freeze
+  CURRENT_URL = 'talkable_current_url'.freeze
 
   class << self
     def configure(config = nil)
@@ -36,6 +37,21 @@ module Talkable
 
     def find_or_generate_uuid
       visitor_uuid || Talkable::API::Visitor.create[:uuid]
+    end
+
+    def current_url
+      Thread.current[CURRENT_URL]
+    end
+
+    def current_url=(url)
+      Thread.current[CURRENT_URL] = url
+    end
+
+    def with_request_url(url)
+      old_url, Talkable.current_url = Talkable.current_url, url
+      yield if block_given?
+    ensure
+      Talkable.current_url = old_url
     end
 
   end

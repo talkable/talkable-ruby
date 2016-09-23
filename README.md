@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def load_talkable_offer
-    origin = Talkable.register_affiliate_member(campaign_tags: 'popup')
+    origin = Talkable.register_affiliate_member
     @offer ||= origin.offer if origin
   end
 
@@ -113,7 +113,10 @@ or invite page at specific path
 ```ruby
 class InviteController < ApplicationController
   def show
-    origin = Talkable.register_affiliate_member(campaign_tags: 'invite')
+    # Make sure you have configured routings at Talkable site
+    # or explicitly specify campaign tags
+    # origin = Talkable.register_affiliate_member(campaign_tags: 'invite')
+    origin = Talkable.register_affiliate_member
     @offer = origin.offer if origin
   end
 end
