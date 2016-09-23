@@ -5,7 +5,19 @@ Talkable Ruby Gem to make your own referral program in Sinatra or Rails applicat
 
 ## Demo
 
-Take a spree demo app and intall Talkable
+Example of usage at http://github.com/talkable/talkable-spree-example
+
+Live demo available at http://spree-example.talkable.com
+
+## Requirements
+
+Gem requires:
+ - `Ruby` version since `1.9.3`
+ - `Rack` version since `1.5.2`
+
+Gem supports:
+ - `Ruby on Rails` since `4.0.0`
+ - `Sinatra` since `1.4.0`
 
 ## Intallation
 
@@ -13,232 +25,178 @@ Take a spree demo app and intall Talkable
 gem "talkable"
 ```
 
-## Using Generator
+### Step by step instruction
+
+- [Setup configuration file __*__](#configuration)
+- [Add Middleware __*__](#add-talkable-middleware)
+- [Load an offer __*__](#load-an-offer)
+- [Display a share page __*__](#display-an-offer-inside-view)
+- [Integrate Conversion Points](#integrate-conversion-points)
+ - [Registering a purchase](#registering-a-purchase)
+ - [Registering other events](#registering-other-events)
+
+__*__ - Automated in Ruby On Rails by using the generator
+
+## Using the Ruby On Rails Generator
+
+Talkable gem provides Ruby On Rails generator to automate an integration process.
 
 ``` sh
 rails generate talkable:install
-Your talkable site slug (http://talkable.com): 
-You API token (http://talkable.com/sites/zz/edit):
-Do you want a different site to be used for non-production env? (y/n)
-Your staging site slug:
-Your staging site API token:
-
-
-create config/initializers/talkable.rb
-update app/controllers/application_controller.rb
-
-create app/controllers/talkable_invite.rb
-create app/views/talkable_invite/show.html.erb
-update app/layouts/application.html.erb # floating widget install
-update app/layouts/_talkable_floating_widget.html.erb
-update config/routes.rb
+```
+``` sh
+Your Talkable site slug: spree-example
+Your Talkable API Key: SOME-API-KEY
+Do you have a custom domain? [Y/n] n
+```
+``` sh
+      create  config/initializers/talkable.rb
+      insert  app/controllers/application_controller.rb
+      insert  app/controllers/application_controller.rb
+      create  app/views/shared
+      create  app/views/shared/_talkable_offer.html.erb
+      insert  app/views/layouts/application.html.erb
+      create  app/controllers/invite_controller.rb
+      create  app/views/invite/show.html.erb
+       route  get '/invite' => 'invite#show'
 ```
 
 ## Configuration
 
 ``` ruby
-Talkable.configure do |c|
-  # required
-  c.site_slug = 'hello'
-  # or
-  c.site_slug = Rails.env.production? ? "hello" : "hello-staging"
-  # required
-  c.api_token = Rails.env.production? ? "1235" : "6789" 
-  # required
-  c.server = 'http://invite.site.com' # fetched from site settings automatically using generator
-  # optional
-  c.js_integration_library = 'http://d2jj/integration/hello.js'  # default
+Talkable.configure do |config|
+  # site slug is taken form ENV["TALKABLE_SITE_SLUG"]
+  config.site_slug  = "spree-example"
+
+  # api key is taken from ENV["TALKABLE_API_KEY"]
+  # config.api_key  =
+
+  # custom server address - by default https://www.talkable.com
+  # config.server   =
+
+  # manually specified per-client integration library
+  # config.js_integration_library =
+end
+
+```
+
+## Manual Integration
+
+### Add Talkable Middleware
+
+``` ruby
+  class Application < Rails::Application
+    config.middleware.use Talkable::Middleware
+  end
+```
+
+### Load an offer
+
+Floating widget at every page
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :load_talkable_offer
+
+  protected
+
+  def load_talkable_offer
+    origin = Talkable.register_affiliate_member(campaign_tags: 'popup')
+    @offer ||= origin.offer if origin
+  end
+
 end
 ```
 
+or invite page at specific path
 
-
-``` ruby
-class ApplicationController < ActionController::Base
-
-  initialize_talkable_api
-
-end
-
-# GEM internals
-class Talkable
-  module ActionControllerExtension
-    def self.initialize_talkable_api
-      before_action :talkable_before_request
-    end
-
-    def talkable_before_request
-      cookies[:talkable_visitor_uuid] = params[:talkable_visitor_uuid] || talkable_visitor_uuid
-      Talkable.with_uuid(talkable_visitor_uuid) do
-        yield
-      end
-    end
-
-    def talkable_visitor_uuid
-      cookies[:talkable_visitor_uuid] ||= Talkable.find_or_generate_uuid
-    end
+```ruby
+class InviteController < ApplicationController
+  def show
+    origin = Talkable.register_affiliate_member(campaign_tags: 'invite')
+    @offer = origin.offer if origin
   end
 end
 ```
 
+### Getting information about an offer
 
+```ruby
+offer = origin.offer
+offer.claim_links # => { facebook: "https://www.talkable.com/x/kqiYhR", sms: "https://www.talkable.com/x/PFxhNB" }
+```
 
+### Display an offer inside view
+
+Provide iframe options to show a share page in specific place
+
+```erb
+<div id="talkable-inline-offer-container"></div>
+<%== offer.advocate_share_iframe(iframe: {container: 'talkable-inline-offer-container'}) %>
+```
+
+## Integrate Conversion Points
+
+### Registering a purchase
+
+Registering a purchase has to be implemented manually based on your platform.
+> It's highly required to have submitted purchases for closing a referral loop.
+
+```ruby
+Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
+  email: 'customer@email.com',
+  order_number: 'ORDER-12345',
+  subtotal: 123.45,
+  coupon_code: 'SALE10', # optional
+  ip_address: request.remote_ip, # optional
+  shipping_zip: '94103', # optional
+  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States', # optional
+  items: order_items.map do |item|
+    {
+      price: item.price,
+      quantity: item.quantity,
+      product_id: item.product_id,
+    }
+  end # optional
+})
+```
+
+### Registering other events
+
+```ruby
+Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
+  email: 'customer@email.com',
+  event_number: 'N12345',
+  event_category: 'user_signuped',
+  subtotal: 123.45, # optional
+  coupon_code: 'SALE10', # optional
+  ip_address: request.remote_ip, # optional
+  shipping_zip: '94103', # optional
+  shipping_address: '290 Division St., Suite 405, San Francisco, California, 94103, United States', # optional
+  items: order_items.map do |item|
+    {
+      price: item.price,
+      quantity: item.quantity,
+      product_id: item.product_id,
+    }
+  end # optional
+})
+```
 
 ## API
 
-Full API support according to DOC
+Full API support according to [DOC](http://docs.talkable.com/api_v2.html)
 
-
-``` ruby
-origin = Talkable::API.register_purchase(
-    {
-      email: 'a@b.com',
-      subtotal: 100.53,
-      coupon_codes: [],
-      traffic_source: 'zz'
-    },
-    )
-origin = Talkable::API.register_event()
-origin = Talkable::API.register_affiliate_member(
-offer = origin.offer
-    {
-      email: '...'
-      sharing_channels: ['facebook', 'embedded_email', 'sms', 'other']
-    }
-    )
-
-offer.claim_links # =>
-                  # {
-                  #   twitter: "http://invite.site.com/x/12356"
-                  #   facebook: "http://invite.site.com/x/12356"
-                  #   embedded_email: "http://invite.site.com/x/12356"
-                  #   twitter: "http://invite.site.com/x/12356"
-                  # }
+```ruby
+Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
+  email: 'customer@domain.com',
+  order_number: '123',
+  subtotal: 34.56,
+})
+Talkable::API::Offer.find(short_url_code)
+Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
+Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
+Talkable::API::Person.find(email)
+Talkable::API::Person.update(email, unsubscribed: true)
+Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
-
-## AD Offer Share page
-
-
-
-User facing GEM API
-
-``` erb
-<%= offer.advocate_share_iframe %>
-
-```
-
-Generated code:
-
-
-```  html
-<div class='talkable-offer-xxx'>
-  <!-- result of the JS evaluation - not ruby evaluation -->
-  <iframe src="https://invite.site.com/x/38828?current_visitor_uuid=<uuid>"></iframe>
-</div>
-
-<script>
-_talkableq.push(['init', {
-  server: '...',
-  site_id: '...',
-  visitor_uuid: '...'
-}])
-_talkableq.push(['show_offer'], "https://invite.site.com/x/38828", {container: 'talkable-offer-xxx'})
-</script>
-```
-
-## integration.js extension
-
-`integration.js` additions. Suppose to be never used directly if using talkable gem
-
-``` js
-talkable.showOffer(offer.show_url)
-```
-
-
-## Self-Serve UI
-
-
-``` ruby
-offer.configure(
-  facebook: {
-    title: ['An offer for all my friends', 'Claim your reward'], # AB test
-    description: 'Click this link and get #{campaign.friend_incentive.description} off on the merchant.com'
-    image: "http://merchant.com/assets/fb_image.jpg"
-  },
-  twitter: {
-    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
-  },
-)
-
-
-offer.configure(
-  twitter: {
-    message: 'Click #{offer.claim_links.twitter} and get {{friend_incentive.description}} off on the merchant.com'
-  },
-
-)
-```
-
-
-
-
-``` js
-
-offer = Talkable.offer(<%= offer.to_json %>)
-$('.js-share-via-facebook').click(
-    offer.shareViaFacebook()
-)
-$('.js-share-via-twitter').click(
-    offer.shareViaTwitter()
-)
-$('.js-share-via-sms').click(
-    offer.shareViaSms()
-)
-offer.bindClickLink($('.js-plain-offer-link'))
-```
-
-
-``` haml
-%h1= offer.localize('offer_title')
-%h1= offer.ab_test("Share with friends", "Get yourself a discount %{advocate_amount}", advocate_amount: campaign.advocate_incentive.description)
-%p
-  Share this offer with friends and get <%= campaign.advocate_incentive.description %>
-
-
-%a.js-share-via-facebook Facebook
-%a.js-share-via-twitter Twitter
-%a.js-share-via-sms Twitter
-```
-
-
-``` ruby
-# routes.rb
-mount Talkable::Rack => 'talkable'
-```
-
-
-## TODO
-
-Functionality:
-
-* [ ] Gem infrustructure
-* [ ] Configuration
-* [ ] API
-  * Custom Traffic Source
-  * Custom User Agent
-  * Visitors
-  * Origins
-  * Shares
-  * Rewards
-* [ ] Controller uuid hook
-* [ ] Offer Share Iframe
-  * [ ] Integration JS additions
-  * [ ] Ruby iframe generation method
-* [ ] Generator
-* [ ] Documentation
-  * Post-Checkout integration instructions
-  * Events integration instructions
-* [ ] Setup demo with the most popular ruby shopping cart gem
-
-Caveats:
-* [ ] Prevent API call to create visitor on first request. Delay until user interacts with RAF.
