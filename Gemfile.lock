@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    talkable (0.0.0)
+    talkable (0.9.0)
       furi (~> 0.2)
       hashie (~> 3.4)
       rack (>= 1.5.2, < 2)
