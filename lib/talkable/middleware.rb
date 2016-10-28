@@ -8,10 +8,13 @@ module Talkable
     end
 
     def call(env)
-      uuid = talkable_visitor_uuid(env)
+      request = Rack::Request.new(env)
+      uuid = talkable_visitor_uuid(request)
 
       result = Talkable.with_uuid(uuid) do
-        @app.call(env)
+        Talkable.with_request_url(request.url) do
+          @app.call(env)
+        end
       end
 
       inject_uuid_in_cookie(uuid, result)
@@ -24,9 +27,8 @@ module Talkable
 
     protected
 
-    def talkable_visitor_uuid(env)
-      req = Rack::Request.new(env)
-      req.params[UUID] || req.cookies[UUID] || Talkable.find_or_generate_uuid
+    def talkable_visitor_uuid(request)
+      request.params[UUID] || request.cookies[UUID] || Talkable.find_or_generate_uuid
     end
 
     def inject_uuid_in_cookie(uuid, result)
