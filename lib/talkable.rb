@@ -28,13 +28,6 @@ module Talkable
       Thread.current[UUID] = uuid
     end
 
-    def with_uuid(uuid)
-      old_uuid, Talkable.visitor_uuid = Talkable.visitor_uuid, uuid
-      yield if block_given?
-    ensure
-      Talkable.visitor_uuid = old_uuid
-    end
-
     def find_or_generate_uuid
       visitor_uuid || Talkable::API::Visitor.create[:uuid]
     end
@@ -47,11 +40,13 @@ module Talkable
       Thread.current[CURRENT_URL] = url
     end
 
-    def with_request_url(url)
+    def with_uuid_and_url(uuid, url)
       old_url, Talkable.current_url = Talkable.current_url, url
+      old_uuid, Talkable.visitor_uuid = Talkable.visitor_uuid, uuid
       yield if block_given?
     ensure
       Talkable.current_url = old_url
+      Talkable.visitor_uuid = old_uuid
     end
 
   end

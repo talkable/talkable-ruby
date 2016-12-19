@@ -11,10 +11,8 @@ module Talkable
       request = Rack::Request.new(env)
       uuid = talkable_visitor_uuid(request)
 
-      result = Talkable.with_uuid(uuid) do
-        Talkable.with_request_url(request.url) do
-          @app.call(env)
-        end
+      result = Talkable.with_uuid_and_url(uuid, request.url) do
+        @app.call(env)
       end
 
       inject_uuid_in_cookie(uuid, result)

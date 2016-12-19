@@ -113,7 +113,7 @@ or invite page at specific path
 ```ruby
 class InviteController < ApplicationController
   def show
-    # Make sure you have configured routings at Talkable site
+    # Make sure you have configured Campaign Placements at Talkable site
     # or explicitly specify campaign tags
     # origin = Talkable.register_affiliate_member(campaign_tags: 'invite')
     origin = Talkable.register_affiliate_member

@@ -10,7 +10,7 @@ describe Talkable::InstallGenerator, type: :generator do
 
   let(:site_slug) { 'my-site-slug' }
   let(:api_key) { 'some-api-key' }
-  let(:server) { 'http://examle.com' }
+  let(:server) { 'http://example.com' }
 
   let(:application_controller) { file('app/controllers/application_controller.rb') }
   let(:extension) { 'erb' }
@@ -51,7 +51,7 @@ describe Talkable::InstallGenerator, type: :generator do
       is_expected.to exist
       is_expected.to contain('config.site_slug  = "my-site-slug"')
       is_expected.to contain('config.api_key    = "some-api-key"')
-      is_expected.to contain('config.server     = "http://examle.com"')
+      is_expected.to contain('config.server     = "http://example.com"')
     end
   end
 
