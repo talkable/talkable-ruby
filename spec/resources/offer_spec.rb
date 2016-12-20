@@ -37,7 +37,7 @@ describe Talkable::Offer do
     let(:snippet) { offer.advocate_share_iframe(options) }
 
     it 'renders container' do
-      expect(snippet).to include("<div id='talkable-offer-invite'></div>")
+      expect(snippet).to include("<div id='talkable-offer'></div>")
     end
 
     it 'renders javascript' do

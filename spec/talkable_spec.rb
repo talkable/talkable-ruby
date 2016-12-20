@@ -47,20 +47,23 @@ describe Talkable do
     end
   end
 
-  describe '#with_uuid' do
-    it 'retains and releases uuid' do
-      Talkable.with_uuid('fe09af8c-1801-4fa3-998b-ddcbe0e052e5') do
-        Talkable.with_uuid('40a852bf-8887-4ce7-b3f4-e08ff327d74f') do
+  describe '#with_uuid_and_url' do
+    it 'retains and releases uuid & url' do
+      Talkable.with_uuid_and_url('fe09af8c-1801-4fa3-998b-ddcbe0e052e5', 'http://example.com') do
+        Talkable.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com/invite') do
+          expect(Talkable.current_url).to eq('http://example.com/invite')
           expect(Talkable.visitor_uuid).to eq('40a852bf-8887-4ce7-b3f4-e08ff327d74f')
         end
+        expect(Talkable.current_url).to eq('http://example.com')
         expect(Talkable.visitor_uuid).to eq('fe09af8c-1801-4fa3-998b-ddcbe0e052e5')
       end
+      expect(Talkable.current_url).to be_nil
       expect(Talkable.visitor_uuid).to be_nil
     end
 
     it 'returns result of given block' do
       expect(
-        Talkable.with_uuid('40a852bf-8887-4ce7-b3f4-e08ff327d74f') do
+        Talkable.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com') do
           "result"
         end
       ).to eq("result")

@@ -1,40 +1,29 @@
 module Talkable
-  DEFAULT_CAMPAIGN_TAGS = {
-    Talkable::API::Origin::AFFILIATE_MEMBER => 'invite'.freeze,
-    Talkable::API::Origin::PURCHASE         => 'post-purchase'.freeze,
-    Talkable::API::Origin::EVENT            => nil,
-  }.freeze
-
   class << self
-    def register_affiliate_member(params)
+    def register_affiliate_member(params = {})
       register_origin(Talkable::API::Origin::AFFILIATE_MEMBER, params)
     end
 
-    def register_purchase(params)
+    def register_purchase(params = {})
       register_origin(Talkable::API::Origin::PURCHASE, params)
     end
 
-    def register_event(params)
+    def register_event(params = {})
       register_origin(Talkable::API::Origin::EVENT, params)
     end
 
     private
 
-    def register_origin(origin_type, params)
-      origin_params = default_params(origin_type).merge(params)
+    def register_origin(origin_type, params = {})
+      origin_params = default_params.merge(params)
       result = Talkable::API::Origin.create(origin_type, origin_params)
       origin = Talkable::Origin.parse(result)
-      if offer = origin.offer
-        # make sure that explicitly specified tags will be listed first
-        tags = Array(origin_params[:campaign_tags]) | Array(offer.campaign_tags)
-        offer.campaign_tags = tags.map(&:to_s).uniq
-      end
       origin
     end
 
-    def default_params(origin_type)
+    def default_params
       {
-        campaign_tags: DEFAULT_CAMPAIGN_TAGS[origin_type]
+        r: Talkable.current_url,
       }
     end
   end
