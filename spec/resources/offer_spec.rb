@@ -23,7 +23,7 @@ describe Talkable::Offer do
       offer = Talkable::Offer.parse(offer: offer_hash)
       expect(offer.claim_links).to be_kind_of(Hashie::Mash)
 
-      offer = Talkable::Offer.parse(claim_links: claim_links_hash)
+      offer = Talkable::Offer.parse(offer: offer_hash, claim_links: claim_links_hash)
       expect(offer.claim_links.to_hash).to eq(Hashie.stringify_keys claim_links_hash)
     end
   end
