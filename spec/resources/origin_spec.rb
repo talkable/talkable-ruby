@@ -18,6 +18,11 @@ describe Talkable::Origin do
   }}
 
   describe ".parse" do
+    it 'handles blanks' do
+      origin = Talkable::Origin.parse(origin: {})
+      expect(origin).to be_nil
+    end
+
     it 'has origin data' do
       origin = Talkable::Origin.parse(origin: origin_hash)
       expect(origin.id).to eq(31386398)

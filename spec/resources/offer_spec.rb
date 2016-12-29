@@ -14,6 +14,11 @@ describe Talkable::Offer do
   }}
 
   describe ".parse" do
+    it 'handles blanks' do
+      offer = Talkable::Offer.parse(offer: {})
+      expect(offer).to be_nil
+    end
+
     it 'has offer data' do
       offer = Talkable::Offer.parse(offer: offer_hash)
       expect(offer.show_url).to eq("https://www.talkable.com/x/5BN5h7")

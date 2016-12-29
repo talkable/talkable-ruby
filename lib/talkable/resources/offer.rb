@@ -1,7 +1,7 @@
 module Talkable
   class Offer < Hashie::Mash
     def self.parse(result_hash)
-      return nil unless result_hash && result_hash[:offer]
+      return nil unless result_hash && result_hash[:offer] && result_hash[:offer].size > 0
       offer = self.new(result_hash[:offer])
       offer.claim_links ||= Hashie::Mash.new(result_hash[:claim_links])
       offer
