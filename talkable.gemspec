@@ -17,7 +17,11 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 1.9.3"
 
-  if RUBY_VERSION < "2.2.2"
+  if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.1.0")
+    s.add_dependency "nokogiri", "< 1.7.0"
+  end
+
+  if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.2.2")
     s.add_dependency "rack", ">= 1.5.2", "< 2"
   else
     s.add_dependency "rack", ">= 1.5.2"
@@ -31,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", "~> 3.4"
   s.add_development_dependency "simplecov", "~> 0.12"
 
-  if RUBY_VERSION < "2.0"
+  if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.0")
     s.add_development_dependency "json", "~> 1.8.3"
     s.add_development_dependency "webmock", ">= 2.1", "< 2.3"
   else
