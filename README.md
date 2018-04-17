@@ -12,8 +12,8 @@ Live demo available at http://spree-example.talkable.com
 ## Requirements
 
 Gem requires:
- - `Ruby` version since `1.9.3`
- - `Rack` version since `1.5.2`
+ - `Ruby` version since `2.3.0`
+ - `Rack` version since `1.6.1`
 
 Gem supports:
  - `Ruby on Rails` since `4.0.0`
@@ -32,8 +32,8 @@ gem "talkable"
 - [Load an offer __*__](#load-an-offer)
 - [Display a share page __*__](#display-an-offer-inside-view)
 - [Integrate Conversion Points](#integrate-conversion-points)
- - [Registering a purchase](#registering-a-purchase)
- - [Registering other events](#registering-other-events)
+- [Registering a purchase](#registering-a-purchase)
+- [Registering other events](#registering-other-events)
 
 __*__ - Automated in Ruby On Rails by using the generator
 
