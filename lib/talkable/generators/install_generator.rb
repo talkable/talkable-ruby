@@ -17,7 +17,7 @@ module Talkable
     end
 
     def inject_talkable_offer
-      inject_into_file "app/controllers/application_controller.rb", after: "protect_from_forgery with: :exception" do
+      inject_into_file "app/controllers/application_controller.rb", after: "class ApplicationController < ActionController::Base" do
 <<-RUBY
 
   before_action :load_talkable_offer
