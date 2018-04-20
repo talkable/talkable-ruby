@@ -1,7 +1,7 @@
 # Talkable Referral Marketing API Gem
 [![](https://ci.solanolabs.com:443/Talkable/talkable-ruby/badges/branches/master?badge_token=c2445aee31992aafe3d8fda62fcde2708f6254f6)](https://ci.solanolabs.com:443/Talkable/talkable-ruby/suites/484176)
 
-Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable](www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
+Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable]( https://www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
 
 ## Demo
 
@@ -99,9 +99,9 @@ For security, you should set these configuration variables from the Unix environ
 ### Add Middleware
 
 ```ruby
-  class Application < Rails::Application
-    config.middleware.use Talkable::Middleware
-  end
+class Application < Rails::Application
+  config.middleware.use Talkable::Middleware
+end
 ```
 
 ### Referral Offer
