@@ -1,55 +1,58 @@
-# Talkable Referral Program API Gem
+# Talkable Referral Marketing API Gem
 [![](https://ci.solanolabs.com:443/Talkable/talkable-ruby/badges/branches/master?badge_token=c2445aee31992aafe3d8fda62fcde2708f6254f6)](https://ci.solanolabs.com:443/Talkable/talkable-ruby/suites/484176)
 
-Talkable Ruby Gem to make your own referral program in Sinatra or Rails application
+Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable]( https://www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
 
 ## Demo
 
-Example of usage at http://github.com/talkable/talkable-spree-example
+See an example application at http://github.com/talkable/talkable-spree-example.
 
-Live demo available at http://spree-example.talkable.com
+See a live demo at http://spree-example.talkable.com.
+
+## Tutorial
+
+See a [detailed tutorial](https://railsapps.github.io/talkable-referral-marketing/) by [Learn Ruby on Rails](http://learn-rails.com/learn-ruby-on-rails.html) author Daniel Kehoe.
 
 ## Requirements
 
-Gem requires:
- - `Ruby` version since `2.3.0`
- - `Rack` version since `1.6.1`
+The gem requires:
+ - Ruby version 2.3 or newer
+ - Rack version 1.6.1 or newer
 
-Gem supports:
- - `Ruby on Rails` since `4.0.0`
- - `Sinatra` since `1.4.0`
+For integration with:
+ - Ruby on Rails 5.0 or newer
+ - Sinatra 1.4 or newer
 
-## Intallation
+## Gem Installation
 
-``` ruby
+Add to your project *Gemfile*:
+
+```ruby
 gem "talkable"
 ```
 
-### Step by step instruction
+Then run:
 
-- [Setup configuration file __*__](#configuration)
-- [Add Middleware __*__](#add-talkable-middleware)
-- [Load an offer __*__](#load-an-offer)
-- [Display a share page __*__](#display-an-offer-inside-view)
-- [Integrate Conversion Points](#integrate-conversion-points)
-- [Registering a purchase](#registering-a-purchase)
-- [Registering other events](#registering-other-events)
-
-__*__ - Automated in Ruby On Rails by using the generator
-
-## Using the Ruby On Rails Generator
-
-Talkable gem provides Ruby On Rails generator to automate an integration process.
-
-``` sh
-rails generate talkable:install
+```console
+$ bundle install
 ```
-``` sh
+
+## Using the Rails Generator
+
+The Talkable gem provides a Ruby On Rails generator to automate the integration process.
+
+```console
+$ rails generate talkable:install
 Your Talkable site slug: spree-example
 Your Talkable API Key: SOME-API-KEY
 Do you have a custom domain? [Y/n] n
 ```
-``` sh
+
+The Talkable "site slug" is your Account Name (the name of your website, brand or company). You'll also need an API key which you'll find on the Account Settings page when you log in to your account. The generator will ask if you have a custom domain. If your website has a domain like example.com or www.example.com, you can answer, "no." If your website is at shop.example.com, you have a custom domain.
+
+The generator adds and modifies several files:
+
+```console
       create  config/initializers/talkable.rb
       insert  app/controllers/application_controller.rb
       insert  app/controllers/application_controller.rb
@@ -61,9 +64,21 @@ Do you have a custom domain? [Y/n] n
        route  get '/invite' => 'invite#show'
 ```
 
-## Configuration
+## Manual Integration
 
-``` ruby
+Here are the steps that are automated by the Ruby On Rails generator.
+
+- [Initializer](#initializer)
+- [Add Middleware](#add-middleware)
+- [Referral Offer](#referral-offer)
+- [Invite Page](#invite-page)
+
+### Initializer
+
+You'll need an initializer file to set the Talkable API configuration variables.
+
+```ruby
+### config/initializers/talkable.rb
 Talkable.configure do |config|
   # site slug is taken form ENV["TALKABLE_SITE_SLUG"]
   config.site_slug  = "spree-example"
@@ -79,22 +94,22 @@ Talkable.configure do |config|
 end
 
 ```
+For security, you should set these configuration variables from the Unix environment or use the Rails [encrypted credentials](https://www.engineyard.com/blog/rails-encrypted-credentials-on-rails-5.2) feature so the API key isn't stored in your GitHub repository.
 
-## Manual Integration
-
-### Add Talkable Middleware
-
-``` ruby
-  class Application < Rails::Application
-    config.middleware.use Talkable::Middleware
-  end
-```
-
-### Load an offer
-
-Floating widget at every page
+### Add Middleware
 
 ```ruby
+class Application < Rails::Application
+  config.middleware.use Talkable::Middleware
+end
+```
+
+### Referral Offer
+
+Add code to retrieve a campaign and display a referral offer on every page of the application.
+
+```ruby
+### app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   before_action :load_talkable_offer
 
@@ -108,9 +123,26 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-or invite page at specific path
+```erb
+### app/views/shared/_talkable_offer.html.erb
+<%- options ||= {} %>
+<%- if offer %>
+  <%== offer.advocate_share_iframe(options) %>
+<% end -%>
+```
+
+### Invite Page
+
+You can add an invite page by implementing an Invite Controller, with route and view files.
+
+Add a route to the *config/routes.rb* file:
 
 ```ruby
+ get '/invite' => 'invite#show'
+```
+
+```ruby
+### app/controllers/invite_controller.rb
 class InviteController < ApplicationController
   def show
     # Make sure you have configured Campaign Placements at Talkable site
@@ -122,28 +154,43 @@ class InviteController < ApplicationController
 end
 ```
 
-### Getting information about an offer
+```erb
+### app/views/invite/show.html.erb
+<div id="talkable-inline-offer-container"></div>
+<%= render 'shared/talkable_offer',
+  offer: @invite_offer,
+  options: {iframe: {container: 'talkable-inline-offer-container'}} %>
+```
+
+## Customize Your Integration
+
+### Getting Information About an Offer
 
 ```ruby
 offer = origin.offer
 offer.claim_links # => { facebook: "https://www.talkable.com/x/kqiYhR", sms: "https://www.talkable.com/x/PFxhNB" }
 ```
 
-### Display an offer inside view
+### Display an Offer Inside a View
 
-Provide iframe options to show a share page in specific place
+Provide iframe options to show a share page in specific place.
 
 ```erb
 <div id="talkable-inline-offer-container"></div>
 <%== offer.advocate_share_iframe(iframe: {container: 'talkable-inline-offer-container'}) %>
 ```
 
-## Integrate Conversion Points
+## API Examples
+
+See the [API docs](http://docs.talkable.com/api_v2.html) for full details.
+
+- [Registering a purchase](#registering-a-purchase)
+- [Registering other events](#registering-other-events)
+- [More API examples](#more-api-examples)
 
 ### Registering a purchase
 
-Registering a purchase has to be implemented manually based on your platform.
-> It's highly required to have submitted purchases for closing a referral loop.
+Here's how to register a purchase. We recommend you have submitted purchases for closing a referral loop.
 
 ```ruby
 Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
@@ -167,6 +214,8 @@ Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
 
 ### Registering other events
 
+Here's how to register other events.
+
 ```ruby
 Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
   email: 'customer@email.com',
@@ -188,9 +237,9 @@ Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
 })
 ```
 
-## API
+### More API examples
 
-Full API support according to [DOC](http://docs.talkable.com/api_v2.html)
+Here are more API examples.
 
 ```ruby
 Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
@@ -205,3 +254,7 @@ Talkable::API::Person.find(email)
 Talkable::API::Person.update(email, unsubscribed: true)
 Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 ```
+
+## Questions? Need Help? Found a bug?
+
+If you've got questions about integration, or need any other information, please feel free to [open an issue](https://github.com/talkable/talkable-ruby/issues) so we can reply. Found a bug? Go ahead and submit an [issue](https://github.com/talkable/talkable-ruby/issues).
