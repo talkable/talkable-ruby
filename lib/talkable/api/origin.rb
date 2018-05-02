@@ -19,7 +19,6 @@ module Talkable
 
         def default_data
           {
-            uuid: Talkable.visitor_uuid,
             traffic_source: DEFAULT_TRAFFIC_SOURCE,
           }
         end

@@ -23,6 +23,7 @@ module Talkable
 
     def default_params
       {
+        uuid: Talkable.visitor_uuid,
         r: Talkable.current_url,
       }
     end
