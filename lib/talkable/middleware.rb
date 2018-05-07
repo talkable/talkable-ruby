@@ -73,7 +73,7 @@ module Talkable
     end
 
     def sync_uuid_url(uuid)
-      Furi.update("https://www.talkable.com/public/1x1.gif", query: {current_visitor_uuid: uuid})
+      Furi.update("#{Talkable.configuration.server}/public/1x1.gif", query: {current_visitor_uuid: uuid})
     end
 
     def sync_uuid_content(uuid)
