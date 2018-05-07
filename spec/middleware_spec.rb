@@ -53,7 +53,7 @@ describe Talkable::Middleware do
 
     it 'injects sync url in body' do
       _, _, response = subject.call(env)
-      expect(response.body.first).to include("https://www.talkable.com/public/1x1.gif?current_visitor_uuid=#{uuid}")
+      expect(response.body.first).to include("http://example.com/public/1x1.gif?current_visitor_uuid=#{uuid}")
     end
 
     it 'injects integration js library' do
