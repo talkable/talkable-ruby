@@ -108,7 +108,7 @@ class Application < Rails::Application
 end
 ```
 
-If you're using devise, it's importand to load Talkable middleware before `Warden::Manager`.
+If you're using Devise, it's important to load Talkable middleware before `Warden::Manager`.
 ```ruby
 app.middleware.insert_before Warden::Manager, Talkable::Middleware
 ```
