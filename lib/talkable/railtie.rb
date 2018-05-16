@@ -5,7 +5,7 @@ module Talkable
     end
 
     initializer "talkable.add_middleware" do |app|
-      app.middleware.use Talkable::Middleware
+      app.middleware.insert_after Rack::TempfileReaper, Talkable::Middleware
     end
   end
 end

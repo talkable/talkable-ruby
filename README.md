@@ -98,10 +98,24 @@ For security, you should set these configuration variables from the Unix environ
 
 ### Add Middleware
 
+Talkable gem automatically inserts a middleware for you, so most likely you should just skip this section.
+
+Here's how you can add Talkable middleware manually.
+
 ```ruby
 class Application < Rails::Application
   config.middleware.use Talkable::Middleware
 end
+```
+
+If you're using devise, it's importand to load Talkable middleware before `Warden::Manager`.
+```ruby
+app.middleware.insert_before Warden::Manager, Talkable::Middleware
+```
+
+(In the gem we add Talkable middleware right after the last default rails middleware), like that:
+```ruby
+app.middleware.insert_after Rack::TempfileReaper, Talkable::Middleware
 ```
 
 ### Referral Offer
