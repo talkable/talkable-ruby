@@ -5,7 +5,11 @@ module Talkable
     end
 
     initializer "talkable.add_middleware" do |app|
-      app.middleware.use Talkable::Middleware
+      if defined? ::Warden::Manager
+        app.middleware.insert_before Warden::Manager, Talkable::Middleware
+      else
+        app.middleware.use Talkable::Middleware
+      end
     end
   end
 end

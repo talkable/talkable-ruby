@@ -98,9 +98,15 @@ For security, you should set these configuration variables from the Unix environ
 
 ### Add Middleware
 
+Here's how you can add Talkable middleware manually.
+
+_Note that if you're using Devise, it's important to load Talkable middleware before `Warden::Manager`, otherwise you can just go with `app.middleware.use Talkable::Middleware`._
+
 ```ruby
-class Application < Rails::Application
-  config.middleware.use Talkable::Middleware
+if defined? ::Warden::Manager
+  app.middleware.insert_before Warden::Manager, Talkable::Middleware
+else
+  app.middleware.use Talkable::Middleware
 end
 ```
 
