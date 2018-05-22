@@ -199,7 +199,7 @@ See the [API docs](http://docs.talkable.com/api_v2.html) for full details.
 Here's how to register a purchase. We recommend you have submitted purchases for closing a referral loop.
 
 ```ruby
-Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
+Talkable.register_purchase(
   email: 'customer@email.com',
   order_number: 'ORDER-12345',
   subtotal: 123.45,
@@ -215,7 +215,7 @@ Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
       title: item.title,
     }
   end # optional
-})
+)
 ```
 
 ### Registering other events
@@ -223,7 +223,7 @@ Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
 Here's how to register other events.
 
 ```ruby
-Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
+Talkable.register_event(
   email: 'customer@email.com',
   event_number: 'N12345',
   event_category: 'user_signuped',
@@ -240,7 +240,7 @@ Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
       title: item.title,
     }
   end # optional
-})
+)
 ```
 
 ### More API examples
@@ -248,17 +248,12 @@ Talkable::API::Origin.create(Talkable::API::Origin::EVENT, {
 Here are more API examples.
 
 ```ruby
-Talkable::API::Origin.create(Talkable::API::Origin::PURCHASE, {
-  email: 'customer@domain.com',
-  order_number: '123',
-  subtotal: 34.56,
-})
 Talkable::API::Offer.find(short_url_code)
-Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
-Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
 Talkable::API::Person.find(email)
 Talkable::API::Person.update(email, unsubscribed: true)
 Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
+Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
+Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
 ```
 
 ## Questions? Need Help? Found a bug?
