@@ -4,6 +4,7 @@ module Talkable
     class Share < Base
       # social
       VIA_FACEBOOK    = "facebook"
+      VIA_FB_MESSAGE  = "facebook_message"
       VIA_TWITTER     = "twitter"
       VIA_LINKEDIN    = "linkedin"
       VIA_WHATSAPP    = "twitter"
@@ -12,7 +13,6 @@ module Talkable
 
       # direct
       SEND_EMAIL      = "email"
-      SEND_FB_MESSAGE = "facebook_message"
 
       class << self
         def create(short_url_code, channel)

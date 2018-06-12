@@ -63,7 +63,6 @@ describe Talkable::API::Share do
   describe "direct" do
     let(:short_url_code) { 'SAMPLE' }
     let(:channel) { Talkable::API::Share::SEND_EMAIL }
-    let(:fb_message_channel) { Talkable::API::Share::SEND_FB_MESSAGE }
     let(:response_hash) {
       {
         recipients: {
@@ -155,7 +154,7 @@ describe Talkable::API::Share do
 
     it ".direct fails when not email (for the time being)" do
       expect{Talkable::API::Share.direct(short_url_code,
-        channel: fb_message_channel,
+        channel: 'random',
         recipients: 'Nathan',
         subject: 'Hello!',
         body: 'World!',
