@@ -12,7 +12,23 @@ module Talkable
       register_origin(Talkable::API::Origin::EVENT, params)
     end
 
+    def approve_referral(origin_slug)
+      update_referral(origin_slug, Talkable::API::Referral::APPROVED)
+    end
+
+    def void_referral(origin_slug)
+      update_referral(origin_slug, Talkable::API::Referral::VOIDED)
+    end
+
+    def unblock_referral(origin_slug)
+      update_referral(origin_slug, Talkable::API::Referral::UNBLOCKED)
+    end
+
     private
+
+    def update_referral(origin_slug, status)
+      Talkable::API::Referral.update(origin_slug, status)
+    end
 
     def register_origin(origin_type, params = {})
       origin_params = default_params.merge(params)

@@ -1,16 +1,38 @@
+# More at http://docs.talkable.com/api_v2/shares.html
 module Talkable
   module API
     class Share < Base
-      CHANNEL_FACEBOOK          = "facebook".freeze
-      CHANNEL_FACEBOOK_MESSAGE  = "facebook_message".freeze
-      CHANNEL_TWITTER           = "twitter".freeze
-      CHANNEL_SMS               = "sms".freeze
-      CHANNEL_OTHER             = "other".freeze
+      # social
+      VIA_FACEBOOK    = "facebook"
+      VIA_TWITTER     = "twitter"
+      VIA_LINKEDIN    = "linkedin"
+      VIA_WHATSAPP    = "twitter"
+      VIA_SMS         = "sms"
+      VIA_OTHER       = "other"
+
+      # direct
+      SEND_EMAIL      = "email"
+      SEND_FB_MESSAGE = "facebook_message"
 
       class << self
         def create(short_url_code, channel)
-          post "/offers/#{short_url_code}/shares", {
+          warn "[DEPRECATION] `create` is deprecated.  Please use `social` or `direct` instead."
+          social(short_url_code, channel: channel)
+        end
+
+        def social(short_url_code, channel:)
+          post "/offers/#{short_url_code}/shares/social", {
             channel: channel,
+          }
+        end
+
+        def direct(short_url_code, channel: SEND_EMAIL, recipients:, subject: nil, body: nil, reminder: nil)
+          raise unless channel == SEND_EMAIL
+          post "/offers/#{short_url_code}/shares/#{channel}", {
+            recipients: recipients,
+            subject: subject,
+            body: body,
+            reminder: reminder,
           }
         end
       end
