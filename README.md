@@ -192,6 +192,8 @@ See the [API docs](http://docs.talkable.com/api_v2.html) for full details.
 
 - [Registering a purchase](#registering-a-purchase)
 - [Registering other events](#registering-other-events)
+- [Working with referrals](#working-with-referrals)
+- [Working with shares](#shares)
 - [More API examples](#more-api-examples)
 
 ### Registering a purchase
@@ -243,7 +245,7 @@ Talkable.register_event(
 )
 ```
 
-### Working with referrals:
+### Working with referrals
 
 ```ruby
 Talkable.approve_referral('test-slug')
@@ -251,7 +253,7 @@ Talkable.void_referral('test-slug')
 Talkable.unblock_referral('test-slug')
 ```
 
-### Shares:
+### Shares
 
 ```ruby
 Talkable::API::Share.social(short_url_code, channel: Talkable::API::Share::VIA_SMS)
