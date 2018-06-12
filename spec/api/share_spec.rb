@@ -158,7 +158,7 @@ describe Talkable::API::Share do
         recipients: 'Nathan',
         subject: 'Hello!',
         body: 'World!',
-        reminder: false)}.to raise_error
+        reminder: false)}.to raise_error(ArgumentError, 'Email is the only supported sharing channel')
     end
   end
 end

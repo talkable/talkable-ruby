@@ -27,7 +27,7 @@ module Talkable
         end
 
         def direct(short_url_code, channel: SEND_EMAIL, recipients:, subject: nil, body: nil, reminder: nil)
-          raise unless channel == SEND_EMAIL
+          raise ArgumentError, 'Email is the only supported sharing channel' unless channel == SEND_EMAIL
           post "/offers/#{short_url_code}/shares/#{channel}", {
             recipients: recipients,
             subject: subject,
