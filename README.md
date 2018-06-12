@@ -243,6 +243,22 @@ Talkable.register_event(
 )
 ```
 
+### Working with referrals:
+
+```ruby
+Talkable.approve_referral('test-slug')
+Talkable.void_referral('test-slug')
+Talkable.unblock_referral('test-slug')
+```
+
+### Shares:
+
+```ruby
+Talkable::API::Share.social(short_url_code, channel: Talkable::API::Share::VIA_SMS)
+Talkable::API::Share.direct(short_url_code, channel: Talkable::API::Share::SEND_EMAIL, recipients: 'friend1@example.com,friend2@example.com', subject: 'Hello!', body: 'World!', reminder: false)
+```
+When sharing via email, the email channel is set to default because for now email is the only channel for direct shares.
+
 ### More API examples
 
 Here are more API examples.
@@ -251,10 +267,10 @@ Here are more API examples.
 Talkable::API::Offer.find(short_url_code)
 Talkable::API::Person.find(email)
 Talkable::API::Person.update(email, unsubscribed: true)
-Talkable::API::Referral.update(order_number, Talkable::API::Referral::APPROVED)
 Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
-Talkable::API::Share.create(short_url_code, Talkable::API::Share::CHANNEL_SMS)
 ```
+
+For more information see the tests. 
 
 ## Questions? Need Help? Found a bug?
 
