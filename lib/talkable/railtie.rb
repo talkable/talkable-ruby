@@ -3,6 +3,7 @@ module Talkable
     generators do
       require 'talkable/generators/install_generator'
       require 'talkable/generators/invite_standalone_generator'
+      require 'talkable/generators/dummy_close_loop_generator'
     end
 
     initializer "talkable.add_middleware" do |app|
