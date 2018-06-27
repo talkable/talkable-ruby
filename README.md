@@ -89,8 +89,8 @@ Talkable.configure do |config|
   # custom server address - by default https://www.talkable.com
   # config.server   =
 
-  # manually specified per-client integration library
-  # config.js_integration_library =
+  # manually specified host for per-client integration library
+  # config.js_integration_host =
 end
 
 ```

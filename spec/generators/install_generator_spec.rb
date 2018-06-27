@@ -16,7 +16,6 @@ describe Talkable::InstallGenerator, type: :generator do
   let(:extension) { 'erb' }
   let(:layout) { file("app/views/layouts/application.html.#{extension}") }
   let(:partial) { file("app/views/shared/_talkable_offer.html.#{extension}") }
-  let(:routes) { file("config/routes.rb") }
 
   let(:default_arguments) { [] }
 
@@ -32,7 +31,7 @@ describe Talkable::InstallGenerator, type: :generator do
 
     prepare_destination
 
-    [application_controller, layout, routes].each do |rails_file|
+    [application_controller, layout].each do |rails_file|
       FileUtils.mkpath File.dirname(rails_file)
 
       File.open(rails_file, "w") do |f|
@@ -63,15 +62,6 @@ describe Talkable::InstallGenerator, type: :generator do
     end
   end
 
-  describe '.add_invite_controller' do
-    let(:invite_controller) { file("app/controllers/invite_controller.rb") }
-    it 'creates invite controller' do
-      expect(invite_controller).to have_correct_syntax
-      expect(invite_controller).to have_method('show')
-      expect(invite_controller).to contain("skip_before_action :load_talkable_offer")
-    end
-  end
-
 
   context 'when template language' do
 
@@ -86,20 +76,6 @@ describe Talkable::InstallGenerator, type: :generator do
         it 'modifies application layout' do
           expect(layout).to have_correct_syntax unless generator.options[:slim] # slim isn't supported yet
           expect(layout).to contain("render 'shared/talkable_offer'")
-        end
-      end
-
-      describe '.add_invite_controller' do
-        let(:view) { file("app/views/invite/show.html.#{extension}") }
-
-        it 'creates offer view' do
-          expect(view).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
-          expect(view).to contain("render 'shared/talkable_offer'")
-        end
-
-        it 'adds route' do
-          expect(routes).to have_correct_syntax
-          expect(routes).to contain("get '/invite' => 'invite#show'")
         end
       end
     end

@@ -53,14 +53,6 @@ RUBY
       end
     end
 
-    def add_invite_controller
-      ext = template_lang
-
-      copy_file "app/controllers/invite_controller.rb", "app/controllers/invite_controller.rb"
-      copy_file "app/views/invite/show.html.#{ext}", "app/views/invite/show.html.#{ext}"
-      route "get '/invite' => 'invite#show'"
-    end
-
     protected
 
     def template_lang
