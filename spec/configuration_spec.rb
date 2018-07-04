@@ -16,10 +16,6 @@ describe Talkable::Configuration do
     expect(subject.site_slug).to eq("some-site-slug")
   end
 
-  it 'has default js integration host' do
-    expect(subject.js_integration_host).not_to be_nil
-  end
-
   it 'has default js integration link' do
     expect(subject.js_integration_library).not_to be_nil
   end
