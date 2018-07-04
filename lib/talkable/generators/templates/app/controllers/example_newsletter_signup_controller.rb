@@ -1,4 +1,4 @@
-class DummyCloseLoopController < ApplicationController
+class ExampleNewsletterSignupController < ApplicationController
   def register
   end
 
@@ -6,10 +6,10 @@ class DummyCloseLoopController < ApplicationController
     Talkable.register_event(
         email: params[:email],
         event_number: SecureRandom.uuid,
-        event_category: 'dummy_signup'
+        event_category: 'example_newsletter_signup'
     )
 
-    redirect_to dummy_close_loop_thank_you_path
+    redirect_to example_newsletter_signup_thank_you_path
   end
 
   def thank_you

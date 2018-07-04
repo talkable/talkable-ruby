@@ -3,9 +3,9 @@ require 'spec_helper'
 require 'rails/all'
 require 'ammeter/init'
 
-require 'talkable/generators/dummy_close_loop_generator'
+require 'talkable/generators/example_newsletter_signup_generator'
 
-describe Talkable::DummyCloseLoopGenerator, type: :generator do
+describe Talkable::ExampleNewsletterSignupGenerator, type: :generator do
   destination File.expand_path("../../../tmp", __FILE__)
 
   let(:extension) { 'erb' }
@@ -29,13 +29,13 @@ describe Talkable::DummyCloseLoopGenerator, type: :generator do
   end
 
   describe '.add_invite_controller' do
-    let(:dummy_loop_close_controller) { file("app/controllers/dummy_close_loop_controller.rb") }
+    let(:example_newsletter_signup_controller) { file("app/controllers/example_newsletter_signup_controller.rb") }
     it 'creates invite controller' do
-      expect(dummy_loop_close_controller).to have_correct_syntax
-      expect(dummy_loop_close_controller).to have_method('register')
-      expect(dummy_loop_close_controller).to have_method('submit')
-      expect(dummy_loop_close_controller).to have_method('thank_you')
-      # expect(dummy_loop_close_controller).to contain("skip_before_action :load_talkable_offer")
+      expect(example_newsletter_signup_controller).to have_correct_syntax
+      expect(example_newsletter_signup_controller).to have_method('register')
+      expect(example_newsletter_signup_controller).to have_method('submit')
+      expect(example_newsletter_signup_controller).to have_method('thank_you')
+      # expect(example_newsletter_signup_controller).to contain("skip_before_action :load_talkable_offer")
     end
   end
 
@@ -49,9 +49,9 @@ describe Talkable::DummyCloseLoopGenerator, type: :generator do
 
     it 'adds route' do
       expect(routes).to have_correct_syntax
-      expect(routes).to contain("get '/dummy_close_loop/thank_you' => 'dummy_close_loop#thank_you'")
-      expect(routes).to contain("get '/dummy_close_loop' => 'dummy_close_loop#register'")
-      expect(routes).to contain("post '/dummy_close_loop' => 'dummy_close_loop#submit'")
+      expect(routes).to contain("get '/example_newsletter_signup/thank_you' => 'example_newsletter_signup#thank_you'")
+      expect(routes).to contain("get '/example_newsletter_signup' => 'example_newsletter_signup#register'")
+      expect(routes).to contain("post '/example_newsletter_signup' => 'example_newsletter_signup#submit'")
     end
   end
 end
