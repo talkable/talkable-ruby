@@ -18,11 +18,7 @@ describe Talkable::InviteStandaloneGenerator, type: :generator do
 
     [routes].each do |rails_file|
       FileUtils.mkpath File.dirname(rails_file)
-
-      File.open(rails_file, "w") do |f|
-        fixture = File.read(File.dirname(__FILE__) + "/../fixtures/files/#{File.basename(rails_file)}")
-        f.write fixture
-      end
+      File.write(rails_file, File.read(File.dirname(__FILE__) + "/../fixtures/files/#{File.basename(rails_file)}"))
     end
 
     run_generator

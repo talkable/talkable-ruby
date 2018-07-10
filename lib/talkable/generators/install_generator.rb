@@ -1,15 +1,12 @@
+require 'talkable/generators/base_generator'
+
 module Talkable
-  class InstallGenerator < Rails::Generators::Base
+  class InstallGenerator < BaseGenerator
     source_root File.expand_path("../templates", __FILE__)
-    class_option :haml, type: :boolean, default: false
-    class_option :slim, type: :boolean, default: false
 
     def ask_config_values
       @site_slug  = ask("Your Talkable site slug:")
       @api_key    = ask("Your Talkable API Key:")
-      if yes?('Do you have a custom domain? [Y/n]')
-        @server   = ask("Your custom domain [#{Talkable::Configuration::DEFAULT_SERVER}]:")
-      end
     end
 
     def add_initializer
@@ -52,22 +49,5 @@ RUBY
         end
       end
     end
-
-    protected
-
-    def template_lang
-      @template_lang ||= if options[:haml]
-        'haml'
-      elsif options[:slim]
-        'slim'
-      else
-        Rails::Generators.options[:rails][:template_engine].to_s.downcase
-      end
-    end
-
-    def erb?
-      template_lang == 'erb'
-    end
-
   end
 end

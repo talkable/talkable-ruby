@@ -4,10 +4,4 @@ Talkable.configure do |config|
 
   # api key is taken from ENV["TALKABLE_API_KEY"]
   config.api_key    = <%= @api_key.inspect %>
-  <%- if defined?(@server) && @server.present? %>
-  config.server     = <%= @server.inspect %>
-  <%- else %>
-  # custom server address - by default <%= Talkable::Configuration::DEFAULT_SERVER %>
-  # config.server   =
-  <%- end %>
 end
