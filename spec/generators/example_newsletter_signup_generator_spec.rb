@@ -35,18 +35,10 @@ describe Talkable::ExampleNewsletterSignupGenerator, type: :generator do
       expect(example_newsletter_signup_controller).to have_method('register')
       expect(example_newsletter_signup_controller).to have_method('submit')
       expect(example_newsletter_signup_controller).to have_method('thank_you')
-      # expect(example_newsletter_signup_controller).to contain("skip_before_action :load_talkable_offer")
     end
   end
 
   describe '.add_invite_controller' do
-    # let(:view) { file("app/views/invite/show.html.#{extension}") }
-    #
-    # it 'creates offer view' do
-    #   expect(view).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet
-    #   expect(view).to contain("render 'shared/talkable_offer'")
-    # end
-
     it 'adds route' do
       expect(routes).to have_correct_syntax
       expect(routes).to contain("get '/example_newsletter_signup/thank_you' => 'example_newsletter_signup#thank_you'")

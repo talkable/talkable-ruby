@@ -1,6 +1,6 @@
 module Talkable
   class Configuration
-    DEFAULT_SERVER = "https://www.talkable.com"
+    DEFAULT_SERVER = "https://www.talkable.com".freeze
 
     attr_accessor :site_slug
     attr_accessor :api_key
@@ -13,6 +13,7 @@ module Talkable
     def initialize
       self.site_slug  = ENV["TALKABLE_SITE_SLUG"]
       self.api_key    = ENV["TALKABLE_API_KEY"]
+      self.server     = DEFAULT_SERVER
     end
 
     def apply(config)
@@ -27,10 +28,6 @@ module Talkable
 
     def js_integration_library
       @js_integration_library || default_js_integration_library
-    end
-
-    def server
-      @server || DEFAULT_SERVER
     end
 
     protected

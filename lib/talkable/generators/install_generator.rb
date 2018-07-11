@@ -7,6 +7,9 @@ module Talkable
     def ask_config_values
       @site_slug  = ask("Your Talkable site slug:")
       @api_key    = ask("Your Talkable API Key:")
+      if yes?('Do you have a custom domain? [Y/n]')
+        @server   = ask("Your custom domain [#{Talkable::Configuration::DEFAULT_SERVER}]:")
+      end
     end
 
     def add_initializer

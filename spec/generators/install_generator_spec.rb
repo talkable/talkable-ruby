@@ -50,6 +50,7 @@ describe Talkable::InstallGenerator, type: :generator do
       is_expected.to exist
       is_expected.to contain('config.site_slug  = "my-site-slug"')
       is_expected.to contain('config.api_key    = "some-api-key"')
+      is_expected.to contain('config.server     = "http://example.com"')
     end
   end
 
