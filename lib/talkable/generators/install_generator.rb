@@ -1,8 +1,12 @@
-require 'talkable/generators/base_generator'
+require 'talkable/generators/shared_generator_methods'
 
 module Talkable
-  class InstallGenerator < BaseGenerator
+  class InstallGenerator < Rails::Generators::Base
+    include Talkable::SharedGeneratorMethods
+
     source_root File.expand_path("../templates", __FILE__)
+    class_option :haml, type: :boolean, default: false
+    class_option :slim, type: :boolean, default: false
 
     def ask_config_values
       @site_slug  = ask("Your Talkable site slug:")

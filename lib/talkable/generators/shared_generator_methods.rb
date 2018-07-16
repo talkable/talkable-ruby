@@ -1,9 +1,4 @@
-class Talkable::BaseGenerator < Rails::Generators::Base
-  class_option :haml, type: :boolean, default: false
-  class_option :slim, type: :boolean, default: false
-
-  protected
-
+module Talkable::SharedGeneratorMethods
   def template_lang
     @template_lang ||= if options[:haml]
      'haml'
