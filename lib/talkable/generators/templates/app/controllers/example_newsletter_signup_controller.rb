@@ -5,7 +5,7 @@ class ExampleNewsletterSignupController < ApplicationController
   def submit
     Talkable.register_event(
       email: params[:email],
-      event_number: "#{params[:email]}$#{SecureRandom.uuid}",
+      event_number: Digest::MD5.hexdigest(params[:email]),
       event_category: 'example_newsletter_signup'
     )
 
