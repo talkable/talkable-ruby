@@ -1,42 +1,19 @@
----
-title: Referral Marketing with the Talkable Gem
-
-language_tabs: # must be one of https://git.io/vQNgJ
-
-toc_footers:
-  - This document is open source
-  - Questions? <a href='https://stackoverflow.com/questions/tagged/ruby-on-rails'>Ask on Stack Overflow</a>
-  - Have fixes? <a href='https://github.com/RailsApps/talkable-referral-marketing-gem'>Edit the GitHub repo</a>
-  - Want more? <a href='http://docs.talkable.com/'>See the Talkable Docs</a>
-
-
-includes:
-
-search: true
----
-
 # Referral Marketing with the Talkable Gem
-
-**by Daniel Kehoe**
-
-_Last updated 24 May 2018_
 
 ## Introduction
 
-> Copy and paste from this "code column" to build a demo application in less than ten minutes. Read the adjacent column for explanation and details.
-
-This is the second of two tutorials that introduce referral marketing with [Talkable](https://www.talkable.com/). Referral marketing is a powerful sales driver for SaaS and ecommerce sites. Talkable is a referral marketing platform that supports the complex requirements of the largest and most sophisticated SaaS and ecommerce sites. The [first tutorial](https://railsapps.github.io/talkable-referral-marketing-basics/) introduces basic concepts using the Talkable JavaScript integration library. This tutorial introduces the Talkable API and the Talkable Ruby gem.
+This is the third of three tutorials that introduce referral marketing with [Talkable](https://www.talkable.com/). Referral marketing is a powerful sales driver for SaaS and ecommerce sites. Talkable is a referral marketing platform that supports the complex requirements of the largest and most sophisticated SaaS and ecommerce sites. The [first tutorial](https://railsapps.github.io/talkable-referral-marketing-basics/) introduces basic concepts using the Talkable JavaScript integration library. This tutorial introduces the Talkable API and the Talkable Ruby gem.
 
 Read the [first tutorial](https://railsapps.github.io/talkable-referral-marketing-basics/) to grasp the basic concepts you'll need to know to use the Talkable platform. This tutorial shows how to build an application with the same functionality as the first tutorial application, but instead of using the JavaScript integration library you'll use the Ruby gem and the Talkable API.
+
+The [second tutorial](https://railsapps.github.io/talkable-referral-marketing-gem/) is an older version of this one before we added an example campaign on account creation and corresponding generators in the gem. The second tutorial has more details about what happens under the hood and could still be interesting for this reason.
+
+This third tutorial will mature partly into self-serve users landing page and partly into our documentation in a course of several next releases.
 
 ## Requirements
 
 You'll need Ruby 2.3+ and Rails 5.0+. You can integrate Talkable in your existing project right away, but a fresh Rails 5 app will also do just fine.
 You'll need only beginner skills as a Rails developer to follow this tutorial.
-
-## Talkable Fundamentals
-
-See the [first tutorial](https://railsapps.github.io/talkable-referral-marketing-basics/) for an introduction to basic concepts.
 
 ## Create an Account
 
@@ -48,9 +25,23 @@ Your site name can be the name of your website, brand or company. You'll be able
 
 For this tutorial, set the Site URL to `http://localhost:3000/` so you can develop and test the application locally.
 
-![talkable-create-account](images/talkable-create-account.png)
+![talkable-create-account](tutorial_images/talkable-create-account.png)
 
-An example campaign is created automatically for you.
+**An example campaign is created automatically for you.**
+
+## Fraud Settings
+
+This part of the tutorial won't be needed in a few days as we will be setting different default fraud settings, but it is needed for now.
+
+Talkable prevents common (and not-so-common) referral fraud like self-referrals. For example, for product sales sites, referral marketing isn't profitable if shoppers can give themselves discounts by entering their own alternative email addresses.
+
+For our tutorial, we'll want to enter our own alternative email addresses and visit the application using the same web browser and the same IP address. We'll change the Fraud Settings to allow this.
+
+![talkable-menu-fraud](tutorial_images/talkable-menu-fraud.png)
+
+Set the "Fraud Profiles" (in the upper left corner) to "Low." Then set each individual fraud rule for Advocate and Friend to "Skip," specifically "Matching Email or Cookie on Friend Purchase" and "Matching Cookie on Friend Claim Page." This will allow self-referrals for testing the tutorial application in your local development environment.
+
+Be sure to click the "Save Changes" button to save the fraud settings.
 
 ## Launch the Campaign
 
@@ -58,15 +49,15 @@ You are done with the Talkable administrative interface for now and can launch y
 
 Select "Campaigns" from the top navigation bar.
 
-![talkable-menu-campaigns](images/talkable-menu-campaigns.png)
+![talkable-menu-campaigns](tutorial_images/talkable-menu-campaigns.png)
 
 "Launch" is hidden behind three dots under the "Action" label.
 
-![talkable-menu-launch](images/talkable-menu-launch.png)
+![talkable-menu-launch](tutorial_images/talkable-menu-launch.png)
 
 Ignore any warnings, accept the defaults, and click the orange "Launch campaign" button.
 
-![talkable-campaign-launch](images/talkable-campaign-launch.png)
+![talkable-campaign-launch](tutorial_images/talkable-campaign-launch.png)
 
 You'll see a warning, "No Integration Found." Ignore the warning. Talkable checks if an Integration script is present on a production site but our development site is not running or accessible to Talkable. Click the green "Launch Now" button.
 
@@ -80,7 +71,7 @@ You can use the [Talkable Ruby Gem](https://github.com/talkable/talkable-ruby) t
 
 Add the gem to the project *Gemfile* and run `bundle install`.
 
-`gem 'talkable', git: 'git://github.com/talkable/talkable-ruby.git'`
+`gem 'talkable', github: 'talkable/talkable-ruby'`
 
 `$ bundle install`
 
@@ -94,19 +85,19 @@ The Talkable gem provides a Ruby On Rails generator for basic configuration of t
 
 You can easily find the "site slug." You'll see the Dashboard page when you log in. The site slug is labelled "Site ID" in the upper left corner.
 
-![talkable-menu-dashboard](images/talkable-menu-dashboard.png)
+![talkable-menu-dashboard](tutorial_images/talkable-menu-dashboard.png)
 
-![talkable-siteslug](images/talkable-siteslug.png)
+![talkable-siteslug](tutorial_images/talkable-siteslug.png)
 
 ### API Key
 
 You'll also need an API key. You can find the Account Settings page from the main menu.
 
-![talkable-account-settings](images/talkable-account-settings.png)
+![talkable-account-settings](tutorial_images/talkable-account-settings.png)
 
 You'll find the API Key under Basic Settings. You won't need the Public API Key (that's just for iOS or Android developers).
 
-![talkable-account-settings-more](images/talkable-account-settings-more.png)
+![talkable-account-settings-more](tutorial_images/talkable-account-settings-more.png)
 
 With your site slug and API key you are ready to run the generator.
 
@@ -118,24 +109,23 @@ Run the install generator from the terminal:
 
 The generator will prompt you for your "site slug" and API key.
 
-<aside class="notice">
 The generator will ask if you have a custom domain. You can answer, "no." Custom domains are an advanced feature for Talkable integration.
-</aside>
 
 In order for example setup to work you'll need to run two more generators.
+
+`$ rails generate talkable:invite_standalone`
 
 Invite standalone generator will add a controller and a view where your campaign will be rendered.
 The placement of where to render the campaign is controlled in your campaign settings on Talkable site.
 For the example campaign we chose to use `/invite` as our placement.
 
-`$ rails generate talkable:invite_standalone`
-
-Example newsletter signup will add a controller, routes and views to your app.
-Our example campaign is configured in a way that will redirect the `friend` to `/example_newsletter_signup` after the claim. On that page a user will be prompted to fake email signup. This signup only sends a corresponding event via Talkable API (but you can change that ;)).
-
 `$ rails generate talkable:example_newsletter_signup`
 
-You can inspect all the stuff produced by generators up close and here are a few important details.
+Example newsletter signup will add a controller, routes and views to your app.
+Our example campaign is configured in a way that will redirect the `friend` to `/example_newsletter_signup` after the claim. On that page a user will be prompted to fake email signup. By default this `signup` only sends a corresponding event via Talkable API.
+
+We encourage you to inspect all the stuff produced by generators up close (this section is more detailed in the original ruby gem tutorial).
+Here are a few important details.
 
 The file *app/views/invite/show.html.erb* renders the view. It contains a reference to the view partial in the file *shared/talkable_offer*.
 
@@ -148,13 +138,9 @@ Your Invite page will display a Talkable referral offer in an iframe, if the fol
 
 We'll use the Invite page to display a referral offer from the Invite Standalone campaign. You can add links to this page anywhere in your application where you want to encourage visitors to refer a friend.
 
-For a membership site, we use the API call `register_event`. We specify an `event_category: 'signup'` and send an `event_number` equivalent to the User object unique ID. Last, we send the user's email address.
-
 It is important to set a User ID or other unchanging string as an `event_number` each time the page is requested by a visitor. With an unchanging User ID, Talkable will recognize the page requests as repeat visits by the same visitor and will record the visits accordingly.
 
 We add the integer 100 to the `current_user.id` to create an `event_number` just for the purpose of this tutorial. If you implemented the tutorial application in our [first tutorial](https://railsapps.github.io/talkable-referral-marketing-basics/), you may have already recorded events for the Invite Standalone campaign. If you build a new application and sign up using event numbers that are already recorded, the Talkable API will respond with an error message "Talkable::API::BadRequest." Adding 100 helps us avoid the issue for anyone who tried the application in the first tutorial.
-
-Devise is set to display the Thank You page when a user signs up for an account. Now, when a visitor signs up for the site, they'll see a link that encourages them to invite a friend. And if a friend signs up for the site, they'll also be encouraged to invite a friend. This is the basis for viral marketing.
 
 That's all the code we need for our simple refer-a-friend feature. We can try out the tutorial application. But first, let's review the fundamental concept of the *referral loop*.
 
@@ -168,7 +154,7 @@ It's helpful to understand the *referral loop* to grasp the principles of referr
 
 * The friend gets redirected to the site. On any page they visit, Talkable will recognize the friend's visit by the presence of the cookie.
 
-* The friend signs up for the site (a *conversion event*) and the API request in the Thank You controller signals Talkable, closing the referral loop.
+* The friend signs up for an example newsletter (a *conversion event*) and the API request signals Talkable, closing the referral loop.
 
 Building on this simple referral loop, you can develop more sophisticated referral marketing campaigns. For example, you can add incentives for the friend or advocate. For a product sales site, you could offer a discount coupon, a rebate, or a non-monetary incentive such as stickers or a t-shirt. You can track an advocate's multiple referrals or even chains of referrals among friends. Talkable supports almost any referral marketing program you can imagine.
 
@@ -182,7 +168,7 @@ Make sure your campaign is launched. Now go to `http://localhost:3000/invite`
 
 You should now see our campaign page for the Advocate.
 
-![talkable-referral-offer](images/talkable-referral-offer.png)
+![talkable-referral-offer](tutorial_images/talkable-referral-offer.png)
 
 Enter your name and email address in the form and click "Invite Friends".
 
@@ -190,27 +176,25 @@ The Advocate Share offer will appear on the Invite page.
 
 Below you can find the scenario when you share the offer via email. Alternatively you can share via `Copy a Link`. You copy the link and open it in another browser or in the incognito mode. You should be able to claim your reward right away.
 
-![talkable-advocate-share](images/talkable-advocate-share.png)
+![talkable-advocate-share](tutorial_images/talkable-advocate-share.png)
 
 Click "Share via Email" and fill in the form with a friend's email address. To try out the application, you should enter your own alternative email address. If you use Gmail, you can use the Gmail "plus" trick to create alternative addresses that will be delivered in your inbox. For example, add a "+foobar" to use "yourname+foobar@gmail.com". This will open a referral loop by registering your email address as an advocate and the friend's email address as a pending invitation.
 
-![talkable-advocate-friend](images/talkable-advocate-friend.png)
+![talkable-advocate-friend](tutorial_images/talkable-advocate-friend.png)
 
 You are done with the Invite page. Sign out of the application so you can pretend to be the friend next time you visit the web application.
 
 ### Friend Receives Email
 
-Check your email inbox. Less than a minute after submitting the form with the friend email address, you should receive an email message from Talkable. The email subject will be, "Your friend gave you a free ebook" and there will be a prominent "Claim Your Gift" button in the message body. The claim button is a link to the Talkable server that will track the action and redirect to your web application.
+Check your email inbox. Less than a minute after submitting the form with the friend email address, you should receive an email message from Talkable. There will be a prominent "Claim Your Gift" button in the message body. The claim button is a link to the Talkable server that will track the action and redirect to your web application.
 
 ### Friend Clicks Link
 
-Click the "Claim Your Gift" button in the email message and you will visit the welcome page of your application.
-
-![rails-signup-thankyou](images/rails-signup-thankyou-1.png)
+Click the "Claim Your Gift" button in the email message and you will visit the newsletter signup page of your application.
 
 ### Friend Signs Up
 
-Now sign up and create a new account using the fake email address you created for yourself.
+Now sign up for an example newsletter.
 
 You'll see the Thank You page. Behind the scenes, the Talkable controller will make an API request to Talkable to record the signup event. This closes a referral loop because Talkable recognizes the friend's email address from the advocate's invitation.
 
@@ -220,7 +204,7 @@ Next let's view reports on the Talkable site and see the events that Talkable ha
 
 Sign in to the Talkable site and select "Reports" from the top navigation bar.
 
-![talkable-menu-reports](images/talkable-menu-reports.png)
+![talkable-menu-reports](tutorial_images/talkable-menu-reports.png)
 
 View some of the reports under the "Support" heading.
 
@@ -240,11 +224,11 @@ Take a few minutes to view the reports and see how the referral activity is logg
 
 Finally, to see a high-level analysis of your referral marketing campaign, find the Campaign Performance summary. Select "Campaigns" from the top navigation bar.
 
-![talkable-menu-campaigns](images/talkable-menu-campaigns.png)
+![talkable-menu-campaigns](tutorial_images/talkable-menu-campaigns.png)
 
 Click the "Invite Standalone" campaign to see a campaign summary.
 
-![talkable-campaign-summary](images/talkable-campaign-summary.png)
+![talkable-campaign-summary](tutorial_images/talkable-campaign-summary.png)
 
 The Campaign Performance summary shows the funnel of impressions (page visits), advocates (sharers), sharing events, and visits by friends. The Campaign Performance isn't the end point of a typical referral marketing campaign. It is the beginning point for further testing and optimization to refine a referral marketing campaign.
 
@@ -267,4 +251,3 @@ However, this verification query doesn't work with the Ruby gem.
 ## Support
 
 Was this tutorial helpful? For questions or more information, contact <a href="mailto:support@talkable.com">support@talkable.com</a>.
-
