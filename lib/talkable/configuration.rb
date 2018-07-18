@@ -13,7 +13,7 @@ module Talkable
     def initialize
       self.site_slug  = ENV["TALKABLE_SITE_SLUG"]
       self.api_key    = ENV["TALKABLE_API_KEY"]
-      self.server     = "https://www.talkable.com"
+      self.server     = DEFAULT_SERVER
     end
 
     def apply(config)
@@ -35,6 +35,5 @@ module Talkable
     def default_js_integration_library
       "//d2jjzw81hqbuqv.cloudfront.net/integration/clients/#{site_slug}.min.js"
     end
-
   end
 end
