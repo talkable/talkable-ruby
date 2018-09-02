@@ -56,5 +56,11 @@ RUBY
         end
       end
     end
+
+    def register_first_event
+      require './config/initializers/talkable.rb'
+      p 'Registering a test affiliate member in order to verify if integration is working'
+      Talkable.register_affiliate_member(email: "integration_check_#{SecureRandom.hex(5)}@talkable.com")
+    end
   end
 end
