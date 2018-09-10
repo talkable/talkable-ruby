@@ -3,6 +3,8 @@
 
 Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable]( https://www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
 
+Here you can create Talkable account https://admin.talkable.com/register?self_serve
+
 ## Demo
 
 See an example application at http://github.com/talkable/talkable-spree-example.
@@ -272,7 +274,7 @@ Talkable::API::Person.update(email, unsubscribed: true)
 Talkable::API::Reward.find(visitor_uuid: '8fdf75ac-92b4-479d-9974-2f9c64eb2e09')
 ```
 
-For more information see the tests. 
+For more information see the tests.
 
 ## Questions? Need Help? Found a bug?
 
