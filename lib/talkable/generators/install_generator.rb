@@ -9,7 +9,7 @@ module Talkable
     class_option :slim, type: :boolean, default: false
 
     def ask_config_values
-      puts "If you don't have talkable account yet, create one here: \e]8;;https://admin.talkable.com/register?self_serve\ahttps://admin.talkable.com/register?self_serve\e]8;;\a"
+      puts "If you don't have Talkable account yet, create one here: \e]8;;https://admin.talkable.com/register?self_serve\ahttps://admin.talkable.com/register?self_serve\e]8;;\a"
       @site_slug  = ask("Your Talkable site slug:")
       @api_key    = ask("Your Talkable API Key:")
       if yes?('Do you have a custom domain? [Y/n]')
