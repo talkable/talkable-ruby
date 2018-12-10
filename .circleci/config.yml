@@ -1,0 +1,38 @@
+version: 2
+
+jobs:
+  ruby-2.5: &template
+    docker:
+      - image: circleci/ruby:2.5
+    working_directory: ~/talkable-ruby
+    steps:
+      - checkout
+      - run:
+          name: Display Versions
+          command: |
+            function extract_version() { perl -pe 'if(($v)=/([0-9]+([.][0-9]+)+)/){print"$v\n";exit}$_=""' ; }
+            echo Ruby $(ruby --version | extract_version)
+            echo RubyGems $(gem --version | extract_version)
+            echo Bundler $(bundle --version | extract_version)
+      - run:
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: RSpec
+          command: bundle exec rspec
+  ruby-2.4:
+    <<: *template
+    docker:
+      - image: circleci/ruby:2.4
+  ruby-2.3:
+    <<: *template
+    docker:
+      - image: circleci/ruby:2.3
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - ruby-2.5
+      - ruby-2.4
+      - ruby-2.3
