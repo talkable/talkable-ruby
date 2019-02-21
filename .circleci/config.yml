@@ -1,9 +1,9 @@
 version: 2
 
 jobs:
-  ruby-2.5: &template
+  ruby-2.6: &template
     docker:
-      - image: circleci/ruby:2.5
+      - image: circleci/ruby:2.6
     working_directory: ~/talkable-ruby
     steps:
       - checkout
@@ -20,6 +20,10 @@ jobs:
       - run:
           name: RSpec
           command: bundle exec rspec
+  ruby-2.5:
+    <<: *template
+    docker:
+      - image: circleci/ruby:2.5
   ruby-2.4:
     <<: *template
     docker:
@@ -33,6 +37,7 @@ workflows:
   version: 2
   workflow:
     jobs:
+      - ruby-2.6
       - ruby-2.5
       - ruby-2.4
       - ruby-2.3
