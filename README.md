@@ -4,8 +4,6 @@
 
 Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable](https://www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
 
-Here you can create Talkable account https://admin.talkable.com/register?self_serve
-
 ## Demo
 
 See an example application at http://github.com/talkable/talkable-spree-example.
