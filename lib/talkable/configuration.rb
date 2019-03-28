@@ -6,7 +6,7 @@ module Talkable
     attr_accessor :api_key
     attr_accessor :server
     attr_accessor :read_timeout
-    attr_accessor :write_timeout
+    attr_accessor :open_timeout
     attr_accessor :timeout
     attr_accessor :js_integration_library
 
@@ -14,11 +14,11 @@ module Talkable
     end
 
     def initialize
-      self.site_slug     = ENV["TALKABLE_SITE_SLUG"]
-      self.api_key       = ENV["TALKABLE_API_KEY"]
-      self.server        = DEFAULT_SERVER
-      self.read_timeout  = 60
-      self.write_timeout = 60
+      self.site_slug    = ENV["TALKABLE_SITE_SLUG"]
+      self.api_key      = ENV["TALKABLE_API_KEY"]
+      self.server       = DEFAULT_SERVER
+      self.read_timeout = 60
+      self.open_timeout = 60
     end
 
     def apply(config)
@@ -36,16 +36,16 @@ module Talkable
     end
 
     def clean
-      self.site_slug     = nil
-      self.api_key       = nil
-      self.server        = DEFAULT_SERVER
-      self.read_timeout  = 60
-      self.write_timeout = 60
+      self.site_slug    = nil
+      self.api_key      = nil
+      self.server       = DEFAULT_SERVER
+      self.read_timeout = 60
+      self.open_timeout = 60
     end
 
     def timeout=(sec)
-      self.read_timeout  = sec
-      self.write_timeout = sec
+      self.read_timeout = sec
+      self.open_timeout = sec
     end
 
     protected
