@@ -32,7 +32,6 @@ module Talkable
 
         def request_params(params = {})
           params.merge({
-            api_key:   Talkable.configuration.api_key,
             site_slug: Talkable.configuration.site_slug,
           })
         end
@@ -50,6 +49,7 @@ module Talkable
             'User-Agent'    => "Talkable Gem/#{Talkable::VERSION}",
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
+            'Authorization' => "Bearer #{Talkable.configuration.api_key}",
           }
         end
 
