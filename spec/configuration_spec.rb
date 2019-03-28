@@ -7,6 +7,8 @@ describe Talkable::Configuration do
     expect(subject.server).to eq("https://www.talkable.com")
     expect(subject.api_key).to be_nil
     expect(subject.site_slug).to be_nil
+    expect(subject.read_timeout).to eq(60)
+    expect(subject.write_timeout).to eq(60)
   end
 
   it 'takes defaults from environment variables' do
@@ -32,13 +34,24 @@ describe Talkable::Configuration do
         subject.apply(not_existing_option: 'value')
       }.to raise_error(Talkable::Configuration::UnknownOptionError)
     end
+
+    context 'with timeout' do
+      before { subject.apply(timeout: 2) }
+
+      it 'changes configuration' do
+        expect(subject.read_timeout).to eq(2)
+        expect(subject.write_timeout).to eq(2)
+      end
+    end
   end
 
   describe "#clean" do
     before do
       subject.apply(api_key: 'api_key',
                     site_slug: 'site_slug',
-                    server: 'http://some-server.com')
+                    server: 'http://some-server.com',
+                    read_timeout: 12,
+                    write_timeout: 10)
     end
 
     it 'changes configuration' do
@@ -47,6 +60,8 @@ describe Talkable::Configuration do
       expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
       expect(subject.api_key).to be_nil
       expect(subject.site_slug).to be_nil
+      expect(subject.read_timeout).to eq(60)
+      expect(subject.write_timeout).to eq(60)
     end
   end
 end

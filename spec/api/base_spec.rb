@@ -39,6 +39,11 @@ describe Talkable::API::Base do
       expect { request }.to raise_error(Talkable::API::NetworkError)
     end
 
+    it 'raises on timeout error' do
+      stub_api_request.to_timeout
+      expect { request }.to raise_error(Talkable::API::NetworkError)
+    end
+
     it 'raises on server error' do
       stub_api_request.to_return(status: 500)
       expect { request }.to raise_error(Talkable::API::NetworkError)
