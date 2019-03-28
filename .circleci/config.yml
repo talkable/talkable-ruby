@@ -4,16 +4,15 @@ jobs:
   ruby-2.6: &template
     docker:
       - image: circleci/ruby:2.6
+        environment:
+          BUNDLER_VERSION: "2.0.1"
     working_directory: ~/talkable-ruby
     steps:
       - checkout
 
       - run:
           name: Configure Bundler
-          command: |
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
+          command: gem install bundler
 
       - run:
           name: Display Versions
@@ -23,18 +22,9 @@ jobs:
             echo RubyGems $(gem --version | extract_version)
             echo Bundler $(bundle --version | extract_version)
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-            - v1-bundle-
       - run:
           name: Bundle Install
           command: bundle install
-      - save_cache:
-          key: v1-bundle-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
       - run:
           name: RSpec
