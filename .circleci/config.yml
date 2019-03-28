@@ -33,14 +33,20 @@ jobs:
     <<: *template
     docker:
       - image: circleci/ruby:2.5
+        environment:
+          BUNDLER_VERSION: "1.17.1"
   ruby-2.4:
     <<: *template
     docker:
       - image: circleci/ruby:2.4
+        environment:
+          BUNDLER_VERSION: "1.17.1"
   ruby-2.3:
     <<: *template
     docker:
       - image: circleci/ruby:2.3
+        environment:
+          BUNDLER_VERSION: "1.17.1"
 
 workflows:
   version: 2
