@@ -23,9 +23,18 @@ jobs:
             echo RubyGems $(gem --version | extract_version)
             echo Bundler $(bundle --version | extract_version)
 
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-bundle-{{ checksum "Gemfile.lock" }}
+            - v1-bundle-
       - run:
           name: Bundle Install
           command: bundle install
+      - save_cache:
+          key: v1-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
 
       - run:
           name: RSpec
