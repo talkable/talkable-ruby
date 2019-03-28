@@ -12,6 +12,7 @@ module Talkable
 
   class << self
     def configure(config = nil)
+      configuration.clean
       configuration.apply config if config
       yield(configuration) if block_given?
     end
@@ -48,7 +49,5 @@ module Talkable
       Talkable.current_url = old_url
       Talkable.visitor_uuid = old_uuid
     end
-
   end
-
 end

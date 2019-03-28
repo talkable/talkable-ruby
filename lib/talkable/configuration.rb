@@ -30,6 +30,12 @@ module Talkable
       @js_integration_library || default_js_integration_library
     end
 
+    def clean
+      self.site_slug  = nil
+      self.api_key    = nil
+      self.server     = DEFAULT_SERVER
+    end
+
     protected
 
     def default_js_integration_library

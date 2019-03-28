@@ -12,6 +12,7 @@ describe Talkable do
 
   describe '#configure' do
     subject { Talkable.configuration }
+
     context 'with hash' do
       before { Talkable.configure(api_key: 'some-api-key') }
 
@@ -29,6 +30,24 @@ describe Talkable do
 
       it 'changes configuration' do
         expect(subject.site_slug).to eq('some-site-slug')
+      end
+    end
+
+    context 'when there were some configuration before' do
+      before do
+        subject.apply(api_key: 'api_key',
+                      site_slug: 'site_slug',
+                      server: 'http://some-server.com')
+        Talkable.configure(api_key: 'other_api_key')
+      end
+
+      it 'cleans previous configs' do
+        expect(subject.site_slug).to be_nil
+        expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
+      end
+
+      it 'changes configuration' do
+        expect(subject.api_key).to eq('other_api_key')
       end
     end
   end
