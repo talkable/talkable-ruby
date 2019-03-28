@@ -5,14 +5,14 @@ jobs:
     docker:
       - image: circleci/ruby:2.6
         environment:
-          BUNDLER_VERSION: "2.0.1"
+          BUNDLER_VERSION: 2.0.1
     working_directory: ~/talkable-ruby
     steps:
       - checkout
 
       - run:
           name: Configure Bundler
-          command: gem install bundler
+          command: gem install bundler --version $BUNDLER_VERSION
 
       - run:
           name: Display Versions
@@ -34,19 +34,19 @@ jobs:
     docker:
       - image: circleci/ruby:2.5
         environment:
-          BUNDLER_VERSION: "1.17.3"
+          BUNDLER_VERSION: 1.17.3
   ruby-2.4:
     <<: *template
     docker:
       - image: circleci/ruby:2.4
         environment:
-          BUNDLER_VERSION: "1.17.3"
+          BUNDLER_VERSION: 1.17.3
   ruby-2.3:
     <<: *template
     docker:
       - image: circleci/ruby:2.3
         environment:
-          BUNDLER_VERSION: "1.17.3"
+          BUNDLER_VERSION: 1.17.3
 
 workflows:
   version: 2
