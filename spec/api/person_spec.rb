@@ -15,7 +15,8 @@ describe Talkable::API::Person do
 
   describe '.find' do
     before do
-      stub_request(:get, "#{base_url}?api_key=#{api_key}&site_slug=#{site_slug}").
+      stub_request(:get, base_url).
+        with(query: { api_key: api_key, site_slug: site_slug }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman"}}}')
     end
 
@@ -61,7 +62,8 @@ describe Talkable::API::Person do
 
   describe '.personal_data' do
     before do
-      stub_request(:get, "#{base_url}/personal_data?api_key=#{api_key}&site_slug=#{site_slug}").
+      stub_request(:get, "#{base_url}/personal_data").
+        with(query: { api_key: api_key, site_slug: site_slug }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman", "origins": [{"type": "AffiliateMember"}]}}}')
     end
 

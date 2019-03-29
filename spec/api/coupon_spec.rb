@@ -16,7 +16,8 @@ describe Talkable::API::Coupon do
 
   describe '.find' do
     before do
-      stub_request(:get, "#{base_url}?api_key=#{api_key}&site_slug=#{site_slug}").
+      stub_request(:get, base_url).
+        with(query: { api_key: api_key, site_slug: site_slug }).
         to_return(body: %({
                     "ok": true,
                     "result": {
@@ -35,7 +36,8 @@ describe Talkable::API::Coupon do
 
     context 'when coupon was not given by Talkable' do
       before do
-        stub_request(:get, "#{base_url}?api_key=#{api_key}&site_slug=#{site_slug}").
+        stub_request(:get, base_url).
+          with(query: { api_key: api_key, site_slug: site_slug }).
           to_return(body: %({
                       "ok": true,
                       "result": {
@@ -52,7 +54,8 @@ describe Talkable::API::Coupon do
 
   describe '.permission' do
     before do
-      stub_request(:get, "#{base_url}/permission/#{email}?api_key=#{api_key}&site_slug=#{site_slug}").
+      stub_request(:get, "#{base_url}/permission/#{email}").
+        with(query: { api_key: api_key, site_slug: site_slug }).
         to_return(body: %({
                     "ok": true,
                     "result": {
