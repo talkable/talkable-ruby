@@ -1,6 +1,7 @@
 module Talkable
   class Configuration
-    DEFAULT_SERVER = "https://www.talkable.com".freeze
+    DEFAULT_SERVER  = 'https://www.talkable.com'.freeze
+    DEFAULT_TIMEOUT = 10.freeze
 
     attr_accessor :site_slug
     attr_accessor :api_key
@@ -17,8 +18,8 @@ module Talkable
       self.site_slug    = ENV["TALKABLE_SITE_SLUG"]
       self.api_key      = ENV["TALKABLE_API_KEY"]
       self.server       = DEFAULT_SERVER
-      self.read_timeout = 60
-      self.open_timeout = 60
+      self.read_timeout = DEFAULT_TIMEOUT
+      self.open_timeout = DEFAULT_TIMEOUT
     end
 
     def apply(config)
@@ -39,8 +40,8 @@ module Talkable
       self.site_slug    = nil
       self.api_key      = nil
       self.server       = DEFAULT_SERVER
-      self.read_timeout = 60
-      self.open_timeout = 60
+      self.read_timeout = DEFAULT_TIMEOUT
+      self.open_timeout = DEFAULT_TIMEOUT
     end
 
     def timeout=(sec)
