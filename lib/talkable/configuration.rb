@@ -1,7 +1,7 @@
 module Talkable
   class Configuration
     DEFAULT_SERVER  = 'https://www.talkable.com'.freeze
-    DEFAULT_TIMEOUT = 10.freeze
+    DEFAULT_TIMEOUT = 5.freeze
 
     attr_accessor :site_slug
     attr_accessor :api_key
@@ -15,11 +15,7 @@ module Talkable
     end
 
     def initialize
-      self.site_slug    = ENV["TALKABLE_SITE_SLUG"]
-      self.api_key      = ENV["TALKABLE_API_KEY"]
-      self.server       = DEFAULT_SERVER
-      self.read_timeout = DEFAULT_TIMEOUT
-      self.open_timeout = DEFAULT_TIMEOUT
+      default_configuration
     end
 
     def apply(config)
@@ -36,12 +32,8 @@ module Talkable
       @js_integration_library || default_js_integration_library
     end
 
-    def clean
-      self.site_slug    = nil
-      self.api_key      = nil
-      self.server       = DEFAULT_SERVER
-      self.read_timeout = DEFAULT_TIMEOUT
-      self.open_timeout = DEFAULT_TIMEOUT
+    def reset
+      default_configuration
     end
 
     def timeout=(sec)
@@ -53,6 +45,16 @@ module Talkable
 
     def default_js_integration_library
       "//d2jjzw81hqbuqv.cloudfront.net/integration/clients/#{site_slug}.min.js"
+    end
+
+    private
+
+    def default_configuration
+      self.site_slug    = ENV["TALKABLE_SITE_SLUG"]
+      self.api_key      = ENV["TALKABLE_API_KEY"]
+      self.server       = DEFAULT_SERVER
+      self.read_timeout = DEFAULT_TIMEOUT
+      self.open_timeout = DEFAULT_TIMEOUT
     end
   end
 end

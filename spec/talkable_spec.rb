@@ -35,19 +35,19 @@ describe Talkable do
 
     context 'when there were some configuration before' do
       before do
-        subject.apply(api_key: 'api_key',
-                      site_slug: 'site_slug',
+        subject.apply(api_key: 'some-api-key',
+                      site_slug: 'some-site-slug',
                       server: 'http://some-server.com')
-        Talkable.configure(api_key: 'other_api_key')
+        Talkable.configure(api_key: 'other-api-key')
       end
 
-      it 'cleans previous configs' do
-        expect(subject.site_slug).to be_nil
-        expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
+      it 'does not remove previous configs' do
+        expect(subject.site_slug).to eq('some-site-slug')
+        expect(subject.server).to eq('http://some-server.com')
       end
 
       it 'changes configuration' do
-        expect(subject.api_key).to eq('other_api_key')
+        expect(subject.api_key).to eq('other-api-key')
       end
     end
   end

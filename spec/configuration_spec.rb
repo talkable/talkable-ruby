@@ -7,8 +7,8 @@ describe Talkable::Configuration do
     expect(subject.server).to eq("https://www.talkable.com")
     expect(subject.api_key).to be_nil
     expect(subject.site_slug).to be_nil
-    expect(subject.read_timeout).to eq(10)
-    expect(subject.open_timeout).to eq(10)
+    expect(subject.read_timeout).to eq(5)
+    expect(subject.open_timeout).to eq(5)
   end
 
   it 'takes defaults from environment variables' do
@@ -45,7 +45,7 @@ describe Talkable::Configuration do
     end
   end
 
-  describe "#clean" do
+  describe "#reset" do
     before do
       subject.apply(api_key: 'api_key',
                     site_slug: 'site_slug',
@@ -55,13 +55,13 @@ describe Talkable::Configuration do
     end
 
     it 'changes configuration' do
-      subject.clean
+      subject.reset
 
       expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
       expect(subject.api_key).to be_nil
       expect(subject.site_slug).to be_nil
-      expect(subject.read_timeout).to eq(10)
-      expect(subject.open_timeout).to eq(10)
+      expect(subject.read_timeout).to eq(5)
+      expect(subject.open_timeout).to eq(5)
     end
   end
 end

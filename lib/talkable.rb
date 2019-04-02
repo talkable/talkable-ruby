@@ -12,13 +12,16 @@ module Talkable
 
   class << self
     def configure(config = nil)
-      configuration.clean
       configuration.apply config if config
       yield(configuration) if block_given?
     end
 
     def configuration
       @configuration ||= Talkable::Configuration.new
+    end
+
+    def reset_configuration
+      configuration.reset
     end
 
     def visitor_uuid
