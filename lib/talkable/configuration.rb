@@ -33,26 +33,26 @@ module Talkable
 
     def reset
       apply(default_configuration)
-      apply(js_integration_library: default_js_integration_library)
     end
 
     def timeout=(sec)
       apply(read_timeout: sec, open_timeout: sec)
     end
 
+    private
+
     def default_js_integration_library
       "//d2jjzw81hqbuqv.cloudfront.net/integration/clients/#{site_slug}.min.js"
     end
 
-    private
-
     def default_configuration
       {
-        site_slug:    ENV["TALKABLE_SITE_SLUG"],
-        api_key:      ENV["TALKABLE_API_KEY"],
-        server:       DEFAULT_SERVER,
-        read_timeout: DEFAULT_TIMEOUT,
-        open_timeout: DEFAULT_TIMEOUT
+        site_slug:              ENV["TALKABLE_SITE_SLUG"],
+        api_key:                ENV["TALKABLE_API_KEY"],
+        server:                 DEFAULT_SERVER,
+        read_timeout:           DEFAULT_TIMEOUT,
+        open_timeout:           DEFAULT_TIMEOUT,
+        js_integration_library: nil
       }
     end
   end

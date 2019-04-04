@@ -64,7 +64,7 @@ describe Talkable::Configuration do
       expect(subject.site_slug).to be_nil
       expect(subject.read_timeout).to eq(5)
       expect(subject.open_timeout).to eq(5)
-      expect(subject.js_integration_library).to eq(subject.default_js_integration_library)
+      expect(subject.js_integration_library).to eq("//d2jjzw81hqbuqv.cloudfront.net/integration/clients/.min.js")
     end
 
     context 'with environment variables' do
@@ -81,7 +81,7 @@ describe Talkable::Configuration do
         expect(subject.site_slug).to eq('some-site-slug')
         expect(subject.read_timeout).to eq(5)
         expect(subject.open_timeout).to eq(5)
-        expect(subject.js_integration_library).to eq(subject.default_js_integration_library)
+        expect(subject.js_integration_library).to eq("//d2jjzw81hqbuqv.cloudfront.net/integration/clients/some-site-slug.min.js")
       end
     end
   end
