@@ -11,6 +11,18 @@ module Talkable
             data: params
           }
         end
+
+        def unsubscribe(email_or_username)
+          post "/people/#{email_or_username}/unsubscribe"
+        end
+
+        def anonymize(email_or_username)
+          post "/people/#{email_or_username}/anonymize"
+        end
+
+        def personal_data(email_or_username)
+          get "/people/#{email_or_username}/personal_data"
+        end
       end
     end
   end
