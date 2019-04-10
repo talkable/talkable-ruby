@@ -16,7 +16,8 @@ describe Talkable::API::Person do
   describe '.find' do
     before do
       stub_request(:get, base_url).
-        with(query: { api_key: api_key, site_slug: site_slug }).
+        with(query: { site_slug: site_slug },
+             headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman"}}}')
     end
 
@@ -29,7 +30,8 @@ describe Talkable::API::Person do
     let(:new_username) { "new_name" }
     before do
       stub_request(:put, base_url).
-        with(body: hash_including({"data":{"username": new_username}})).
+        with(body: hash_including({"data":{"username": new_username}}),
+             headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"new_name"}}}')
     end
 
@@ -41,6 +43,7 @@ describe Talkable::API::Person do
   describe '.unsubscribe' do
     before do
       stub_request(:post, "#{base_url}/unsubscribe").
+        with(headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman", "unsubscribed_at":"2016-09-06T16:14:25.000Z"}}}')
     end
 
@@ -52,6 +55,7 @@ describe Talkable::API::Person do
   describe '.anonymize' do
     before do
       stub_request(:post, "#{base_url}/anonymize").
+        with(headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: '{"ok": true, "result": {"person":{"username":null, "first_name": null, "last_name": null}}}')
     end
 
@@ -63,7 +67,8 @@ describe Talkable::API::Person do
   describe '.personal_data' do
     before do
       stub_request(:get, "#{base_url}/personal_data").
-        with(query: { api_key: api_key, site_slug: site_slug }).
+        with(query: { site_slug: site_slug },
+             headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: '{"ok": true, "result": {"person":{"username":"batman", "origins": [{"type": "AffiliateMember"}]}}}')
     end
 

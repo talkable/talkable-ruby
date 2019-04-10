@@ -15,7 +15,8 @@ describe Talkable::API::Campaign do
   describe '.all' do
     before do
       stub_request(:get, base_url).
-        with(query: { api_key: api_key, site_slug: site_slug }).
+        with(query: { site_slug: site_slug },
+             headers: { Authorization: "Bearer #{api_key}" }).
         to_return(body: %({
                     "ok": true,
                     "result": {
