@@ -20,6 +20,10 @@ module Talkable
       @configuration ||= Talkable::Configuration.new
     end
 
+    def reset_configuration
+      configuration.reset
+    end
+
     def visitor_uuid
       Thread.current[UUID]
     end
@@ -48,7 +52,5 @@ module Talkable
       Talkable.current_url = old_url
       Talkable.visitor_uuid = old_uuid
     end
-
   end
-
 end

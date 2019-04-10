@@ -32,7 +32,6 @@ module Talkable
 
         def request_params(params = {})
           params.merge({
-            api_key:   Talkable.configuration.api_key,
             site_slug: Talkable.configuration.site_slug,
           })
         end
@@ -50,11 +49,14 @@ module Talkable
             'User-Agent'    => "Talkable Gem/#{Talkable::VERSION}",
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
+            'Authorization' => "Bearer #{Talkable.configuration.api_key}",
           }
         end
 
         def perform_request(uri, request)
           http = Net::HTTP.new(uri.host, uri.port)
+          http.read_timeout = Talkable.configuration.read_timeout
+          http.open_timeout = Talkable.configuration.open_timeout
           http.use_ssl = uri.is_a?(URI::HTTPS)
 
           request.initialize_http_header request_headers

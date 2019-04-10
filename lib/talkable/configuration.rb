@@ -1,19 +1,20 @@
 module Talkable
   class Configuration
-    DEFAULT_SERVER = "https://www.talkable.com".freeze
+    DEFAULT_SERVER  = 'https://www.talkable.com'.freeze
+    DEFAULT_TIMEOUT = 5
 
     attr_accessor :site_slug
     attr_accessor :api_key
     attr_accessor :server
+    attr_accessor :read_timeout
+    attr_accessor :open_timeout
     attr_accessor :js_integration_library
 
     class UnknownOptionError < StandardError
     end
 
     def initialize
-      self.site_slug  = ENV["TALKABLE_SITE_SLUG"]
-      self.api_key    = ENV["TALKABLE_API_KEY"]
-      self.server     = DEFAULT_SERVER
+      apply(default_configuration)
     end
 
     def apply(config)
@@ -30,10 +31,29 @@ module Talkable
       @js_integration_library || default_js_integration_library
     end
 
-    protected
+    def reset
+      apply(default_configuration)
+    end
+
+    def timeout=(sec)
+      apply(read_timeout: sec, open_timeout: sec)
+    end
+
+    private
 
     def default_js_integration_library
       "//d2jjzw81hqbuqv.cloudfront.net/integration/clients/#{site_slug}.min.js"
+    end
+
+    def default_configuration
+      {
+        site_slug:              ENV["TALKABLE_SITE_SLUG"],
+        api_key:                ENV["TALKABLE_API_KEY"],
+        server:                 DEFAULT_SERVER,
+        read_timeout:           DEFAULT_TIMEOUT,
+        open_timeout:           DEFAULT_TIMEOUT,
+        js_integration_library: nil
+      }
     end
   end
 end
