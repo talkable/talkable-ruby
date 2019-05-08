@@ -7,7 +7,7 @@ module Talkable
       VIA_FB_MESSAGE  = "facebook_message"
       VIA_TWITTER     = "twitter"
       VIA_LINKEDIN    = "linkedin"
-      VIA_WHATSAPP    = "twitter"
+      VIA_WHATSAPP    = "whatsapp"
       VIA_SMS         = "sms"
       VIA_OTHER       = "other"
 
