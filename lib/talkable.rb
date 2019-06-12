@@ -2,6 +2,7 @@ require 'talkable/version'
 require 'talkable/configuration'
 require 'talkable/api'
 require 'talkable/resources'
+require 'talkable/referrals'
 require 'talkable/middleware'
 require 'talkable/integration'
 require 'talkable/railtie' if defined? ::Rails::Railtie
