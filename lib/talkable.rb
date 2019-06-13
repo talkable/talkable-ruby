@@ -6,6 +6,7 @@ require 'talkable/referrals'
 require 'talkable/middleware'
 require 'talkable/integration'
 require 'talkable/railtie' if defined? ::Rails::Railtie
+require 'securerandom'
 
 module Talkable
   UUID = 'talkable_visitor_uuid'.freeze
@@ -34,7 +35,7 @@ module Talkable
     end
 
     def find_or_generate_uuid
-      visitor_uuid || Talkable::API::Visitor.create[:uuid]
+      visitor_uuid || SecureRandom.uuid
     end
 
     def current_url

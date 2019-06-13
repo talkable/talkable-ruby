@@ -18,3 +18,7 @@ def stub_uuid_request(uuid)
   stub_request(:post, %r{.*api/v2/visitors.*}).
     to_return(body: %Q{{"ok": true, "result": {"uuid":"#{uuid}"}}})
 end
+
+def stub_uuid_generation(uuid)
+  allow(SecureRandom).to receive(:uuid).and_return(uuid)
+end
