@@ -15,7 +15,7 @@ describe Talkable::Middleware do
 
   context 'when new visitor' do
     let(:env) { Rack::MockRequest.env_for("/") }
-    before { stub_uuid_request(uuid) }
+    before { stub_uuid_generation(uuid) }
 
     it_behaves_like 'middleware', 'fe09af8c-1801-4fa3-998b-ddcbe0e052e5'
   end
@@ -47,7 +47,7 @@ describe Talkable::Middleware do
     let(:app) { ->(env) { [200, env, ['<head><title>title</title></head><body><h1>title</h1></body>']] } }
 
     before {
-      stub_uuid_request(uuid)
+      stub_uuid_generation(uuid)
       Talkable.configure(site_slug: 'test-middleware', server: 'http://example.com')
     }
 

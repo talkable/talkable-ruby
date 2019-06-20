@@ -92,8 +92,9 @@ describe Talkable do
   describe '#find_or_generate_uuid' do
     let(:uuid) { 'fe09af8c-1801-4fa3-998b-ddcbe0e052e5' }
 
-    it 'makes API call' do
-      stub_uuid_request(uuid)
+    it 'generates new uuid' do
+      stub_uuid_generation(uuid)
+      expect(SecureRandom).to receive(:uuid)
       expect(Talkable.find_or_generate_uuid).to eq(uuid)
     end
 
