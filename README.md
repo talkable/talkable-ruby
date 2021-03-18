@@ -17,11 +17,11 @@ See a [detailed tutorial](https://railsapps.github.io/talkable-referral-marketin
 ## Requirements
 
 The gem requires:
- - Ruby version 2.3 or newer
+ - Ruby version 2.5 or newer
  - Rack version 1.6.1 or newer
 
 For integration with:
- - Ruby on Rails 5.0 or newer
+ - Ruby on Rails 5.2 or newer
  - Sinatra 1.4 or newer
 
 ## Gem Installation
