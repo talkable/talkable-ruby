@@ -53,13 +53,13 @@ describe Talkable::Middleware do
 
     it 'injects sync url in body' do
       _, _, response = subject.call(env)
-      expect(response.body.first).to include("http://example.com/public/1x1.gif?current_visitor_uuid=#{uuid}")
+      expect(response.first).to include("http://example.com/public/1x1.gif?current_visitor_uuid=#{uuid}")
     end
 
     it 'injects integration js library' do
       _, _, response = subject.call(env)
-      expect(response.body.first).to include('<script src="//d2jjzw81hqbuqv.cloudfront.net/integration/clients/test-middleware.min.js" type="text/javascript"></script>')
-      expect(response.body.first).to include(%Q{
+      expect(response.first).to include('<script src="//d2jjzw81hqbuqv.cloudfront.net/integration/clients/test-middleware.min.js" type="text/javascript"></script>')
+      expect(response.first).to include(%Q{
 <script>
   window._talkableq = window._talkableq || [];
   _talkableq.push(['init', {"site_id":"test-middleware","server":"http://example.com"}]);

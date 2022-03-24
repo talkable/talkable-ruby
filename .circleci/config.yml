@@ -1,52 +1,51 @@
-version: 2
+version: 2.1
+
+orbs:
+  ruby-orbs: sue445/ruby-orbs@volatile
 
 jobs:
-  ruby-2.6: &template
+  ruby-3-1: &template
     docker:
-      - image: circleci/ruby:2.6
-        environment:
-          BUNDLER_VERSION: 2.0.1
-    working_directory: ~/talkable-ruby
+      - image: cimg/ruby:3.1
     steps:
       - checkout
 
       - run:
-          name: Configure Bundler
-          command: gem install bundler
-
-      - run:
           name: Display Versions
           command: |
-            function extract_version() { perl -pe 'if(($v)=/([0-9]+([.][0-9]+)+)/){print"$v\n";exit}$_=""' ; }
-            echo Ruby $(ruby --version | extract_version)
-            echo RubyGems $(gem --version | extract_version)
-            echo Bundler $(bundle --version | extract_version)
+            function extractVersion() {
+              perl -pe 'if(($v)=/([0-9]+([.][0-9]+)+)/){print"$v\n";exit}$_=""'
+            }
 
-      - run:
-          name: Bundle Install
-          command: bundle install
+            echo Ruby $(ruby --version | extractVersion)
+            echo RubyGems $(gem --version | extractVersion)
+            echo Bundler $(bundle --version | extractVersion)
+
+      - ruby-orbs/bundle-install:
+          restore_bundled_with: false
+          with_gemfile_lock: false
+          gemspec_name: talkable
 
       - run:
           name: RSpec
           command: bundle exec rspec
-  ruby-2.5:
+  ruby-3-0:
     <<: *template
     docker:
-      - image: circleci/ruby:2.5
-  ruby-2.4:
+      - image: cimg/ruby:3.0
+  ruby-2-7:
     <<: *template
     docker:
-      - image: circleci/ruby:2.4
-  ruby-2.3:
+      - image: cimg/ruby:2.7
+  ruby-2-6:
     <<: *template
     docker:
-      - image: circleci/ruby:2.3
+      - image: cimg/ruby:2.6
 
 workflows:
-  version: 2
   workflow:
     jobs:
-      - ruby-2.6
-      - ruby-2.5
-      - ruby-2.4
-      - ruby-2.3
+      - ruby-3-1
+      - ruby-3-0
+      - ruby-2-7
+      - ruby-2-6
