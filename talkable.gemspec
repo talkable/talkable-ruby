@@ -1,31 +1,42 @@
-$:.push File.expand_path('../lib', __FILE__)
-require 'talkable/version'
+# frozen_string_literal: true
 
-Gem::Specification.new do |s|
-  s.name        = "talkable"
-  s.version     = Talkable::VERSION
-  s.authors     = ["Talkable"]
-  s.email       = "dev@talkable.com"
-  s.description = "Talkable Ruby Gem to make your own referral program in Sinatra or Rails application"
-  s.summary     = "Talkable Referral Program API"
-  s.homepage    = "https://github.com/talkable/talkable-ruby"
-  s.license     = "MIT"
+require_relative "lib/talkable/version"
 
-  s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  s.require_paths = ["lib"]
+Gem::Specification.new do |spec|
+  spec.name        = "talkable"
+  spec.version     = Talkable::VERSION
+  spec.authors     = ["Talkable"]
+  spec.email       = "dev@talkable.com"
+  spec.description = "Talkable Ruby Gem to make your own referral program in Sinatra or Rails application"
+  spec.license     = "MIT"
 
-  s.required_ruby_version = ">= 2.3.0" # min ruby version that still receives security updates
+  spec.summary     = "Talkable Referral Program API"
+  spec.homepage    = "https://github.com/talkable/talkable-ruby"
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
-  s.add_dependency "rack", ">= 1.6.1"
-  s.add_dependency "furi", "~> 0.2"
-  s.add_dependency "hashie", "~> 3.4"
+  spec.metadata = {
+    "homepage_uri"      => spec.homepage,
+    "bug_tracker_uri"   => "#{spec.homepage}/issues",
+    "changelog_uri"     => "#{spec.homepage}/releases/tag/v#{spec.version}",
+    "source_code_uri"   => "#{spec.homepage}/tree/v#{spec.version}",
+    "allowed_push_host" => "https://rubygems.org",
+    "rubygems_mfa_required" => "true",
+  }
 
-  s.add_development_dependency "bundler", "~> 2.0.1"
-  s.add_development_dependency "rake", "~> 11.2"
-  s.add_development_dependency "rspec", "~> 3.4"
-  s.add_development_dependency "simplecov", "~> 0.12"
-  s.add_development_dependency "webmock", ">= 2.1"
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
+  end
+  spec.require_paths = ["lib"]
 
-  s.add_development_dependency "ammeter" # specs for generators
-  s.add_development_dependency "haml" # check haml syntax in generators
+  spec.add_dependency "rack", "~> 2.2"
+  spec.add_dependency "furi", "~> 0.2"
+  spec.add_dependency "hashie", "~> 5.0"
+
+  spec.add_development_dependency "rake", ">= 13.0"
+  spec.add_development_dependency "rspec", ["~> 3", "< 3.11"]
+  spec.add_development_dependency "simplecov", "~> 0.21"
+  spec.add_development_dependency "webmock", "~> 3.14"
+
+  spec.add_development_dependency "ammeter" # specs for generators
+  spec.add_development_dependency "haml" # check haml syntax in generators
 end

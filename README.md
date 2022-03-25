@@ -6,23 +6,19 @@ Referral marketing is one of the most powerful strategies for ecommerce sales gr
 
 ## Demo
 
-See an example application at http://github.com/talkable/talkable-spree-example.
+See an example application at https://github.com/talkable/talkable-spree-example.
 
 See a live demo at http://spree-example.talkable.com.
-
-## Tutorial
-
-See a [detailed tutorial](https://railsapps.github.io/talkable-referral-marketing/) by [Learn Ruby on Rails](http://learn-rails.com/learn-ruby-on-rails.html) author Daniel Kehoe.
 
 ## Requirements
 
 The gem requires:
- - Ruby version 2.3 or newer
- - Rack version 1.6.1 or newer
+ - Ruby version 2.6 or newer
+ - Rack version 2.2 or newer
 
 For integration with:
- - Ruby on Rails 5.0 or newer
- - Sinatra 1.4 or newer
+ - Ruby on Rails 6.0 or newer
+ - Sinatra 2.0 or newer
 
 ## Gem Installation
 
@@ -189,7 +185,7 @@ Provide iframe options to show a share page in specific place.
 
 ## API Examples
 
-See the [API docs](http://docs.talkable.com/api_v2.html) for full details.
+See the [API docs](https://docs.talkable.com/api_v2.html) for full details.
 
 - [Registering a purchase](#registering-a-purchase)
 - [Registering other events](#registering-other-events)

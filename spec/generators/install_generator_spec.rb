@@ -4,6 +4,7 @@ require 'rails/all'
 require 'ammeter/init'
 
 require 'talkable/generators/install_generator'
+require './spec/support/erb_syntax_checker'
 
 describe Talkable::InstallGenerator, type: :generator do
   destination File.expand_path("../../../tmp", __FILE__)
@@ -74,7 +75,16 @@ describe Talkable::InstallGenerator, type: :generator do
         end
 
         it 'modifies application layout' do
-          expect(layout).to have_correct_syntax unless generator.options[:slim] # slim isn't supported yet
+          if generator.options[:slim]
+            # slim isn't supported yet
+          elsif extension == 'erb'
+            # Cannot use `have_correct_syntax` matcher for ERB because of issue
+            # https://github.com/alexrothenberg/ammeter/issues/66
+            checker = ErbSyntaxChecker.new(File.read(layout))
+            expect(checker).to be_correct_syntax
+          else
+            expect(layout).to have_correct_syntax
+          end
           expect(layout).to contain("render 'shared/talkable_offer'")
         end
       end
