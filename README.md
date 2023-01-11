@@ -13,7 +13,7 @@ See a live demo at http://spree-example.talkable.com.
 ## Requirements
 
 The gem requires:
- - Ruby version 2.6 or newer
+ - Ruby version 2.7 or newer
  - Rack version 2.2 or newer
 
 For integration with:

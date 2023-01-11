@@ -6,7 +6,7 @@ You may read the [first tutorial](https://railsapps.github.io/talkable-referral-
 
 ## Requirements
 
-Ruby 2.6+ and Rails 6.0+ (if you're using Rails).
+Ruby 2.7+ and Rails 6.0+ (if you're using Rails).
 
 ## Create an Account
 
