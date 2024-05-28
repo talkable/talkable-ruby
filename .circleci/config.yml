@@ -4,9 +4,9 @@ orbs:
   ruby-orbs: sue445/ruby-orbs@volatile
 
 jobs:
-  ruby-3-2: &template
+  ruby-3-3: &template
     docker:
-      - image: cimg/ruby:3.2
+      - image: cimg/ruby:3.3
     steps:
       - checkout
 
@@ -29,23 +29,18 @@ jobs:
       - run:
           name: RSpec
           command: bundle exec rspec
+  ruby-3-2:
+    <<: *template
+    docker:
+      - image: cimg/ruby:3.2
   ruby-3-1:
     <<: *template
     docker:
       - image: cimg/ruby:3.1
-  ruby-3-0:
-    <<: *template
-    docker:
-      - image: cimg/ruby:3.0
-  ruby-2-7:
-    <<: *template
-    docker:
-      - image: cimg/ruby:2.7
 
 workflows:
   workflow:
     jobs:
+      - ruby-3-3
       - ruby-3-2
       - ruby-3-1
-      - ruby-3-0
-      - ruby-2-7
