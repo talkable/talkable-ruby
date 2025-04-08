@@ -4,12 +4,12 @@ require 'rack/mock'
 describe Talkable::Middleware do
   let(:uuid) { 'fe09af8c-1801-4fa3-998b-ddcbe0e052e5' }
   let(:app) { ->(env) { [200, env, Talkable.visitor_uuid] } }
-  subject { Talkable::Middleware.new(app) }
+  subject { described_class.new(app) }
 
   shared_examples 'middleware' do |uuid|
     it 'injects talkable_visitor_uuid in cookie' do
       _, headers, _ = subject.call(env)
-      expect(headers['Set-Cookie']).to match(/talkable_visitor_uuid=#{uuid};\spath=\/;/)
+      expect(headers['set-cookie']).to match(/talkable_visitor_uuid=#{uuid};\spath=\/;/)
     end
   end
 
@@ -67,5 +67,4 @@ describe Talkable::Middleware do
       })
     end
   end
-
 end

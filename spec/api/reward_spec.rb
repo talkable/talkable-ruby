@@ -10,7 +10,7 @@ describe Talkable::API::Reward do
     end
 
     it "success" do
-      result = Talkable::API::Reward.find({visitor_uuid: visitor_uuid})
+      result = described_class.find({visitor_uuid: visitor_uuid})
       expect(result[:rewards]).to be_kind_of(Array)
       expect(result[:rewards].first).to eq({id: 128})
     end

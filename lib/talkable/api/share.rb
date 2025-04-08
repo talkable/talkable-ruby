@@ -3,16 +3,16 @@ module Talkable
   module API
     class Share < Base
       # social
-      VIA_FACEBOOK    = "facebook"
-      VIA_FB_MESSAGE  = "facebook_message"
-      VIA_TWITTER     = "twitter"
-      VIA_LINKEDIN    = "linkedin"
-      VIA_WHATSAPP    = "whatsapp"
-      VIA_SMS         = "sms"
-      VIA_OTHER       = "other"
+      VIA_FACEBOOK    = "facebook".freeze
+      VIA_FB_MESSAGE  = "facebook_message".freeze
+      VIA_TWITTER     = "twitter".freeze
+      VIA_LINKEDIN    = "linkedin".freeze
+      VIA_WHATSAPP    = "whatsapp".freeze
+      VIA_SMS         = "sms".freeze
+      VIA_OTHER       = "other".freeze
 
       # direct
-      SEND_EMAIL      = "email"
+      SEND_EMAIL      = "email".freeze
 
       class << self
         def create(short_url_code, channel)

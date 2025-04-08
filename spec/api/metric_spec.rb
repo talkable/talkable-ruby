@@ -19,8 +19,6 @@ describe Talkable::API::Metric do
     Talkable.configure(api_key: api_key, site_slug: site_slug, server: server)
   end
 
-  subject { described_class }
-
   describe '.find' do
     context 'with required params' do
       before do
@@ -37,7 +35,7 @@ describe Talkable::API::Metric do
       end
 
       it 'returns success' do
-        expect(subject.find(name, params)).
+        expect(described_class.find(name, params)).
           to eq({plain: 1234, formatted: '1234', result_type: 'number'})
       end
     end
@@ -69,7 +67,7 @@ describe Talkable::API::Metric do
       end
 
       it 'returns success' do
-        expect(subject.find(name, params)).
+        expect(described_class.find(name, params)).
           to eq({plain: 1234, formatted: '1234', result_type: 'number'})
       end
     end
@@ -91,7 +89,7 @@ describe Talkable::API::Metric do
       end
 
       it 'returns success' do
-        expect(subject.find(name, params)).
+        expect(described_class.find(name, params)).
           to eq({plain: 5432, formatted: '$5432', result_type: 'money'})
       end
     end

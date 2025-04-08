@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Talkable::Configuration do
-  subject { Talkable::Configuration.new }
+  subject { described_class.new }
 
   it 'has defaults' do
     expect(subject.server).to eq("https://www.talkable.com")
@@ -32,7 +32,7 @@ describe Talkable::Configuration do
     it 'raises for unknown options' do
       expect {
         subject.apply(not_existing_option: 'value')
-      }.to raise_error(Talkable::Configuration::UnknownOptionError)
+      }.to raise_error(described_class::UnknownOptionError)
     end
 
     context 'with timeout' do
@@ -59,7 +59,7 @@ describe Talkable::Configuration do
     it 'changes configuration' do
       subject.reset
 
-      expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
+      expect(subject.server).to eq(described_class::DEFAULT_SERVER)
       expect(subject.api_key).to be_nil
       expect(subject.site_slug).to be_nil
       expect(subject.read_timeout).to eq(5)
@@ -76,7 +76,7 @@ describe Talkable::Configuration do
       it 'changes configuration' do
         subject.reset
 
-        expect(subject.server).to eq(Talkable::Configuration::DEFAULT_SERVER)
+        expect(subject.server).to eq(described_class::DEFAULT_SERVER)
         expect(subject.api_key).to eq('some-api-key')
         expect(subject.site_slug).to eq('some-site-slug')
         expect(subject.read_timeout).to eq(5)

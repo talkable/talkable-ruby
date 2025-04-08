@@ -9,11 +9,11 @@ describe Talkable::API::Offer do
 
     before do
       stub_request(:get, %r{.*api/v2/offers/123.*}).
-        to_return(body: '{"ok": true, "result": {"offer":{"id":123}}}')
+        to_return(body: '{"ok":true,"result":{"offer":{"id":123}}}')
     end
 
     it "success" do
-      expect(Talkable::API::Offer.find(id, params)).to eq({offer: {id: id}})
+      expect(described_class.find(id, params)).to eq({offer: {id: id}})
     end
   end
 end

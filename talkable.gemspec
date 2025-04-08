@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary     = "Talkable Referral Program API"
   spec.homepage    = "https://github.com/talkable/talkable-ruby"
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.1.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.0")
 
   spec.metadata = {
     "homepage_uri"      => spec.homepage,
@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "rack", "~> 2.2"
+  spec.add_dependency "rack", ">= 2.2"
   spec.add_dependency "furi", "~> 0.2"
   spec.add_dependency "hashie", "~> 5.0"
 
@@ -38,5 +38,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "webmock", "~> 3.23"
 
   spec.add_development_dependency "ammeter" # specs for generators
+  spec.add_development_dependency "ostruct" # removed from standard library in Ruby 3.5, used by gem "ammeter"
   spec.add_development_dependency "haml" # check haml syntax in generators
 end

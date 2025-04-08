@@ -12,8 +12,6 @@ describe Talkable::API::Coupon do
     Talkable.configure(api_key: api_key, site_slug: site_slug, server: server)
   end
 
-  subject { described_class }
-
   describe '.find' do
     before do
       stub_request(:get, base_url).
@@ -32,7 +30,7 @@ describe Talkable::API::Coupon do
     end
 
     it 'returns success' do
-      expect(subject.find(code)).to eq({talkable_coupon: true, coupon: {code: code, amount: 10.0}})
+      expect(described_class.find(code)).to eq({talkable_coupon: true, coupon: {code: code, amount: 10.0}})
     end
 
     context 'when coupon was not given by Talkable' do
@@ -49,7 +47,7 @@ describe Talkable::API::Coupon do
       end
 
       it 'returns success' do
-        expect(subject.find(code)).to eq({talkable_coupon: false})
+        expect(described_class.find(code)).to eq({talkable_coupon: false})
       end
     end
   end
@@ -69,7 +67,7 @@ describe Talkable::API::Coupon do
     end
 
     it 'returns success' do
-      expect(subject.permission(code, email)).to eq({talkable_coupon: false, allowed: true})
+      expect(described_class.permission(code, email)).to eq({talkable_coupon: false, allowed: true})
     end
   end
 end

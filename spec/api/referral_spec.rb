@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Talkable::API::Referral do
   let(:origin_slug) { 'order_number' }
-  let(:status) { Talkable::API::Referral::APPROVED }
+  let(:status) { described_class::APPROVED }
 
   describe '.update' do
     before do
@@ -12,7 +12,7 @@ describe Talkable::API::Referral do
     end
 
     it "success" do
-      expect(Talkable::API::Referral.update(origin_slug, status)).to be_nil
+      expect(described_class.update(origin_slug, status)).to be_nil
     end
   end
 end
