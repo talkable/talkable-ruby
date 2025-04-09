@@ -13,11 +13,11 @@ See a live demo at http://spree-example.talkable.com.
 ## Requirements
 
 The gem requires:
- - Ruby version 3.1 or newer
+ - Ruby version 3.2 or newer
  - Rack version 2.2 or newer
 
 For integration with:
- - Ruby on Rails 6.1 or newer
+ - Ruby on Rails 7.1 or newer
  - Sinatra 3.0 or newer
 
 ## Gem Installation

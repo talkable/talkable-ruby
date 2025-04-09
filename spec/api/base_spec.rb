@@ -29,7 +29,7 @@ describe Talkable::API::Base do
         'Content-Type'  => 'application/json',
         'Accept'        => 'application/json',
         'Authorization' => "Bearer #{api_key}",
-      }).to_return(body:'{"ok": true, "result":""}', status: 200)
+      }).to_return(body: '{"ok":true,"result":""}', status: 200)
 
       expect { request }.not_to raise_error
     end
@@ -57,23 +57,23 @@ describe Talkable::API::Base do
     it 'raises error message on client error' do
       stub_api_request.to_return(
         status: 404,
-        body: '{"ok": false, "error_message":"NotFound"}'
+        body: '{"ok":false,"error_message":"NotFound"}'
       )
       expect{ request }.to raise_error("NotFound")
     end
 
-    it 'raises error message on success request' do
+    it 'raises error message on successful request' do
       stub_api_request.to_return(
         status: 200,
-        body: '{"ok": false, "error_message":"InvalidData"}'
+        body: '{"ok":false,"error_message":"InvalidData"}'
       )
       expect{ request }.to raise_error("InvalidData")
     end
 
-    it 'responses result' do
+    it 'responds with result' do
       stub_api_request.to_return(
         status: 200,
-        body: '{"ok": true, "result":{"key": "value"}}'
+        body: '{"ok":true,"result":{"key":"value"}}'
       )
       expect {
         expect(request).to eq({key: 'value'})
@@ -82,20 +82,20 @@ describe Talkable::API::Base do
   end
 
   describe '.get' do
-    let(:request) { Talkable::API::Base.get(path, params) }
+    let(:request) { described_class.get(path, params) }
     let(:params_stub) { {query: api_params} }
     it_behaves_like 'api request', :get
   end
 
   describe '.post' do
-    let(:request) { Talkable::API::Base.post(path, params) }
+    let(:request) { described_class.post(path, params) }
     let(:params_stub) { {body: api_params.to_json} }
 
     it_behaves_like 'api request', :post
   end
 
   describe '.put' do
-    let(:request) { Talkable::API::Base.put(path, params) }
+    let(:request) { described_class.put(path, params) }
     let(:params_stub) { {body: api_params.to_json} }
 
     it_behaves_like 'api request', :put

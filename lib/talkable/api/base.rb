@@ -86,7 +86,6 @@ module Talkable
           else
             raise BadRequest.new(result[:error_message])
           end
-
         rescue JSON::ParserError
           raise_invalid_response
         end

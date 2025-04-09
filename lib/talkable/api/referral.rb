@@ -1,9 +1,9 @@
 module Talkable
   module API
     class Referral < Base
-      APPROVED  = 'approved'
-      VOIDED    = 'voided'
-      UNBLOCKED = 'unblocked'
+      APPROVED  = "approved".freeze
+      VOIDED    = "voided".freeze
+      UNBLOCKED = "unblocked".freeze
 
       class << self
         def update(origin_slug, status)

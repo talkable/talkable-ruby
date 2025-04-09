@@ -15,26 +15,26 @@ describe Talkable::Offer do
 
   describe ".parse" do
     it 'handles blanks' do
-      offer = Talkable::Offer.parse(offer: {})
+      offer = described_class.parse(offer: {})
       expect(offer).to be_nil
     end
 
     it 'has offer data' do
-      offer = Talkable::Offer.parse(offer: offer_hash)
+      offer = described_class.parse(offer: offer_hash)
       expect(offer.show_url).to eq("https://www.talkable.com/x/5BN5h7")
     end
 
     it 'has claim_links data' do
-      offer = Talkable::Offer.parse(offer: offer_hash)
+      offer = described_class.parse(offer: offer_hash)
       expect(offer.claim_links).to be_kind_of(Hashie::Mash)
 
-      offer = Talkable::Offer.parse(offer: offer_hash, claim_links: claim_links_hash)
+      offer = described_class.parse(offer: offer_hash, claim_links: claim_links_hash)
       expect(offer.claim_links.to_hash).to eq(Hashie.stringify_keys claim_links_hash)
     end
   end
 
   describe ".advocate_share_iframe" do
-    let(:offer) { Talkable::Offer.new(
+    let(:offer) { described_class.new(
       show_url: 'https://www.talkable.com/x/5BN5h7',
       campaign_tags: ['invite'],
     )}

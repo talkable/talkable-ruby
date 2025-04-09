@@ -1,14 +1,15 @@
 version: 2.1
 
 orbs:
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
   ruby-orbs: sue445/ruby-orbs@volatile
 
 jobs:
-  ruby-3-3: &template
+  ruby-3-4: &template
     docker:
-      - image: cimg/ruby:3.3
+      - image: cimg/ruby:3.4
     steps:
-      - checkout
+      - git-shallow-clone/checkout
 
       - run:
           name: Display Versions
@@ -29,18 +30,18 @@ jobs:
       - run:
           name: RSpec
           command: bundle exec rspec
+  ruby-3-3:
+    <<: *template
+    docker:
+      - image: cimg/ruby:3.3
   ruby-3-2:
     <<: *template
     docker:
       - image: cimg/ruby:3.2
-  ruby-3-1:
-    <<: *template
-    docker:
-      - image: cimg/ruby:3.1
 
 workflows:
   workflow:
     jobs:
+      - ruby-3-4
       - ruby-3-3
       - ruby-3-2
-      - ruby-3-1

@@ -6,7 +6,7 @@ describe Talkable do
 
     before do
       stub_request(:post, %r{.*api/v2/origins.*}).
-        to_return(body: '{"ok": true, "result": {"origin":{"id":1024}}}')
+        to_return(body: '{"ok":true,"result":{"origin":{"id":1024}}}')
     end
 
     it 'registers origin' do

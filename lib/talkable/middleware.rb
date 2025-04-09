@@ -20,7 +20,6 @@ module Talkable
         content = inject_uuid_in_body(uuid, content)
         inject_integration_js_in_head(content)
       end
-
     end
 
     protected
@@ -142,6 +141,5 @@ module Talkable
       content_disposition = headers['Content-Disposition']
       content_disposition && content_disposition.include?('attachment')
     end
-
   end
 end

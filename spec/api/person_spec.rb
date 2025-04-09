@@ -11,8 +11,6 @@ describe Talkable::API::Person do
     Talkable.configure(api_key: api_key, site_slug: site_slug, server: server)
   end
 
-  subject { described_class }
-
   describe '.find' do
     before do
       stub_request(:get, base_url).
@@ -22,7 +20,7 @@ describe Talkable::API::Person do
     end
 
     it 'returns success' do
-      expect(subject.find(email)).to eq({person: {username: 'batman'}})
+      expect(described_class.find(email)).to eq({person: {username: 'batman'}})
     end
   end
 
@@ -36,7 +34,7 @@ describe Talkable::API::Person do
     end
 
     it 'returns success' do
-      expect(subject.update(email, username: new_username)).to eq({person: {username: new_username}})
+      expect(described_class.update(email, username: new_username)).to eq({person: {username: new_username}})
     end
   end
 
@@ -48,7 +46,7 @@ describe Talkable::API::Person do
     end
 
     it 'returns success' do
-      expect(subject.unsubscribe(email)).to eq({person: {username: 'batman', unsubscribed_at: '2016-09-06T16:14:25.000Z'}})
+      expect(described_class.unsubscribe(email)).to eq({person: {username: 'batman', unsubscribed_at: '2016-09-06T16:14:25.000Z'}})
     end
   end
 
@@ -60,7 +58,7 @@ describe Talkable::API::Person do
     end
 
     it 'returns success' do
-      expect(subject.anonymize(email)).to eq({person: {username: nil, first_name: nil, last_name: nil}})
+      expect(described_class.anonymize(email)).to eq({person: {username: nil, first_name: nil, last_name: nil}})
     end
   end
 
@@ -73,7 +71,7 @@ describe Talkable::API::Person do
     end
 
     it 'returns success' do
-      expect(subject.personal_data(email)).to eq({person: {username: 'batman', origins: [{type: 'AffiliateMember'}]}})
+      expect(described_class.personal_data(email)).to eq({person: {username: 'batman', origins: [{type: 'AffiliateMember'}]}})
     end
   end
 end

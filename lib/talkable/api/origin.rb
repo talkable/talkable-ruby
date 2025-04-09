@@ -5,7 +5,7 @@ module Talkable
       PURCHASE          = "Purchase".freeze
       EVENT             = "Event".freeze
 
-      DEFAULT_TRAFFIC_SOURCE = 'talkable-gem'
+      DEFAULT_TRAFFIC_SOURCE = "talkable-gem".freeze
 
       class << self
         def create(origin_type, params)

@@ -10,8 +10,6 @@ describe Talkable::API::Campaign do
     Talkable.configure(api_key: api_key, site_slug: site_slug, server: server)
   end
 
-  subject { described_class }
-
   describe '.all' do
     before do
       stub_request(:get, base_url).
@@ -30,7 +28,7 @@ describe Talkable::API::Campaign do
     end
 
     it 'returns success' do
-      expect(subject.all).to eq({campaigns: [{id: 111, name: 'API campaign', is_active: true}]})
+      expect(described_class.all).to eq({campaigns: [{id: 111, name: 'API campaign', is_active: true}]})
     end
   end
 end

@@ -51,12 +51,11 @@ describe Talkable::API::Share do
     end
 
     it ".create (deprecated)" do
-      expect(Talkable::API::Share.create(short_url_code, channel: channel)).to eq(response_hash)
-
+      expect(described_class.create(short_url_code, channel: channel)).to eq(response_hash)
     end
 
     it ".social" do
-      expect(Talkable::API::Share.social(short_url_code, channel: channel)).to eq(response_hash)
+      expect(described_class.social(short_url_code, channel: channel)).to eq(response_hash)
     end
   end
 
@@ -144,7 +143,7 @@ describe Talkable::API::Share do
     end
 
     it ".direct via email" do
-      expect(Talkable::API::Share.direct(short_url_code,
+      expect(described_class.direct(short_url_code,
         channel: channel,
         recipients: 'friend1@example.com,friend2@example.com',
         subject: 'Hello!',
@@ -153,7 +152,7 @@ describe Talkable::API::Share do
     end
 
     it ".direct fails when not email (for the time being)" do
-      expect{Talkable::API::Share.direct(short_url_code,
+      expect{described_class.direct(short_url_code,
         channel: 'random',
         recipients: 'Nathan',
         subject: 'Hello!',

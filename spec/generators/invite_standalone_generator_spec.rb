@@ -26,15 +26,13 @@ describe Talkable::InviteStandaloneGenerator, type: :generator do
 
   describe '.add_invite_controller' do
     let(:invite_controller) { file("app/controllers/invite_controller.rb") }
+    let(:view) { file("app/views/invite/show.html.#{extension}") }
+
     it 'creates invite controller' do
       expect(invite_controller).to have_correct_syntax
       expect(invite_controller).to have_method('show')
       expect(invite_controller).to contain("skip_before_action :load_talkable_offer")
     end
-  end
-
-  describe '.add_invite_controller' do
-    let(:view) { file("app/views/invite/show.html.#{extension}") }
 
     it 'creates offer view' do
       expect(view).to have_correct_syntax unless generator.options[:slim] # slim isn't suported yet

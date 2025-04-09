@@ -30,15 +30,14 @@ describe Talkable::ExampleNewsletterSignupGenerator, type: :generator do
 
   describe '.add_invite_controller' do
     let(:example_newsletter_signup_controller) { file("app/controllers/example_newsletter_signup_controller.rb") }
+
     it 'creates invite controller' do
       expect(example_newsletter_signup_controller).to have_correct_syntax
       expect(example_newsletter_signup_controller).to have_method('register')
       expect(example_newsletter_signup_controller).to have_method('submit')
       expect(example_newsletter_signup_controller).to have_method('thank_you')
     end
-  end
 
-  describe '.add_invite_controller' do
     it 'adds route' do
       expect(routes).to have_correct_syntax
       expect(routes).to contain("get '/example_newsletter_signup/thank_you' => 'example_newsletter_signup#thank_you'")

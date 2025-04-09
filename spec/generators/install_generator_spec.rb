@@ -65,7 +65,6 @@ describe Talkable::InstallGenerator, type: :generator do
 
 
   context 'when template language' do
-
     shared_examples 'templatable' do
       describe '.inject_talkable_offer' do
         it 'creates partial' do
@@ -107,7 +106,5 @@ describe Talkable::InstallGenerator, type: :generator do
 
       it_behaves_like 'templatable'
     end
-
   end
-
 end

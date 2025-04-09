@@ -3,7 +3,7 @@ require 'time'
 module Talkable
   class Origin < Hashie::Mash
     def self.parse(result_hash)
-      return nil unless result_hash && result_hash[:origin] &&  result_hash[:origin].size > 0
+      return nil unless result_hash && result_hash[:origin] && result_hash[:origin].size > 0
       origin_hash = result_hash[:origin]
       order_date = (origin_hash ? origin_hash[:order_date] : nil)
 

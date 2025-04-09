@@ -19,27 +19,26 @@ describe Talkable::Origin do
 
   describe ".parse" do
     it 'handles blanks' do
-      origin = Talkable::Origin.parse(origin: {})
+      origin = described_class.parse(origin: {})
       expect(origin).to be_nil
     end
 
     it 'has origin data' do
-      origin = Talkable::Origin.parse(origin: origin_hash)
+      origin = described_class.parse(origin: origin_hash)
       expect(origin.id).to eq(31386398)
       expect(origin.order_date).to be_kind_of(Time)
     end
 
     it 'ignores incorrect date' do
       expect {
-        origin = Talkable::Origin.parse(origin: {order_date: 'invalid'})
+        origin = described_class.parse(origin: {order_date: 'invalid'})
       }.not_to raise_error
     end
 
     it 'has offer data' do
-      origin = Talkable::Origin.parse(origin: origin_hash, offer: offer_hash)
+      origin = described_class.parse(origin: origin_hash, offer: offer_hash)
       expect(origin.offer).to be_kind_of(Talkable::Offer)
       expect(origin.offer.show_url).to eq("https://www.talkable.com/x/5BN5h7")
     end
-
   end
 end

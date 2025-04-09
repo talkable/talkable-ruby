@@ -8,7 +8,7 @@ describe Talkable::API::Visitor do
     before { stub_uuid_request(uuid) }
 
     it "success" do
-      expect(Talkable::API::Visitor.create(params)).to eq({uuid: uuid})
+      expect(described_class.create(params)).to eq({uuid: uuid})
     end
   end
 end

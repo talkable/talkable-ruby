@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe Talkable do
   it 'has a version number' do
-    expect(Talkable::VERSION).not_to be nil
+    expect(described_class::VERSION).not_to be nil
   end
 
-  describe '#configuration' do
-    subject { Talkable.configuration }
-    it { is_expected.to be_an_instance_of(Talkable::Configuration) }
+  describe '.configuration' do
+    subject { described_class.configuration }
+    it { is_expected.to be_an_instance_of(described_class::Configuration) }
   end
 
-  describe '#configure' do
-    subject { Talkable.configuration }
+  describe '.configure' do
+    subject { described_class.configuration }
 
     context 'with hash' do
-      before { Talkable.configure(api_key: 'some-api-key') }
+      before { described_class.configure(api_key: 'some-api-key') }
 
       it 'changes configuration' do
         expect(subject.api_key).to eq('some-api-key')
@@ -23,7 +23,7 @@ describe Talkable do
 
     context 'with block' do
       before do
-        Talkable.configure do |config|
+        described_class.configure do |config|
           config.site_slug = 'some-site-slug'
         end
       end
@@ -38,7 +38,7 @@ describe Talkable do
         subject.apply(api_key: 'some-api-key',
                       site_slug: 'some-site-slug',
                       server: 'http://some-server.com')
-        Talkable.configure(api_key: 'other-api-key')
+        described_class.configure(api_key: 'other-api-key')
       end
 
       it 'does not remove previous configs' do
@@ -52,50 +52,50 @@ describe Talkable do
     end
   end
 
-  describe '#visitor_uuid' do
+  describe '.visitor_uuid' do
     it 'uses threads' do
       allow(Thread.current).to receive(:[]).with(Talkable::UUID).and_return("some-uuid")
-      expect(Talkable.visitor_uuid).to eq('some-uuid')
+      expect(described_class.visitor_uuid).to eq('some-uuid')
     end
   end
 
-  describe '#visitor_uuid=' do
+  describe '.visitor_uuid=' do
     it 'uses threads' do
       allow(Thread.current).to receive(:[]=).with(Talkable::UUID, 'some-uuid')
-      Talkable.visitor_uuid = 'some-uuid'
+      described_class.visitor_uuid = 'some-uuid'
     end
   end
 
-  describe '#with_uuid_and_url' do
+  describe '.with_uuid_and_url' do
     it 'retains and releases uuid & url' do
-      Talkable.with_uuid_and_url('fe09af8c-1801-4fa3-998b-ddcbe0e052e5', 'http://example.com') do
-        Talkable.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com/invite') do
-          expect(Talkable.current_url).to eq('http://example.com/invite')
-          expect(Talkable.visitor_uuid).to eq('40a852bf-8887-4ce7-b3f4-e08ff327d74f')
+      described_class.with_uuid_and_url('fe09af8c-1801-4fa3-998b-ddcbe0e052e5', 'http://example.com') do
+        described_class.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com/invite') do
+          expect(described_class.current_url).to eq('http://example.com/invite')
+          expect(described_class.visitor_uuid).to eq('40a852bf-8887-4ce7-b3f4-e08ff327d74f')
         end
-        expect(Talkable.current_url).to eq('http://example.com')
-        expect(Talkable.visitor_uuid).to eq('fe09af8c-1801-4fa3-998b-ddcbe0e052e5')
+        expect(described_class.current_url).to eq('http://example.com')
+        expect(described_class.visitor_uuid).to eq('fe09af8c-1801-4fa3-998b-ddcbe0e052e5')
       end
-      expect(Talkable.current_url).to be_nil
-      expect(Talkable.visitor_uuid).to be_nil
+      expect(described_class.current_url).to be_nil
+      expect(described_class.visitor_uuid).to be_nil
     end
 
     it 'returns result of given block' do
       expect(
-        Talkable.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com') do
+        described_class.with_uuid_and_url('40a852bf-8887-4ce7-b3f4-e08ff327d74f', 'http://example.com') do
           "result"
         end
       ).to eq("result")
     end
   end
 
-  describe '#find_or_generate_uuid' do
+  describe '.find_or_generate_uuid' do
     let(:uuid) { 'fe09af8c-1801-4fa3-998b-ddcbe0e052e5' }
 
     it 'generates new uuid' do
       stub_uuid_generation(uuid)
       expect(SecureRandom).to receive(:uuid)
-      expect(Talkable.find_or_generate_uuid).to eq(uuid)
+      expect(described_class.find_or_generate_uuid).to eq(uuid)
     end
 
     context 'when uuid was assigned' do
@@ -104,7 +104,7 @@ describe Talkable do
       end
 
       it 'returns uuid' do
-        expect(Talkable.find_or_generate_uuid).to eq(uuid)
+        expect(described_class.find_or_generate_uuid).to eq(uuid)
       end
     end
   end
