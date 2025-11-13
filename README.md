@@ -1,24 +1,26 @@
 # Talkable Referral Marketing API Gem
 
-[![Build Status](https://circleci.com/gh/talkable/talkable-ruby.svg?style=svg&circle-token=88c3962ec8e07a03bd366c68caa3fe6133f9c824)](https://circleci.com/gh/talkable/talkable-ruby)
+[![CI](https://github.com/talkable/talkable-ruby/actions/workflows/ci.yml/badge.svg)](https://github.com/talkable/talkable-ruby/actions/workflows/ci.yml)
 
 Referral marketing is one of the most powerful strategies for ecommerce sales growth. [Talkable](https://www.talkable.com) provides a rich platform for referral marketing. You can integrate sophisticated referral marketing into your own ecommerce site using the Talkable Ruby gem for a Rails or Sinatra application.
 
 ## Demo
 
-See an example application at https://github.com/talkable/talkable-spree-example.
+See an example application at <https://github.com/talkable/talkable-spree-example>.
 
-See a live demo at http://spree-example.talkable.com.
+See a live demo at <http://spree-example.talkable.com>.
 
 ## Requirements
 
 The gem requires:
- - Ruby version 3.2 or newer
- - Rack version 2.2 or newer
+
+- Ruby version 3.2 or newer
+- Rack version 2.2 or newer
 
 For integration with:
- - Ruby on Rails 7.1 or newer
- - Sinatra 3.0 or newer
+
+- Ruby on Rails 7.1 or newer
+- Sinatra 3.0 or newer
 
 ## Gem Installation
 
@@ -31,7 +33,7 @@ gem "talkable"
 Then run:
 
 ```console
-$ bundle install
+bundle install
 ```
 
 ## Using the Rails Generator
@@ -45,7 +47,7 @@ Your Talkable API Key: SOME-API-KEY
 Do you have a custom domain? [Y/n] n
 ```
 
-The Talkable "site slug" is your Account Name (the name of your website, brand or company). You'll also need an API key which you'll find on the Account Settings page when you log in to your account. The generator will ask if you have a custom domain. If your website has a domain like example.com or www.example.com, you can answer, "no." If your website is at shop.example.com, you have a custom domain.
+The Talkable "site slug" is your Account Name (the name of your website, brand or company). You'll also need an API key which you'll find on the Account Settings page when you log in to your account. The generator will ask if you have a custom domain. If your website has a domain like example.com or <www.example.com>, you can answer, "no." If your website is at shop.example.com, you have a custom domain.
 
 The generator adds and modifies several files:
 
@@ -91,13 +93,14 @@ Talkable.configure do |config|
 end
 
 ```
+
 For security, you should set these configuration variables from the Unix environment or use the Rails [encrypted credentials](https://www.engineyard.com/blog/rails-encrypted-credentials-on-rails-5.2) feature so the API key isn't stored in your GitHub repository.
 
 ### Add Middleware
 
 Here's how you can add Talkable middleware manually.
 
-_Note that if you're using Devise, it's important to load Talkable middleware before `Warden::Manager`, otherwise you can just go with `app.middleware.use Talkable::Middleware`._
+*Note that if you're using Devise, it's important to load Talkable middleware before `Warden::Manager`, otherwise you can just go with `app.middleware.use Talkable::Middleware`.*
 
 ```ruby
 if defined? ::Warden::Manager
@@ -256,6 +259,7 @@ Talkable.unblock_referral('test-slug')
 Talkable::API::Share.social(short_url_code, channel: Talkable::API::Share::VIA_SMS)
 Talkable::API::Share.direct(short_url_code, channel: Talkable::API::Share::SEND_EMAIL, recipients: 'friend1@example.com,friend2@example.com', subject: 'Hello!', body: 'World!', reminder: false)
 ```
+
 When sharing via email, the email channel is set to default because for now email is the only channel for direct shares.
 
 ### More API examples
