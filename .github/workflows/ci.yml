@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Ruby ${{ matrix.ruby-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.2', '3.3', '3.4']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Display versions
+        run: |
+          function extractVersion() {
+            perl -pe 'if(($v)=/([0-9]+([.][0-9]+)+)/){print"$v\n";exit}$_=""'
+          }
+
+          echo Ruby $(ruby --version | extractVersion)
+          echo RubyGems $(gem --version | extractVersion)
+          echo Bundler $(bundle --version | extractVersion)
+
+      - name: Run tests
+        run: bundle exec rspec
